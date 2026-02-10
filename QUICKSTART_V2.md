@@ -34,7 +34,8 @@ python data/seed_beta_data.py
 ### Step 3: Run the Application
 ```bash
 # Terminal 1: Start Backend API
-python app.py
+python main.py
+# or: python app.py
 
 # Terminal 2: Start Enhanced Dashboard
 streamlit run frontend/dashboard_enhanced.py
