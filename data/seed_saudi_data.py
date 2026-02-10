@@ -7,7 +7,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app import app
 from backend.database import db
 from backend.models.models import (
@@ -33,31 +33,31 @@ def seed_stores():
         {
             'name': 'Riyadh Tech Hub',
             'location': 'Riyadh, Saudi Arabia',
-            'opening_date': datetime.utcnow() + timedelta(days=15),
+            'opening_date': datetime.now(timezone.utc) + timedelta(days=15),
             'status': 'in_progress'
         },
         {
             'name': 'Jeddah Electronics Center',
             'location': 'Jeddah, Saudi Arabia',
-            'opening_date': datetime.utcnow() + timedelta(days=30),
+            'opening_date': datetime.now(timezone.utc) + timedelta(days=30),
             'status': 'planning'
         },
         {
             'name': 'Dammam Plaza Store',
             'location': 'Dammam, Saudi Arabia',
-            'opening_date': datetime.utcnow() + timedelta(days=7),
+            'opening_date': datetime.now(timezone.utc) + timedelta(days=7),
             'status': 'in_progress'
         },
         {
             'name': 'Mecca Mall Outlet',
             'location': 'Mecca, Saudi Arabia',
-            'opening_date': datetime.utcnow() + timedelta(days=45),
+            'opening_date': datetime.now(timezone.utc) + timedelta(days=45),
             'status': 'planning'
         },
         {
             'name': 'Medina Central Store',
             'location': 'Medina, Saudi Arabia',
-            'opening_date': datetime.utcnow() - timedelta(days=5),
+            'opening_date': datetime.now(timezone.utc) - timedelta(days=5),
             'status': 'completed'
         }
     ]
@@ -184,7 +184,7 @@ def seed_checklists_and_tasks(stores, team_members):
                 if store.status == 'completed':
                     status = 'completed'
                     completed_at = due_date + timedelta(hours=random.randint(1, 48))
-                elif due_date < datetime.utcnow():
+                elif due_date < datetime.now(timezone.utc):
                     # Overdue tasks - some completed, some not
                     if random.random() > 0.3:  # 70% completed
                         status = 'completed'
@@ -223,7 +223,7 @@ def seed_whatsapp_groups(stores):
             group_name=f"{store.name} - Opening Team",
             group_id=f"group_{store.id}_simulation",
             is_active=store.status != 'completed',
-            archived_at=datetime.utcnow() if store.status == 'completed' else None
+            archived_at=datetime.now(timezone.utc) if store.status == 'completed' else None
         )
         db.session.add(group)
         groups.append(group)
@@ -286,9 +286,9 @@ def seed_follow_ups(tasks, team_members):
     for task in tasks:
         if task.status in ['pending', 'in_progress', 'blocked']:
             # Determine follow-up type
-            if task.due_date < datetime.utcnow():
+            if task.due_date < datetime.now(timezone.utc):
                 # Overdue - create escalation
-                days_overdue = (datetime.utcnow() - task.due_date).days
+                days_overdue = (datetime.now(timezone.utc) - task.due_date).days
                 
                 if days_overdue >= 7:
                     escalation_level = 2
@@ -300,11 +300,11 @@ def seed_follow_ups(tasks, team_members):
                     escalation_level = 0
                     message = f"Reminder: Task '{task.title}' is {days_overdue} days overdue."
                 
-                scheduled_time = datetime.utcnow() + timedelta(hours=random.randint(1, 6))
+                scheduled_time = datetime.now(timezone.utc) + timedelta(hours=random.randint(1, 6))
             else:
                 # Upcoming - create reminder
                 escalation_level = 0
-                days_until_due = (task.due_date - datetime.utcnow()).days
+                days_until_due = (task.due_date - datetime.now(timezone.utc)).days
                 message = f"Reminder: Task '{task.title}' is due in {days_until_due} days."
                 scheduled_time = task.due_date - timedelta(days=1)
             
@@ -314,9 +314,9 @@ def seed_follow_ups(tasks, team_members):
                     task_id=task.id,
                     message=message,
                     scheduled_time=scheduled_time,
-                    status='pending' if scheduled_time > datetime.utcnow() else 'sent',
+                    status='pending' if scheduled_time > datetime.now(timezone.utc) else 'sent',
                     escalation_level=escalation_level,
-                    sent_at=datetime.utcnow() if scheduled_time <= datetime.utcnow() else None
+                    sent_at=datetime.now(timezone.utc) if scheduled_time <= datetime.now(timezone.utc) else None
                 )
                 db.session.add(follow_up)
                 follow_ups.append(follow_up)
