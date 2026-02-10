@@ -95,7 +95,7 @@ def seed_team_members(stores):
             name = f"{random.choice(first_names)} {random.choice(last_names)}"
             role = random.choice(roles)
             # Saudi phone numbers format: +966 5X XXX XXXX
-            phone = f"+9665{random.randint(0,9)}{random.randint(1000000, 9999999)}"
+            phone = f"+9665{random.randint(0, 9)}{random.randint(1000000, 9999999)}"
             email = f"{name.lower().replace(' ', '.').replace('-', '')}@company.sa"
             
             member = TeamMember(
