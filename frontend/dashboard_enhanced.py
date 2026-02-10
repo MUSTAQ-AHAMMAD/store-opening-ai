@@ -1077,7 +1077,7 @@ else:
         
         # Store selector
         stores_data = api_request("/stores")
-        if stores_data:
+        if stores_data and isinstance(stores_data, list):
             store_options = {s['name']: s['id'] for s in stores_data}
             selected_store_name = st.selectbox("Select Store for Analysis", list(store_options.keys()))
             store_id = store_options[selected_store_name]
@@ -1130,6 +1130,10 @@ else:
                 
                 # This would require selecting a task - simplified for now
                 st.info("Feature: Analyzes historical data to predict task completion risks")
+        elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
+            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+        else:
+            st.warning("⚠️ Unable to load stores. Please check if the backend is running.")
     
     elif page == "stores":
         st.markdown('<div class="main-header fade-in">🏪 Store Management</div>', unsafe_allow_html=True)
@@ -1140,7 +1144,7 @@ else:
         with tab1:
             stores_data = api_request("/stores")
             
-            if stores_data:
+            if stores_data and isinstance(stores_data, list):
                 st.success(f"📊 Total Stores: {len(stores_data)}")
                 
                 # Filters
@@ -1241,8 +1245,10 @@ else:
                             if cancel_edit:
                                 del st.session_state.edit_store_id
                                 st.rerun()
+            elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
+                st.error(f"⚠️ Error loading stores: {stores_data['error']}")
             else:
-                st.warning("⚠️ No stores found or unable to fetch stores")
+                st.info("📭 No stores found. Add a new store to get started!")
         
         with tab2:
             st.markdown("### ➕ Create New Store")
@@ -1289,7 +1295,7 @@ else:
         
         team_data = api_request("/team")
         
-        if team_data:
+        if team_data and isinstance(team_data, list):
             st.success(f"👥 Total Team Members: {len(team_data)}")
             
             # Filters
@@ -1299,7 +1305,7 @@ else:
             with col2:
                 # Get store list for filter
                 stores_data = api_request("/stores")
-                store_filter_options = ["All Stores"] + [s['name'] for s in stores_data] if stores_data else ["All Stores"]
+                store_filter_options = ["All Stores"] + [s['name'] for s in stores_data] if stores_data and isinstance(stores_data, list) else ["All Stores"]
                 store_filter = st.selectbox("Filter by Store", store_filter_options)
             
             st.markdown("---")
@@ -1312,7 +1318,7 @@ else:
                                search_member.lower() in m.get('email', '').lower() or
                                search_member.lower() in m.get('phone', '').lower()]
             
-            if store_filter != "All Stores" and stores_data:
+            if store_filter != "All Stores" and stores_data and isinstance(stores_data, list):
                 store_id = next((s['id'] for s in stores_data if s['name'] == store_filter), None)
                 if store_id:
                     filtered_team = [m for m in filtered_team if m.get('store_id') == store_id]
@@ -1331,7 +1337,7 @@ else:
                         st.write(f"📱 {member.get('phone', 'N/A')}")
                     
                     with col3:
-                        store_name = next((s['name'] for s in stores_data if s['id'] == member.get('store_id')), 'N/A') if stores_data else 'N/A'
+                        store_name = next((s['name'] for s in stores_data if s['id'] == member.get('store_id')), 'N/A') if stores_data and isinstance(stores_data, list) else 'N/A'
                         st.write(f"🏪 **Store:**")
                         st.write(store_name)
                     
@@ -1355,7 +1361,7 @@ else:
                     new_member_phone = st.text_input("Phone*")
                     new_member_role = st.selectbox("Role", ["team_member", "manager", "admin"])
                     
-                    if stores_data:
+                    if stores_data and isinstance(stores_data, list):
                         store_options = {s['name']: s['id'] for s in stores_data}
                         new_member_store = st.selectbox("Assign to Store", list(store_options.keys()))
                         new_member_store_id = store_options[new_member_store]
@@ -1389,7 +1395,7 @@ else:
         
         # Store selector
         stores_data = api_request("/stores")
-        if stores_data:
+        if stores_data and isinstance(stores_data, list):
             col1, col2 = st.columns([2, 1])
             with col1:
                 store_options = {s['name']: s['id'] for s in stores_data}
@@ -1402,7 +1408,7 @@ else:
             # Get checklists for store
             checklists_data = api_request(f"/checklists?store_id={store_id}")
             
-            if checklists_data:
+            if checklists_data and isinstance(checklists_data, list):
                 for checklist in checklists_data:
                     with st.expander(f"📋 {checklist.get('name', 'Checklist')} - {checklist.get('category', 'General')}", expanded=True):
                         st.write(f"**Description:** {checklist.get('description', 'N/A')}")
@@ -1410,7 +1416,7 @@ else:
                         # Get tasks for this checklist
                         tasks_data = api_request(f"/checklists/{checklist['id']}/tasks")
                         
-                        if tasks_data:
+                        if tasks_data and isinstance(tasks_data, list):
                             # Filter tasks
                             filtered_tasks = [t for t in tasks_data if t.get('status') in status_filter] if status_filter else tasks_data
                             
@@ -1489,6 +1495,8 @@ else:
                                 if result and 'error' not in result:
                                     st.success("✅ Checklist created!")
                                     st.rerun()
+        elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
+            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
         else:
             st.warning("⚠️ No stores found")
     
@@ -1500,7 +1508,7 @@ else:
         with tab1:
             groups_data = api_request("/whatsapp/groups")
             
-            if groups_data:
+            if groups_data and isinstance(groups_data, list):
                 st.success(f"📱 Total WhatsApp Groups: {len(groups_data)}")
                 
                 for group in groups_data:
@@ -1535,7 +1543,7 @@ else:
             # Create new group
             with st.expander("➕ Create New WhatsApp Group"):
                 stores_data = api_request("/stores")
-                if stores_data:
+                if stores_data and isinstance(stores_data, list):
                     with st.form("create_whatsapp_group"):
                         store_options = {s['name']: s['id'] for s in stores_data}
                         selected_store = st.selectbox("Select Store", list(store_options.keys()))
@@ -1557,12 +1565,16 @@ else:
                                     st.rerun()
                                 else:
                                     st.error("❌ Failed to create group")
+                elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
+                    st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+                else:
+                    st.warning("⚠️ No stores found")
         
         with tab2:
             st.markdown("### 💬 Send WhatsApp Message")
             
             groups_data = api_request("/whatsapp/groups")
-            if groups_data:
+            if groups_data and isinstance(groups_data, list):
                 group_options = {f"{g['name']} - {g.get('store_name', 'N/A')}": g['id'] for g in groups_data}
                 selected_group = st.selectbox("Select Group", list(group_options.keys()))
                 
@@ -1595,7 +1607,7 @@ else:
         
         # Store selector
         stores_data = api_request("/stores")
-        if stores_data:
+        if stores_data and isinstance(stores_data, list):
             store_options = {"All Stores": None}
             store_options.update({s['name']: s['id'] for s in stores_data})
             selected_store = st.selectbox("Select Store", list(store_options.keys()))
@@ -1709,6 +1721,8 @@ else:
                         fig2 = px.pie(values=status_counts.values, names=status_counts.index,
                                      title='Store Status Distribution')
                         st.plotly_chart(fig2, use_container_width=True)
+        elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
+            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
         else:
             st.warning("⚠️ No stores found")
     
@@ -1728,7 +1742,7 @@ else:
         st.markdown("### Manual Escalation")
         
         stores_data = api_request("/stores")
-        if stores_data:
+        if stores_data and isinstance(stores_data, list):
             store_options = {s['name']: s['id'] for s in stores_data}
             selected_store = st.selectbox("Select Store", list(store_options.keys()))
             
@@ -1736,6 +1750,10 @@ else:
             
             # In a real implementation, we'd list overdue tasks here
             st.write("Feature: Manual voice call escalation for selected tasks")
+        elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
+            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+        else:
+            st.warning("⚠️ No stores found")
     
     # Footer
     st.markdown("<br><br>", unsafe_allow_html=True)
