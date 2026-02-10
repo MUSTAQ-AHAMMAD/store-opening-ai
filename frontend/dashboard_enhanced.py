@@ -1,6 +1,7 @@
 """
 Store Opening AI - Enhanced Dashboard with Authentication
 Modern, Rich UI with User Management and AI Features
+COMPLETELY REDESIGNED UI - Fresh, Modern Look
 """
 
 import streamlit as st
@@ -10,6 +11,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import json
+import time
 
 # Constants
 TARGET_COMPLETION_RATE = 80
@@ -19,7 +21,7 @@ RISK_STATUS_MODERATE = 0
 
 # Configure page with modern theme
 st.set_page_config(
-    page_title="Store Opening AI - Dashboard",
+    page_title="🏢 Store Opening AI - Next Generation Dashboard",
     page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -28,534 +30,423 @@ st.set_page_config(
 # API Configuration
 API_BASE_URL = "http://localhost:5000/api"
 
-# Enhanced Custom CSS for modern, professional admin panel UI
+# COMPLETELY NEW MODERN UI - Fresh Design with Vibrant Colors
 st.markdown("""
     <style>
-    /* CSS Variables for Professional Theme */
+    /* 🎨 NEW DESIGN SYSTEM - Vibrant & Modern Theme */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
     :root {
-        --primary-color: #2563eb;
-        --primary-hover: #1d4ed8;
-        --primary-light: #dbeafe;
-        --success-color: #059669;
-        --warning-color: #d97706;
-        --danger-color: #dc2626;
-        --info-color: #0891b2;
-        --light-bg: #f9fafb;
-        --card-bg: #ffffff;
-        --text-primary: #111827;
+        /* Vibrant Purple-Blue Gradient Theme */
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --primary-color: #667eea;
+        --primary-dark: #5568d3;
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        --info-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        
+        /* Modern Neutral Colors */
+        --bg-primary: #f8f9fe;
+        --bg-secondary: #ffffff;
+        --text-primary: #1a1d29;
         --text-secondary: #6b7280;
-        --border-color: #e5e7eb;
-        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        --text-muted: #9ca3af;
+        --border-light: #e5e7eb;
+        --border-medium: #d1d5db;
+        
+        /* Glassmorphism Effect */
+        --glass-bg: rgba(255, 255, 255, 0.9);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        
+        /* Shadows - Enhanced */
+        --shadow-sm: 0 2px 8px rgba(102, 126, 234, 0.1);
+        --shadow-md: 0 4px 16px rgba(102, 126, 234, 0.15);
+        --shadow-lg: 0 8px 32px rgba(102, 126, 234, 0.2);
+        --shadow-xl: 0 16px 48px rgba(102, 126, 234, 0.25);
     }
     
-    /* Global Styles with professional system fonts */
+    /* 🌟 GLOBAL STYLES - Modern & Clean */
     * {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
     
-    /* Main container - Professional flat design */
+    /* Main Container - Vibrant Background */
     .main {
-        background: var(--light-bg);
-        padding: 0;
+        background: var(--bg-primary);
     }
     
     .block-container {
-        padding-top: 1.5rem;
-        padding-bottom: 2rem;
-        background: transparent;
-        max-width: 1400px;
+        padding: 2rem 3rem;
+        max-width: 1600px;
     }
     
-    /* Header Styles - Clean and Professional */
+    /* 🎯 HEADER STYLES - Bold & Impactful */
     .main-header {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--text-primary);
+        font-size: 3rem;
+        font-weight: 800;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin-bottom: 0.5rem;
-        text-align: left;
+        letter-spacing: -0.02em;
+        animation: slideIn 0.6s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
     .page-subtitle {
-        font-size: 0.95rem;
+        font-size: 1.125rem;
         color: var(--text-secondary);
-        margin-bottom: 2rem;
-        text-align: left;
+        margin-bottom: 2.5rem;
+        font-weight: 500;
     }
     
-    .sub-header {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin: 2rem 0 1rem 0;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--border-color);
+    /* 💎 METRIC CARDS - Glassmorphism with Gradients */
+    .metric-card-modern {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-lg);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
     }
     
-    /* Professional Metric Cards */
-    .metric-card {
-        background: var(--card-bg);
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-sm);
-        transition: all 0.2s ease;
-        height: 100%;
+    .metric-card-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--primary-gradient);
     }
     
-    .metric-card:hover {
-        box-shadow: var(--shadow-md);
-        transform: translateY(-2px);
+    .metric-card-modern:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: var(--shadow-xl);
     }
     
-    .metric-card-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 10px;
+    .metric-icon-gradient {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
-    
-    .metric-card-primary .metric-card-icon {
-        background: var(--primary-color);
-        color: white;
-    }
-    
-    .metric-card-success .metric-card-icon {
-        background: var(--success-color);
-        color: white;
-    }
-    
-    .metric-card-warning .metric-card-icon {
-        background: var(--warning-color);
-        color: white;
-    }
-    
-    .metric-card-danger .metric-card-icon {
-        background: var(--danger-color);
-        color: white;
-    }
-    
-    .metric-card-info .metric-card-icon {
-        background: var(--info-color);
-        color: white;
-    }
-    
-    .metric-value {
         font-size: 2rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        line-height: 1;
-        margin-bottom: 0.5rem;
-    }
-    
-    .metric-label {
-        font-size: 0.875rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    
-    .metric-trend {
-        font-size: 0.875rem;
-        font-weight: 600;
-        margin-top: 0.5rem;
-    }
-    
-    .metric-trend-up {
-        color: var(--success-color);
-    }
-    
-    .metric-trend-down {
-        color: var(--danger-color);
-    }
-    
-    /* Executive Summary Banner */
-    .executive-banner {
-        background: var(--primary-color);
-        padding: 1.5rem;
-        border-radius: 12px;
-        color: white;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
+        background: var(--primary-gradient);
         box-shadow: var(--shadow-md);
     }
     
-    /* Professional Header */
-    .dashboard-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid var(--border-color);
+    .metric-value-large {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+        margin: 1rem 0 0.5rem 0;
+        letter-spacing: -0.02em;
     }
     
-    /* Risk Pills */
-    .risk-pill {
-        padding: 0.5rem 1rem;
+    .metric-label-modern {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    
+    .metric-change {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-top: 0.75rem;
+    }
+    
+    .metric-change-positive {
+        background: rgba(74, 222, 128, 0.1);
+        color: #16a34a;
+    }
+    
+    .metric-change-negative {
+        background: rgba(248, 113, 113, 0.1);
+        color: #dc2626;
+    }
+    
+    /* 🎨 GRADIENT HERO BANNER */
+    .hero-banner {
+        background: var(--primary-gradient);
+        padding: 2.5rem;
+        border-radius: 24px;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-xl);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        filter: blur(40px);
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.125rem;
+        opacity: 0.95;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* 🏪 STORE CARDS - Modern Design */
+    .store-card-modern {
+        background: white;
         border-radius: 20px;
+        padding: 1.75rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .store-card-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: var(--primary-gradient);
+    }
+    
+    .store-card-modern:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateX(4px);
+    }
+    
+    .store-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .store-location {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    /* 🎯 STATUS BADGES - Vibrant */
+    .status-badge-modern {
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
         font-weight: 600;
         font-size: 0.875rem;
-        display: inline-block;
-        margin-right: 0.5rem;
-    }
-    
-    .risk-pill-high {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-    
-    .risk-pill-medium {
-        background: #fef3c7;
-        color: #92400e;
-    }
-    
-    .risk-pill-low {
-        background: #d1fae5;
-        color: #065f46;
-    }
-    
-    /* Enhanced Insight Boxes */
-    .insight-box {
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-    }
-    
-    .insight-box-warning {
-        background: #fef3c7;
-        border-left: 4px solid #f59e0b;
-    }
-    
-    .insight-box-info {
-        background: #dbeafe;
-        border-left: 4px solid #3b82f6;
-    }
-    
-    .insight-box-success {
-        background: #d1fae5;
-        border-left: 4px solid #10b981;
-    }
-    
-    /* Professional Status Badges */
-    .status-badge {
-        padding: 0.375rem 0.75rem;
-        border-radius: 6px;
-        font-weight: 600;
-        font-size: 0.75rem;
-        display: inline-block;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-transform: capitalize;
     }
     
     .status-planning {
-        background: #dbeafe;
-        color: #1e40af;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
     }
     
     .status-in-progress {
-        background: #fef3c7;
-        color: #92400e;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
     }
     
     .status-completed {
-        background: #d1fae5;
-        color: #065f46;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
     }
     
     .status-delayed {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-    
-    /* Button Styles - Modern and Clean */
-    .stButton>button {
-        background: var(--primary-color);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
         color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.625rem 1.25rem;
-        font-weight: 600;
-        font-size: 0.875rem;
-        transition: all 0.2s ease;
-        box-shadow: var(--shadow-sm);
     }
     
-    .stButton>button:hover {
-        background: var(--primary-hover);
-        box-shadow: var(--shadow-md);
-        transform: translateY(-1px);
+    /* 📊 PROGRESS BARS - Animated */
+    .progress-bar-container {
+        width: 100%;
+        height: 12px;
+        background: var(--border-light);
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
     }
     
-    /* Sidebar Styles - Professional Navigation */
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--primary-gradient);
+        border-radius: 12px;
+        transition: width 1s ease-out;
+        animation: progressAnimation 2s ease-out;
+    }
+    
+    @keyframes progressAnimation {
+        from { width: 0; }
+    }
+    
+    /* 🔘 BUTTONS - Modern & Interactive */
+    .stButton > button {
+        background: var(--primary-gradient) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 0.75rem 2rem !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        transition: all 0.3s ease !important;
+        box-shadow: var(--shadow-md) !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg) !important;
+    }
+    
+    /* 📱 SIDEBAR - Sleek Navigation */
     [data-testid="stSidebar"] {
-        background: var(--card-bg);
-        border-right: 1px solid var(--border-color);
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        color: white;
     }
     
     [data-testid="stSidebar"] .element-container {
-        color: var(--text-primary);
-    }
-    
-    /* Sidebar User Profile Section */
-    .user-profile-card {
-        background: var(--primary-color);
-        padding: 1.25rem;
-        border-radius: 12px;
         color: white;
-        margin-bottom: 1.5rem;
-        text-align: center;
     }
     
-    .user-profile-icon {
-        width: 56px;
-        height: 56px;
+    [data-testid="stSidebar"] hr {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Sidebar Navigation Items */
+    [data-testid="stSidebar"] .stRadio > label {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        margin: 0.25rem 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    [data-testid="stSidebar"] .stRadio > label:hover {
         background: rgba(255, 255, 255, 0.2);
+        transform: translateX(4px);
+    }
+    
+    /* 🎴 CARDS - Various Styles */
+    .info-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-light);
+        margin-bottom: 1rem;
+    }
+    
+    .info-card-gradient {
+        background: var(--info-gradient);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 1rem;
+    }
+    
+    /* 📈 CHARTS - Enhanced Styling */
+    .stPlotlyChart {
+        background: white;
+        border-radius: 16px;
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-light);
+    }
+    
+    /* 🎯 WORKFLOW STAGES - Visual Timeline */
+    .stage-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+    }
+    
+    .stage-container:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateX(4px);
+    }
+    
+    .stage-number {
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
+        background: var(--primary-gradient);
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.75rem;
-        margin: 0 auto 0.75rem;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .user-profile-name {
-        font-size: 1.125rem;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-    }
-    
-    .user-profile-role {
-        font-size: 0.875rem;
-        opacity: 0.9;
-    }
-    
-    /* Login Form Styles - Professional */
-    .login-container {
-        max-width: 420px;
-        margin: 0 auto;
-        padding: 2.5rem;
-        background: var(--card-bg);
-        border-radius: 16px;
-        box-shadow: var(--shadow-xl);
-        border: 1px solid var(--border-color);
-    }
-    
-    .login-header {
-        text-align: center;
-        font-size: 1.75rem;
         font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+        flex-shrink: 0;
     }
     
-    .login-subtitle {
-        text-align: center;
-        font-size: 0.875rem;
-        color: var(--text-secondary);
-        margin-bottom: 2rem;
+    .stage-completed .stage-number {
+        background: var(--success-gradient);
     }
     
-    /* Input fields enhancement */
-    .stTextInput input, .stTextArea textarea, .stSelectbox select {
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-        padding: 0.625rem;
-        font-size: 0.875rem;
-        transition: all 0.2s ease;
-        background: var(--card-bg);
+    .stage-delayed .stage-number {
+        background: var(--danger-gradient);
     }
     
-    .stTextInput input:focus, .stTextArea textarea:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        outline: none;
-    }
-    
-    /* Card Container for Content */
-    .content-card {
-        background: var(--card-bg);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-sm);
-    }
-    
-    .content-card-header {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    /* Alert Styling - Professional */
-    .stAlert {
-        border-radius: 8px;
-        border-left: 4px solid;
-        padding: 1rem;
-        margin: 1rem 0;
-        font-size: 0.875rem;
-    }
-    
-    /* Progress bar - Modern */
-    .stProgress > div > div > div {
-        background: var(--primary-color);
-        border-radius: 4px;
-    }
-    
-    /* Data Tables - Professional */
-    .dataframe {
-        border: 1px solid var(--border-color) !important;
-        border-radius: 8px;
-        overflow: hidden;
-        font-size: 0.875rem;
-    }
-    
-    .dataframe th {
-        background: var(--light-bg) !important;
-        color: var(--text-primary) !important;
-        font-weight: 600 !important;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-        padding: 0.75rem !important;
-    }
-    
-    .dataframe td {
-        padding: 0.75rem !important;
-        border-bottom: 1px solid var(--border-color) !important;
-    }
-    
-    .dataframe tr:hover {
-        background: var(--light-bg) !important;
-    }
-    
-    /* Tabs - Modern Style */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 0.5rem;
-        border-bottom: 2px solid var(--border-color);
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background: transparent;
-        color: var(--text-secondary);
-        border-radius: 0;
-        padding: 0.75rem 1.25rem;
-        font-weight: 500;
-        border-bottom: 2px solid transparent;
-        margin-bottom: -2px;
-    }
-    
-    .stTabs [data-baseweb="tab"]:hover {
-        color: var(--primary-color);
-    }
-    
-    .stTabs [aria-selected="true"] {
-        color: var(--primary-color) !important;
-        border-bottom-color: var(--primary-color) !important;
-    }
-    
-    /* Expander - Professional */
-    .streamlit-expanderHeader {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-    
-    .streamlit-expanderHeader:hover {
-        background: var(--light-bg);
-        border-color: var(--primary-color);
-    }
-    
-    /* Metrics from Streamlit */
-    [data-testid="stMetricValue"] {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--text-primary);
-    }
-    
-    [data-testid="stMetricLabel"] {
-        font-size: 0.875rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    
-    /* Navigation Menu Styling */
-    [data-testid="stSidebar"] .stRadio > div {
-        gap: 0.25rem;
-    }
-    
-    [data-testid="stSidebar"] .stRadio > div > label {
-        background: transparent;
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        border: 1px solid transparent;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-weight: 500;
-        color: var(--text-secondary);
-    }
-    
-    [data-testid="stSidebar"] .stRadio > div > label:hover {
-        background: var(--primary-light);
-        color: var(--primary-color);
-        border-color: var(--primary-color);
-    }
-    
-    [data-testid="stSidebar"] .stRadio > div > label[data-baseweb="radio"] > div:first-child {
-        display: none;
-    }
-    
-    [data-testid="stSidebar"] .stRadio > div > label > div {
-        color: inherit;
-    }
-    
-    [data-testid="stSidebar"] .stRadio input:checked + div + div {
-        background: var(--primary-light);
-        color: var(--primary-color);
-        border-color: var(--primary-color);
-        font-weight: 600;
-    }
-    
-    /* Hide default radio button circles */
-    [data-testid="stSidebar"] .stRadio [role="radio"] {
-        display: none;
-    }
-    
-    /* Style for active navigation item */
-    [data-testid="stSidebar"] .stRadio input[type="radio"]:checked ~ label,
-    [data-testid="stSidebar"] .stRadio input[type="radio"]:checked + div {
-        background: var(--primary-light) !important;
-        color: var(--primary-color) !important;
-        border-color: var(--primary-color) !important;
-        font-weight: 600 !important;
-    }
-    
-    /* Animation */
-    @keyframes fadeIn {
+    /* ✨ ANIMATIONS */
+    @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(20px);
         }
         to {
             opacity: 1;
@@ -563,24 +454,79 @@ st.markdown("""
         }
     }
     
-    .fade-in {
-        animation: fadeIn 0.3s ease-in;
+    .animate-fade-in {
+        animation: fadeInUp 0.6s ease-out;
     }
     
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .main-header {
-            font-size: 1.5rem;
-        }
-        
-        .metric-value {
-            font-size: 1.5rem;
-        }
-        
-        .metric-card {
-            padding: 1rem;
-        }
+    /* 🎨 EXPANDER - Modern Design */
+    .streamlit-expanderHeader {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid var(--border-light);
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
     }
+    
+    .streamlit-expanderHeader:hover {
+        background: var(--bg-primary);
+        border-color: var(--primary-color);
+    }
+    
+    /* 📝 INPUT FIELDS - Refined */
+    .stTextInput > div > div > input,
+    .stSelectbox > div > div > select,
+    .stTextArea > div > div > textarea {
+        border-radius: 12px;
+        border: 2px solid var(--border-light);
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stSelectbox > div > div > select:focus,
+    .stTextArea > div > div > textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* 🎯 TABS - Modern Design */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 1rem;
+        background: white;
+        padding: 0.5rem;
+        border-radius: 12px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: var(--primary-gradient);
+        color: white;
+    }
+    
+    /* 💡 ALERTS & NOTIFICATIONS */
+    .stAlert {
+        border-radius: 12px;
+        border: none;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    /* 🎨 DATAFRAME - Clean Look */
+    .stDataFrame {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    /* Hide Streamlit Branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
     </style>
 """, unsafe_allow_html=True)
 
@@ -807,17 +753,14 @@ else:
     
     # Main Content Area
     if page == "dashboard":
-        # Executive Header with Date
-        current_date = datetime.now().strftime("%B %d, %Y")
+        # ✨ NEW MODERN DASHBOARD HEADER
+        current_date = datetime.now().strftime("%B %d, %Y • %I:%M %p")
         st.markdown(f'''
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <div>
-                    <div class="main-header">Executive Dashboard</div>
-                    <div class="page-subtitle">Real-time insights and performance metrics</div>
-                </div>
-                <div style="text-align: right; color: var(--text-secondary); font-size: 0.875rem;">
-                    <div style="font-weight: 600; color: var(--text-primary);">{current_date}</div>
-                    <div>Last updated: Just now</div>
+            <div class="animate-fade-in">
+                <div class="hero-banner">
+                    <div class="hero-title">🚀 Store Opening AI Dashboard</div>
+                    <div class="hero-subtitle">Welcome back! Here's what's happening with your stores today.</div>
+                    <div style="margin-top: 1rem; opacity: 0.9; font-size: 0.95rem;">📅 {current_date}</div>
                 </div>
             </div>
         ''', unsafe_allow_html=True)
@@ -828,84 +771,60 @@ else:
         if dashboard_data:
             summary = dashboard_data.get('summary', {})
             
-            # Executive Summary Card
-            st.markdown(f"""
-                <div style="background: #2563eb; 
-                            padding: 1.5rem; border-radius: 12px; color: white; margin-bottom: 1.5rem;
-                            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div style="font-size: 0.875rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                                System Status
-                            </div>
-                            <div style="font-size: 1.5rem; font-weight: 700;">
-                                {"🟢 All Systems Operational" if summary.get('overdue_tasks', 0) < 3 else "⚠️ Attention Required"}
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Overall Progress</div>
-                            <div style="font-size: 2rem; font-weight: 700;">{(summary.get('completed_tasks', 0) / max(summary.get('total_tasks', 1), 1) * 100):.0f}%</div>
-                        </div>
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-            
-            # Key Metrics Row with Professional Cards and Trends
+            # 💎 MODERN METRIC CARDS WITH GLASSMORPHISM
             col1, col2, col3, col4 = st.columns(4)
+            
+            total_stores = summary.get('total_stores', 0)
+            total_tasks = summary.get('total_tasks', 0)
+            completed_tasks = summary.get('completed_tasks', 0)
+            overdue_tasks = summary.get('overdue_tasks', 0)
+            completion_pct = (completed_tasks / max(total_tasks, 1)) * 100
             
             with col1:
                 st.markdown(f"""
-                    <div class="metric-card metric-card-primary fade-in">
-                        <div class="metric-card-icon">🏪</div>
-                        <div class="metric-value">{summary.get('total_stores', 0)}</div>
-                        <div class="metric-label">Active Stores</div>
-                        <div class="metric-trend metric-trend-up" style="margin-top: 0.5rem; font-size: 0.8rem;">
-                            <span style="color: #10b981;">▲ 2</span> vs last period
+                    <div class="metric-card-modern animate-fade-in">
+                        <div class="metric-icon-gradient">🏪</div>
+                        <div class="metric-label-modern">Total Stores</div>
+                        <div class="metric-value-large">{total_stores}</div>
+                        <div class="metric-change metric-change-positive">
+                            ↗ +2 this month
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col2:
                 st.markdown(f"""
-                    <div class="metric-card metric-card-info fade-in">
-                        <div class="metric-card-icon">📋</div>
-                        <div class="metric-value">{summary.get('total_tasks', 0)}</div>
-                        <div class="metric-label">Total Tasks</div>
-                        <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary);">
-                            {summary.get('completed_tasks', 0)} completed
+                    <div class="metric-card-modern animate-fade-in" style="animation-delay: 0.1s;">
+                        <div class="metric-icon-gradient" style="background: var(--success-gradient);">✅</div>
+                        <div class="metric-label-modern">Completion Rate</div>
+                        <div class="metric-value-large">{completion_pct:.0f}%</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: {completion_pct}%;"></div>
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col3:
-                completion_pct = 0
-                if summary.get('total_tasks', 0) > 0:
-                    completion_pct = (summary.get('completed_tasks', 0) / summary.get('total_tasks')) * 100
-                
-                trend_color = "#10b981" if completion_pct >= RISK_THRESHOLD_HIGH else "#f59e0b"
                 st.markdown(f"""
-                    <div class="metric-card metric-card-success fade-in">
-                        <div class="metric-card-icon">✓</div>
-                        <div class="metric-value">{completion_pct:.1f}%</div>
-                        <div class="metric-label">Completion Rate</div>
-                        <div class="metric-trend" style="margin-top: 0.5rem; font-size: 0.8rem; color: {trend_color};">
-                            Target: {TARGET_COMPLETION_RATE}%
+                    <div class="metric-card-modern animate-fade-in" style="animation-delay: 0.2s;">
+                        <div class="metric-icon-gradient" style="background: var(--warning-gradient);">📋</div>
+                        <div class="metric-label-modern">Active Tasks</div>
+                        <div class="metric-value-large">{total_tasks}</div>
+                        <div class="metric-change metric-change-positive">
+                            {completed_tasks} completed
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col4:
-                overdue = summary.get('overdue_tasks', 0)
-                status_color = "#ef4444" if overdue > RISK_STATUS_CRITICAL else "#f59e0b" if overdue > RISK_STATUS_MODERATE else "#10b981"
+                overdue_status = "metric-change-negative" if overdue_tasks > 5 else "metric-change-positive"
                 st.markdown(f"""
-                    <div class="metric-card metric-card-danger fade-in">
-                        <div class="metric-card-icon">⚠</div>
-                        <div class="metric-value">{overdue}</div>
-                        <div class="metric-label">Overdue Tasks</div>
-                        <div style="margin-top: 0.5rem; font-size: 0.8rem;">
-                            <span style="color: {status_color}; font-weight: 600;">
-                                {"Critical" if overdue > RISK_STATUS_CRITICAL else "Moderate" if overdue > RISK_STATUS_MODERATE else "Good"}
-                            </span>
+                    <div class="metric-card-modern animate-fade-in" style="animation-delay: 0.3s;">
+                        <div class="metric-icon-gradient" style="background: var(--danger-gradient);">⚠️</div>
+                        <div class="metric-label-modern">Overdue Tasks</div>
+                        <div class="metric-value-large">{overdue_tasks}</div>
+                        <div class="metric-change {overdue_status}">
+                            {("✓ Under control" if overdue_tasks <= 5 else "⚠ Needs attention")}
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
@@ -938,136 +857,149 @@ else:
                             {f'<div style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🟢 {risk_counts["low"]} Low Risk</div>' if risk_counts['low'] > 0 else ''}
                         </div>
                     """, unsafe_allow_html=True)
-                
-                for insight in ai_insights_data['insights']:
-                    risk_color = {
-                        'low': '🟢',
-                        'medium': '🟡',
-                        'high': '🔴'
-                    }.get(insight['risk_level'], '⚪')
-                    
-                    with st.expander(f"{risk_color} {insight['store_name']} - Risk: {insight['risk_level'].upper()}", expanded=insight['risk_level'] == 'high'):
-                        if insight['risk_factors']:
-                            st.markdown("""
-                                <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 1rem;">
-                                    <div style="font-weight: 600; color: #92400e; margin-bottom: 0.5rem;">⚠️ Risk Factors:</div>
-                            """, unsafe_allow_html=True)
-                            for factor in insight['risk_factors']:
-                                st.write(f"• {factor}")
-                            st.markdown("</div>", unsafe_allow_html=True)
-                        
-                        if insight['recommendations']:
-                            st.markdown("""
-                                <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 1rem;">
-                                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 0.5rem;">💡 Recommended Actions:</div>
-                            """, unsafe_allow_html=True)
-                            for rec in insight['recommendations']:
-                                st.write(f"✓ {rec}")
-                            st.markdown("</div>", unsafe_allow_html=True)
-                        
-                        metrics = insight['metrics']
-                        col_m1, col_m2, col_m3 = st.columns(3)
-                        with col_m1:
-                            st.metric("Completion", f"{metrics['completion_rate']}%", 
-                                     delta=f"{metrics['completion_rate'] - 75}%" if metrics['completion_rate'] < 100 else "Complete")
-                        with col_m2:
-                            st.metric("Overdue Tasks", metrics['overdue_tasks'],
-                                     delta=f"-{metrics['overdue_tasks']}" if metrics['overdue_tasks'] > 0 else "On Track",
-                                     delta_color="inverse")
-                        with col_m3:
-                            days_until = metrics.get('days_until_opening', 'N/A')
-                            st.metric("Days to Opening", days_until,
-                                     delta="Urgent" if isinstance(days_until, int) and days_until < 7 else "")
             
-            # Store Progress Chart
+            # 🏪 MODERN STORES SECTION
             st.markdown('''
-                <div class="sub-header">
-                    <span style="margin-right: 0.5rem;">📈</span>
-                    Store Performance Analytics
+                <div style="margin-top: 2rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem;">
+                        🏪 Active Store Overview
+                    </h2>
                 </div>
             ''', unsafe_allow_html=True)
             
             stores = dashboard_data.get('stores', [])
             if stores:
+                # Display stores in a modern card layout
+                for store in stores[:6]:  # Show top 6 stores
+                    # Determine status color
+                    status_colors = {
+                        'planning': 'var(--primary-gradient)',
+                        'in_progress': 'var(--warning-gradient)',
+                        'completed': 'var(--success-gradient)',
+                        'delayed': 'var(--danger-gradient)'
+                    }
+                    status_color = status_colors.get(store.get('status', 'planning'), 'var(--primary-gradient)')
+                    
+                    completion = store.get('completion_percentage', 0)
+                    
+                    st.markdown(f"""
+                        <div class="store-card-modern animate-fade-in">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <div style="flex: 1;">
+                                    <div class="store-title">{store.get('name', 'Unknown Store')}</div>
+                                    <div class="store-location">📍 {store.get('location', 'Location not set')}</div>
+                                </div>
+                                <div class="status-badge-modern status-{store.get('status', 'planning')}">
+                                    {store.get('status', 'planning').replace('_', ' ')}
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 600;">Progress</span>
+                                    <span style="font-size: 0.875rem; color: var(--text-primary); font-weight: 700;">{completion:.0f}%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: {completion}%;"></div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-light);">
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Tasks</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">{store.get('total_tasks', 0)}</div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Completed</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #4ade80;">{store.get('completed_tasks', 0)}</div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Pending</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #f59e0b;">{store.get('pending_tasks', 0)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
+                
+                # View all stores button
+                if len(stores) > 6:
+                    col_btn = st.columns([1, 2, 1])[1]
+                    with col_btn:
+                        st.button(f"📋 View All {len(stores)} Stores", use_container_width=True)
+            else:
+                st.info("📊 No stores found. Create your first store to get started!")
+            
+            # 📊 MODERN CHART SECTION
+            st.markdown('''
+                <div style="margin-top: 3rem; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary);">
+                        📊 Performance Analytics
+                    </h2>
+                </div>
+            ''', unsafe_allow_html=True)
+            
+            if stores:
                 df_stores = pd.DataFrame(stores)
                 
-                # Enhanced chart with professional styling
-                fig = px.bar(
-                    df_stores,
-                    x='name',
-                    y='completion_percentage',
-                    color='status',
-                    title='',
-                    labels={'completion_percentage': 'Completion %', 'name': 'Store Location'},
-                    color_discrete_map={
-                        'planning': '#60a5fa',
-                        'in_progress': '#f59e0b',
-                        'completed': '#10b981',
-                        'delayed': '#ef4444'
-                    },
-                    text='completion_percentage'
-                )
+                # Create modern gradient bar chart
+                fig = go.Figure()
                 
-                # Professional chart styling
-                fig.update_traces(
-                    texttemplate='%{text:.1f}%',
-                    textposition='outside',
-                    marker_line_color='rgba(255,255,255,0.3)',
-                    marker_line_width=2
-                )
+                for status in ['completed', 'in_progress', 'planning', 'delayed']:
+                    df_status = df_stores[df_stores['status'] == status] if status in df_stores['status'].values else pd.DataFrame()
+                    
+                    if not df_status.empty:
+                        colors = {
+                            'completed': '#4ade80',
+                            'in_progress': '#f59e0b',
+                            'planning': '#667eea',
+                            'delayed': '#ef4444'
+                        }
+                        
+                        fig.add_trace(go.Bar(
+                            name=status.replace('_', ' ').title(),
+                            x=df_status['name'],
+                            y=df_status['completion_percentage'],
+                            marker_color=colors.get(status, '#667eea'),
+                            text=df_status['completion_percentage'].apply(lambda x: f'{x:.0f}%'),
+                            textposition='outside',
+                            hovertemplate='<b>%{x}</b><br>Completion: %{y:.1f}%<extra></extra>'
+                        ))
                 
                 fig.update_layout(
-                    height=450,
-                    plot_bgcolor='#ffffff',
-                    paper_bgcolor='#ffffff',
-                    font=dict(family='-apple-system, BlinkMacSystemFont, Segoe UI, Roboto', size=13, color='#1e293b'),
+                    barmode='group',
+                    height=400,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(family='Inter, sans-serif', size=12, color='#1a1d29'),
                     xaxis=dict(
+                        title='Store Location',
                         showgrid=False,
                         showline=True,
-                        linecolor='#e2e8f0',
-                        linewidth=2,
-                        title_font=dict(size=14, color='#475569'),
-                        tickfont=dict(size=12, color='#64748b')
+                        linecolor='#e5e7eb',
+                        tickfont=dict(size=11)
                     ),
                     yaxis=dict(
+                        title='Completion Percentage',
                         showgrid=True,
-                        gridcolor='#f1f5f9',
-                        showline=False,
-                        title_font=dict(size=14, color='#475569'),
-                        tickfont=dict(size=12, color='#64748b'),
-                        range=[0, 110]
+                        gridcolor='#f3f4f6',
+                        range=[0, 110],
+                        ticksuffix='%'
                     ),
                     legend=dict(
-                        orientation="h",
-                        yanchor="bottom",
+                        orientation='h',
+                        yanchor='bottom',
                         y=1.02,
-                        xanchor="right",
+                        xanchor='right',
                         x=1,
-                        bgcolor='rgba(255,255,255,0.9)',
-                        bordercolor='#e2e8f0',
-                        borderwidth=1,
-                        font=dict(size=12)
+                        bgcolor='rgba(255, 255, 255, 0.9)',
+                        bordercolor='#e5e7eb',
+                        borderwidth=1
                     ),
-                    margin=dict(t=50, b=50, l=50, r=50),
+                    margin=dict(t=80, b=60, l=60, r=40),
                     hovermode='x unified'
                 )
                 
-                st.plotly_chart(fig, use_container_width=True, key="store_progress_chart")
-                
-                # Add export button
-                col_export1, col_export2, col_export3 = st.columns([1, 1, 2])
-                with col_export1:
-                    if st.button("📊 Export Chart Data", use_container_width=True):
-                        csv = df_stores.to_csv(index=False)
-                        st.download_button(
-                            label="Download CSV",
-                            data=csv,
-                            file_name=f"store_progress_{datetime.now().strftime('%Y%m%d')}.csv",
-                            mime="text/csv",
-                        )
-                with col_export2:
-                    if st.button("📄 Generate Report", use_container_width=True):
-                        st.info("Report generation feature - Coming soon")
+                st.plotly_chart(fig, use_container_width=True)
     
     
     elif page == "ai_insights":
