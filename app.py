@@ -28,13 +28,20 @@ CORS(app)
 from backend.models import models
 
 # Register blueprints/routes
-from backend.routes import store_routes, team_routes, checklist_routes, whatsapp_routes, analytics_routes
+from backend.routes import (
+    store_routes, team_routes, checklist_routes, 
+    whatsapp_routes, analytics_routes, auth_routes,
+    voice_routes, ai_routes
+)
 
 app.register_blueprint(store_routes.bp)
 app.register_blueprint(team_routes.bp)
 app.register_blueprint(checklist_routes.bp)
 app.register_blueprint(whatsapp_routes.bp)
 app.register_blueprint(analytics_routes.bp)
+app.register_blueprint(auth_routes.bp)
+app.register_blueprint(voice_routes.bp)
+app.register_blueprint(ai_routes.bp)
 
 # Root route
 @app.route('/')
