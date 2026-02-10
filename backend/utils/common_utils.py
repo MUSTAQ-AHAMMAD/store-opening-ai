@@ -3,7 +3,8 @@ Utility functions for the Store Opening AI system
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict, List, Any
+from flask import jsonify
 
 
 def parse_iso_datetime(date_string: str) -> datetime:
@@ -73,3 +74,23 @@ def calculate_days_between(start_date: datetime, end_date: datetime) -> int:
     """
     delta = end_date - start_date
     return delta.days
+
+
+def validate_required_fields(data: Dict[str, Any], required_fields: List[str]) -> Optional[tuple]:
+    """
+    Validate that all required fields are present in the data
+    
+    Args:
+        data: Dictionary to validate
+        required_fields: List of required field names
+    
+    Returns:
+        None if validation passes, or (error_response, status_code) tuple if validation fails
+    """
+    missing_fields = [field for field in required_fields if field not in data]
+    
+    if missing_fields:
+        error_message = f"Missing required field(s): {', '.join(missing_fields)}"
+        return jsonify({'error': error_message}), 400
+    
+    return None

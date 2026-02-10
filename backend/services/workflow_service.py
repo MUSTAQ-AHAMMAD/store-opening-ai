@@ -55,6 +55,17 @@ WORKFLOW_STAGES = {
     }
 }
 
+# Statuses that should be excluded from various checks
+COMPLETED_STATUSES = {'completed'}
+
+# Escalation urgency levels
+ESCALATION_URGENCY_LEVELS = {
+    0: '⚠️ REMINDER',
+    1: '🚨 URGENT',
+    2: '🔴 CRITICAL',
+    3: '❌ EMERGENCY'
+}
+
 
 class WorkflowService:
     """Service for managing store opening workflow"""
@@ -99,7 +110,7 @@ class WorkflowService:
             
             # Update all workflow stage due dates
             for stage in store.workflow_stages:
-                if stage.status not in ['completed']:
+                if stage.status not in COMPLETED_STATUSES:
                     stage_info = WORKFLOW_STAGES.get(stage.stage_number)
                     if stage_info:
                         stage.due_date = new_opening_date - timedelta(days=stage_info['days_before_opening'])
@@ -369,7 +380,7 @@ Updated Stage Deadlines:
         delayed_stages = []
         
         for stage in store.workflow_stages:
-            if stage.status not in ['completed'] and stage.due_date and stage.due_date < now:
+            if stage.status not in COMPLETED_STATUSES and stage.due_date and stage.due_date < now:
                 delayed_stages.append(stage)
         
         return delayed_stages
@@ -501,7 +512,7 @@ Mobile: {nearby_store.contact_person_mobile}
                 context
             )
         else:
-            urgency = ['⚠️ REMINDER', '🚨 URGENT', '🔴 CRITICAL', '❌ EMERGENCY'][min(level - 1, 3)]
+            urgency = ESCALATION_URGENCY_LEVELS.get(min(level, 3), '⚠️ REMINDER')
             return f"""{urgency} - Workflow Stage Delayed
 
 Store: {store.name}

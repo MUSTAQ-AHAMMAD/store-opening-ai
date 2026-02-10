@@ -97,6 +97,12 @@ Best regards,
 Store Opening AI System
         """.strip()
         
+        # Generate team member list HTML
+        team_member_list_html = ''.join([
+            f"<li>{m['name']} ({m['role']}) - {m['email']}</li>"
+            for m in team_members if m.get('email')
+        ])
+        
         html_body = f"""
         <html>
         <head>
@@ -124,7 +130,7 @@ Store Opening AI System
                 
                 <h3>Team Members</h3>
                 <ul>
-                    {''.join([f"<li>{m['name']} ({m['role']}) - {m['email']}</li>" for m in team_members if m.get('email')])}
+                    {team_member_list_html}
                 </ul>
                 
                 <h3>Workflow Process (7 Stages)</h3>

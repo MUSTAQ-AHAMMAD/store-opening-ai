@@ -12,7 +12,7 @@ from backend.models.models import (
 )
 from backend.services.workflow_service import get_workflow_service
 from backend.services.email_service import get_email_service
-from backend.utils.common_utils import parse_iso_datetime
+from backend.utils.common_utils import parse_iso_datetime, validate_required_fields
 
 bp = Blueprint('workflow', __name__, url_prefix='/api/workflow')
 
@@ -47,10 +47,12 @@ def update_nearby_store_details(store_id):
     data = request.get_json()
     
     # Validate required fields
-    required_fields = ['store_name', 'contact_person_name', 'contact_person_mobile', 'updated_by_id']
-    for field in required_fields:
-        if field not in data:
-            return jsonify({'error': f'Missing required field: {field}'}), 400
+    validation_error = validate_required_fields(
+        data,
+        ['store_name', 'contact_person_name', 'contact_person_mobile', 'updated_by_id']
+    )
+    if validation_error:
+        return validation_error
     
     updated_by = TeamMember.query.get(data['updated_by_id'])
     if not updated_by:
@@ -86,8 +88,9 @@ def confirm_warehouse_shipment(store_id):
     store = Store.query.get_or_404(store_id)
     data = request.get_json()
     
-    if 'confirmed_by_id' not in data:
-        return jsonify({'error': 'Missing required field: confirmed_by_id'}), 400
+    validation_error = validate_required_fields(data, ['confirmed_by_id'])
+    if validation_error:
+        return validation_error
     
     confirmed_by = TeamMember.query.get(data['confirmed_by_id'])
     if not confirmed_by:
@@ -108,8 +111,9 @@ def confirm_nearby_store_receipt(store_id):
     store = Store.query.get_or_404(store_id)
     data = request.get_json()
     
-    if 'confirmed_by_id' not in data:
-        return jsonify({'error': 'Missing required field: confirmed_by_id'}), 400
+    validation_error = validate_required_fields(data, ['confirmed_by_id'])
+    if validation_error:
+        return validation_error
     
     confirmed_by = TeamMember.query.get(data['confirmed_by_id'])
     if not confirmed_by:
@@ -130,8 +134,9 @@ def confirm_store_receipt(store_id):
     store = Store.query.get_or_404(store_id)
     data = request.get_json()
     
-    if 'confirmed_by_id' not in data:
-        return jsonify({'error': 'Missing required field: confirmed_by_id'}), 400
+    validation_error = validate_required_fields(data, ['confirmed_by_id'])
+    if validation_error:
+        return validation_error
     
     confirmed_by = TeamMember.query.get(data['confirmed_by_id'])
     if not confirmed_by:
@@ -152,10 +157,9 @@ def start_installation(store_id):
     store = Store.query.get_or_404(store_id)
     data = request.get_json()
     
-    required_fields = ['teamviewer_id', 'technician_id']
-    for field in required_fields:
-        if field not in data:
-            return jsonify({'error': f'Missing required field: {field}'}), 400
+    validation_error = validate_required_fields(data, ['teamviewer_id', 'technician_id'])
+    if validation_error:
+        return validation_error
     
     technician = TeamMember.query.get(data['technician_id'])
     if not technician:
@@ -212,8 +216,9 @@ def complete_final_checklist(store_id):
     store = Store.query.get_or_404(store_id)
     data = request.get_json()
     
-    if 'completed_by_id' not in data:
-        return jsonify({'error': 'Missing required field: completed_by_id'}), 400
+    validation_error = validate_required_fields(data, ['completed_by_id'])
+    if validation_error:
+        return validation_error
     
     completed_by = TeamMember.query.get(data['completed_by_id'])
     if not completed_by:
@@ -259,8 +264,9 @@ def update_opening_date(store_id):
     store = Store.query.get_or_404(store_id)
     data = request.get_json()
     
-    if 'opening_date' not in data:
-        return jsonify({'error': 'Missing required field: opening_date'}), 400
+    validation_error = validate_required_fields(data, ['opening_date'])
+    if validation_error:
+        return validation_error
     
     try:
         new_opening_date = parse_iso_datetime(data['opening_date'])

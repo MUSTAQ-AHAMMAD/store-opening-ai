@@ -21,6 +21,21 @@ from backend.services.workflow_service import get_workflow_service
 DATETIME_TOLERANCE_SECONDS = 60  # Allow 1 minute tolerance for datetime comparisons
 
 
+def assert_datetime_near(actual: datetime, expected: datetime, tolerance_seconds: int = DATETIME_TOLERANCE_SECONDS):
+    """
+    Assert that two datetimes are within tolerance of each other
+    
+    Args:
+        actual: The actual datetime value
+        expected: The expected datetime value
+        tolerance_seconds: Tolerance in seconds (default: 60)
+    """
+    diff_seconds = abs((actual - expected).total_seconds())
+    assert diff_seconds < tolerance_seconds, \
+        f"Datetimes differ by {diff_seconds} seconds (tolerance: {tolerance_seconds}s). " \
+        f"Expected: {expected}, Actual: {actual}"
+
+
 @pytest.fixture
 def client():
     """Create test client"""
@@ -225,7 +240,7 @@ def test_timeline_recalculation(client, sample_store):
                 
                 # New due date should be 10 days later
                 expected_due_date = old_due_date + timedelta(days=10)
-                assert abs((new_due_date - expected_due_date).total_seconds()) < DATETIME_TOLERANCE_SECONDS
+                assert_datetime_near(new_due_date, expected_due_date)
 
 
 def test_delayed_stage_detection(client, sample_store):
