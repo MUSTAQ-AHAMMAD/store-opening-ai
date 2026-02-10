@@ -16,6 +16,9 @@ from backend.models.models import (
 )
 import random
 
+# Import user seeding function
+from data.seed_users import seed_admin_user
+
 def clear_data():
     """Clear all existing data"""
     with app.app_context():
@@ -312,7 +315,8 @@ def seed_all():
         # Clear existing data
         clear_data()
         
-        # Seed data in order
+        # Seed data in order (users first for authentication)
+        seed_admin_user(use_existing_context=True)
         stores = seed_stores()
         team_members = seed_team_members(stores)
         tasks = seed_checklists_and_tasks(stores, team_members)
@@ -324,6 +328,7 @@ def seed_all():
         print("SEEDING COMPLETE!")
         print("="*50)
         print(f"\nSummary:")
+        print(f"  - Users: 3 (admin, manager, user)")
         print(f"  - Stores: {len(stores)}")
         print(f"  - Team Members: {len(team_members)}")
         print(f"  - Tasks: {len(tasks)}")

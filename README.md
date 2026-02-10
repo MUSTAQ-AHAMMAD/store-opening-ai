@@ -94,6 +94,7 @@ python data/seed_beta_data.py
 ```
 
 This will create:
+- **Default user accounts** for login (admin, manager, user)
 - 5 sample stores with different opening dates
 - 20+ team members across stores
 - Complete checklists for each store (Hardware, Software, Connectivity, Training)
@@ -101,6 +102,17 @@ This will create:
 - WhatsApp groups for each store
 - Mock conversation data for archived groups
 - Follow-up reminders and escalations
+
+### Default Login Credentials
+After seeding, you can login with these credentials:
+
+| Role | Username | Password |
+|------|----------|----------|
+| Admin | `admin` | `admin123` |
+| Manager | `manager` | `manager123` |
+| Team Member | `user` | `user123` |
+
+> ⚠️ **Security Note**: Change these default passwords in production!
 
 ## 🏃 Running the Application
 

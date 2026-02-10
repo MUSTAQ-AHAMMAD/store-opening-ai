@@ -12,16 +12,22 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from app import app, db
 from backend.models.models import User
 
-def seed_admin_user():
-    """Create default admin user"""
-    with app.app_context():
+def seed_admin_user(use_existing_context=False):
+    """Create default admin user
+    
+    Args:
+        use_existing_context: If True, assumes function is called within an existing app context.
+                            If False (default), creates its own app context.
+    """
+    def _seed():
+        # Ensure database tables exist
+        db.create_all()
+        
         # Check if admin already exists
         existing_admin = User.query.filter_by(username='admin').first()
         
         if existing_admin:
-            print("Admin user already exists!")
-            print(f"Username: {existing_admin.username}")
-            print(f"Email: {existing_admin.email}")
+            print("Admin user already exists, skipping user creation")
             return
         
         # Create admin user
@@ -85,6 +91,12 @@ def seed_admin_user():
         print("2. Force password change on first login")
         print("3. Never use predictable passwords like these")
         print("="*50 + "\n")
+    
+    if use_existing_context:
+        _seed()
+    else:
+        with app.app_context():
+            _seed()
 
 if __name__ == '__main__':
     seed_admin_user()
