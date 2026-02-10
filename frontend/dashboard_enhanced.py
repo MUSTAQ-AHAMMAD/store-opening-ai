@@ -830,9 +830,9 @@ else:
             
             # Executive Summary Card
             st.markdown(f"""
-                <div style="background: var(--primary-color); 
+                <div style="background: #2563eb; 
                             padding: 1.5rem; border-radius: 12px; color: white; margin-bottom: 1.5rem;
-                            box-shadow: var(--shadow-md);">
+                            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div style="font-size: 0.875rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
