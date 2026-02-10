@@ -326,7 +326,7 @@ st.markdown("""
     }
     
     /* 🔘 BUTTONS - Modern & Interactive */
-    /* (Enhanced version defined later for better specificity) */
+    /* Enhanced version with improved styling defined later in stylesheet for better specificity and UX */
     
     /* 📱 SIDEBAR - Sleek Navigation */
     [data-testid="stSidebar"] {
@@ -653,7 +653,7 @@ st.markdown("""
         font-size: 0.95rem !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
-        text-transform: none;
+        text-transform: none; /* Improved readability: removed uppercase for more professional appearance */
         letter-spacing: 0.02em;
     }
     
