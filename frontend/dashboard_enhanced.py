@@ -11,6 +11,12 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import json
 
+# Constants
+TARGET_COMPLETION_RATE = 80
+RISK_THRESHOLD_HIGH = 75
+RISK_STATUS_CRITICAL = 5
+RISK_STATUS_MODERATE = 0
+
 # Configure page with modern theme
 st.set_page_config(
     page_title="Store Opening AI - Dashboard",
@@ -820,21 +826,21 @@ else:
                 if summary.get('total_tasks', 0) > 0:
                     completion_pct = (summary.get('completed_tasks', 0) / summary.get('total_tasks')) * 100
                 
-                trend_color = "#10b981" if completion_pct >= 75 else "#f59e0b"
+                trend_color = "#10b981" if completion_pct >= RISK_THRESHOLD_HIGH else "#f59e0b"
                 st.markdown(f"""
                     <div class="metric-card metric-card-success fade-in">
                         <div class="metric-card-icon">✓</div>
                         <div class="metric-value">{completion_pct:.1f}%</div>
                         <div class="metric-label">Completion Rate</div>
                         <div class="metric-trend" style="margin-top: 0.5rem; font-size: 0.8rem; color: {trend_color};">
-                            Target: 80%
+                            Target: {TARGET_COMPLETION_RATE}%
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col4:
                 overdue = summary.get('overdue_tasks', 0)
-                status_color = "#ef4444" if overdue > 5 else "#f59e0b" if overdue > 0 else "#10b981"
+                status_color = "#ef4444" if overdue > RISK_STATUS_CRITICAL else "#f59e0b" if overdue > RISK_STATUS_MODERATE else "#10b981"
                 st.markdown(f"""
                     <div class="metric-card metric-card-danger fade-in">
                         <div class="metric-card-icon">⚠</div>
@@ -842,7 +848,7 @@ else:
                         <div class="metric-label">Overdue Tasks</div>
                         <div style="margin-top: 0.5rem; font-size: 0.8rem;">
                             <span style="color: {status_color}; font-weight: 600;">
-                                {"Critical" if overdue > 5 else "Moderate" if overdue > 0 else "Good"}
+                                {"Critical" if overdue > RISK_STATUS_CRITICAL else "Moderate" if overdue > RISK_STATUS_MODERATE else "Good"}
                             </span>
                         </div>
                     </div>
