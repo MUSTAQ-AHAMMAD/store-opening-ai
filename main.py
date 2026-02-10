@@ -3,8 +3,8 @@ Store Opening AI Management System
 Entry point - delegates to app.py
 """
 
-from app import app, initialize_db
 import os
+from app import app, initialize_db
 
 if __name__ == '__main__':
     # Initialize database
