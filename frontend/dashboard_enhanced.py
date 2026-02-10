@@ -1295,7 +1295,7 @@ else:
         
         team_data = api_request("/team")
         
-        if team_data:
+        if team_data and isinstance(team_data, list):
             st.success(f"👥 Total Team Members: {len(team_data)}")
             
             # Filters
@@ -1408,7 +1408,7 @@ else:
             # Get checklists for store
             checklists_data = api_request(f"/checklists?store_id={store_id}")
             
-            if checklists_data:
+            if checklists_data and isinstance(checklists_data, list):
                 for checklist in checklists_data:
                     with st.expander(f"📋 {checklist.get('name', 'Checklist')} - {checklist.get('category', 'General')}", expanded=True):
                         st.write(f"**Description:** {checklist.get('description', 'N/A')}")
@@ -1416,7 +1416,7 @@ else:
                         # Get tasks for this checklist
                         tasks_data = api_request(f"/checklists/{checklist['id']}/tasks")
                         
-                        if tasks_data:
+                        if tasks_data and isinstance(tasks_data, list):
                             # Filter tasks
                             filtered_tasks = [t for t in tasks_data if t.get('status') in status_filter] if status_filter else tasks_data
                             
@@ -1508,7 +1508,7 @@ else:
         with tab1:
             groups_data = api_request("/whatsapp/groups")
             
-            if groups_data:
+            if groups_data and isinstance(groups_data, list):
                 st.success(f"📱 Total WhatsApp Groups: {len(groups_data)}")
                 
                 for group in groups_data:
@@ -1574,7 +1574,7 @@ else:
             st.markdown("### 💬 Send WhatsApp Message")
             
             groups_data = api_request("/whatsapp/groups")
-            if groups_data:
+            if groups_data and isinstance(groups_data, list):
                 group_options = {f"{g['name']} - {g.get('store_name', 'N/A')}": g['id'] for g in groups_data}
                 selected_group = st.selectbox("Select Group", list(group_options.keys()))
                 
