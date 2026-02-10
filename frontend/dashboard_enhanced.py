@@ -1,7 +1,7 @@
 """
 Store Opening AI - Enhanced Dashboard with Authentication
 Modern, Rich UI with User Management and AI Features
-COMPLETELY REDESIGNED UI - Fresh, Modern Look
+OUT-OF-THE-BOX DESIGN - Dark Neon Cyberpunk Theme
 """
 
 import streamlit as st
@@ -19,10 +19,10 @@ RISK_THRESHOLD_HIGH = 75
 RISK_STATUS_CRITICAL = 5
 RISK_STATUS_MODERATE = 0
 
-# Configure page with modern theme
+# Configure page with dark neon theme
 st.set_page_config(
-    page_title="🏢 Store Opening AI - Next Generation Dashboard",
-    page_icon="🏢",
+    page_title="⚡ Store Opening AI - Neon Dashboard",
+    page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -30,53 +30,74 @@ st.set_page_config(
 # API Configuration
 API_BASE_URL = "http://localhost:5000/api"
 
-# COMPLETELY NEW MODERN UI - Fresh Design with Vibrant Colors
+# ⚡ OUT-OF-THE-BOX DESIGN - Dark Neon Cyberpunk Theme
 st.markdown("""
     <style>
-    /* 🎨 NEW DESIGN SYSTEM - Vibrant & Modern Theme */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    /* ⚡ NEON CYBERPUNK DESIGN SYSTEM - Bold & Futuristic */
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
     
     :root {
-        /* Vibrant Purple-Blue Gradient Theme */
-        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --primary-color: #667eea;
-        --primary-dark: #5568d3;
-        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-        --info-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        /* Neon Accent Colors */
+        --neon-cyan: #00f0ff;
+        --neon-magenta: #ff00e5;
+        --neon-lime: #39ff14;
+        --neon-orange: #ff6b00;
+        --neon-violet: #b84dff;
         
-        /* Modern Neutral Colors */
-        --bg-primary: #f8f9fe;
-        --bg-secondary: #ffffff;
-        --text-primary: #1a1d29;
-        --text-secondary: #6b7280;
-        --text-muted: #9ca3af;
-        --border-light: #e5e7eb;
-        --border-medium: #d1d5db;
+        /* Gradient System */
+        --primary-gradient: linear-gradient(135deg, #00f0ff 0%, #b84dff 100%);
+        --secondary-gradient: linear-gradient(135deg, #ff00e5 0%, #ff6b00 100%);
+        --success-gradient: linear-gradient(135deg, #39ff14 0%, #00f0ff 100%);
+        --warning-gradient: linear-gradient(135deg, #ff6b00 0%, #ff00e5 100%);
+        --danger-gradient: linear-gradient(135deg, #ff3366 0%, #ff6b00 100%);
+        --info-gradient: linear-gradient(135deg, #00f0ff 0%, #39ff14 100%);
         
-        /* Glassmorphism Effect */
-        --glass-bg: rgba(255, 255, 255, 0.9);
-        --glass-border: rgba(255, 255, 255, 0.2);
+        /* Dark Background System */
+        --bg-primary: #0a0e1a;
+        --bg-secondary: #111827;
+        --bg-card: #151c2e;
+        --bg-card-hover: #1a2340;
+        --bg-elevated: #1e2742;
         
-        /* Shadows - Enhanced */
-        --shadow-sm: 0 2px 8px rgba(102, 126, 234, 0.1);
-        --shadow-md: 0 4px 16px rgba(102, 126, 234, 0.15);
-        --shadow-lg: 0 8px 32px rgba(102, 126, 234, 0.2);
-        --shadow-xl: 0 16px 48px rgba(102, 126, 234, 0.25);
+        /* Text Colors */
+        --text-primary: #e8ecf4;
+        --text-secondary: #8b95a8;
+        --text-muted: #5a6478;
+        
+        /* Borders */
+        --border-light: rgba(0, 240, 255, 0.12);
+        --border-medium: rgba(0, 240, 255, 0.25);
+        --border-glow: rgba(0, 240, 255, 0.4);
+        
+        /* Dark Glass Effect */
+        --glass-bg: rgba(21, 28, 46, 0.85);
+        --glass-border: rgba(0, 240, 255, 0.15);
+        
+        /* Neon Shadows */
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+        --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+        --shadow-neon-cyan: 0 0 20px rgba(0, 240, 255, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
+        --shadow-neon-magenta: 0 0 20px rgba(255, 0, 229, 0.3), 0 0 40px rgba(255, 0, 229, 0.1);
+        --shadow-neon-lime: 0 0 20px rgba(57, 255, 20, 0.3), 0 0 40px rgba(57, 255, 20, 0.1);
+
+        /* Primary Color Aliases */
+        --primary-color: #00f0ff;
+        --primary-dark: #00c4d4;
     }
     
-    /* 🌟 GLOBAL STYLES - Modern & Clean */
+    /* ⚡ GLOBAL STYLES */
     * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
     
-    /* Main Container - Vibrant Background */
+    /* Main Container - Dark Background */
     .main {
         background: var(--bg-primary);
+        color: var(--text-primary);
     }
     
     .block-container {
@@ -84,10 +105,10 @@ st.markdown("""
         max-width: 1600px;
     }
     
-    /* 🎯 HEADER STYLES - Bold & Impactful */
+    /* ⚡ HEADER STYLES - Neon Glow */
     .main-header {
         font-size: 2.5rem;
-        font-weight: 800;
+        font-weight: 700;
         background: var(--primary-gradient);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -95,11 +116,22 @@ st.markdown("""
         margin-bottom: 0.5rem;
         letter-spacing: -0.02em;
         animation: slideIn 0.6s ease-out;
+        filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.4));
     }
     
     @keyframes slideIn {
         from { opacity: 0; transform: translateY(-20px); }
         to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes neonPulse {
+        0%, 100% { box-shadow: var(--shadow-neon-cyan); }
+        50% { box-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 60px rgba(0, 240, 255, 0.2); }
+    }
+
+    @keyframes borderGlow {
+        0%, 100% { border-color: rgba(0, 240, 255, 0.3); }
+        50% { border-color: rgba(0, 240, 255, 0.6); }
     }
     
     .page-subtitle {
@@ -109,15 +141,15 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* 💎 METRIC CARDS - Glassmorphism with Gradients */
+    /* 💎 METRIC CARDS - Dark Glass with Neon Edges */
     .metric-card-modern {
         background: var(--glass-bg);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(16px);
         padding: 2rem;
         border-radius: 20px;
         border: 1px solid var(--glass-border);
         box-shadow: var(--shadow-lg);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
     }
@@ -128,13 +160,15 @@ st.markdown("""
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
+        height: 3px;
         background: var(--primary-gradient);
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
     }
     
     .metric-card-modern:hover {
         transform: translateY(-8px) scale(1.02);
-        box-shadow: var(--shadow-xl);
+        box-shadow: var(--shadow-xl), var(--shadow-neon-cyan);
+        border-color: var(--border-glow);
     }
     
     .metric-icon-gradient {
@@ -147,24 +181,25 @@ st.markdown("""
         font-size: 1.75rem;
         margin-bottom: 1rem;
         background: var(--primary-gradient);
-        box-shadow: var(--shadow-md);
+        box-shadow: var(--shadow-neon-cyan);
     }
     
     .metric-value-large {
         font-size: 2.5rem;
-        font-weight: 800;
+        font-weight: 700;
         color: var(--text-primary);
         line-height: 1;
         margin: 1rem 0 0.5rem 0;
         letter-spacing: -0.02em;
+        font-family: 'JetBrains Mono', monospace;
     }
     
     .metric-label-modern {
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.15em;
     }
     
     .metric-change {
@@ -179,25 +214,28 @@ st.markdown("""
     }
     
     .metric-change-positive {
-        background: rgba(74, 222, 128, 0.1);
-        color: #16a34a;
+        background: rgba(57, 255, 20, 0.1);
+        color: #39ff14;
+        border: 1px solid rgba(57, 255, 20, 0.2);
     }
     
     .metric-change-negative {
-        background: rgba(248, 113, 113, 0.1);
-        color: #dc2626;
+        background: rgba(255, 51, 102, 0.1);
+        color: #ff3366;
+        border: 1px solid rgba(255, 51, 102, 0.2);
     }
     
-    /* 🎨 GRADIENT HERO BANNER */
+    /* ⚡ HERO BANNER - Cyberpunk Mesh Gradient */
     .hero-banner {
-        background: var(--primary-gradient);
+        background: linear-gradient(135deg, #0a0e1a 0%, #1a0a2e 30%, #0a1a2e 60%, #0a0e1a 100%);
         padding: 2.5rem;
         border-radius: 24px;
         color: white;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow-xl);
+        box-shadow: var(--shadow-xl), var(--shadow-neon-cyan);
         position: relative;
         overflow: hidden;
+        border: 1px solid var(--border-medium);
     }
     
     .hero-banner::before {
@@ -205,11 +243,23 @@ st.markdown("""
         position: absolute;
         top: -50%;
         right: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, transparent 70%);
+        filter: blur(40px);
+        animation: neonPulse 4s ease-in-out infinite;
+    }
+
+    .hero-banner::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -5%;
         width: 300px;
         height: 300px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
+        background: radial-gradient(circle, rgba(184, 77, 255, 0.15) 0%, transparent 70%);
         filter: blur(40px);
+        animation: neonPulse 4s ease-in-out infinite 2s;
     }
     
     .hero-title {
@@ -218,23 +268,25 @@ st.markdown("""
         margin-bottom: 0.5rem;
         position: relative;
         z-index: 1;
+        text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
     }
     
     .hero-subtitle {
         font-size: 1rem;
-        opacity: 0.95;
+        opacity: 0.85;
         position: relative;
         z-index: 1;
+        color: var(--text-secondary);
     }
     
-    /* 🏪 STORE CARDS - Modern Design */
+    /* 🏪 STORE CARDS - Dark Neon Design */
     .store-card-modern {
-        background: white;
+        background: var(--bg-card);
         border-radius: 20px;
         padding: 1.75rem;
         box-shadow: var(--shadow-md);
         border: 1px solid var(--border-light);
-        transition: all 0.3s ease;
+        transition: all 0.4s ease;
         margin-bottom: 1.5rem;
         position: relative;
         overflow: hidden;
@@ -245,14 +297,17 @@ st.markdown("""
         position: absolute;
         top: 0;
         left: 0;
-        width: 5px;
+        width: 4px;
         height: 100%;
         background: var(--primary-gradient);
+        box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
     }
     
     .store-card-modern:hover {
-        box-shadow: var(--shadow-lg);
-        transform: translateX(4px);
+        box-shadow: var(--shadow-lg), var(--shadow-neon-cyan);
+        transform: translateX(6px);
+        border-color: var(--border-medium);
+        background: var(--bg-card-hover);
     }
     
     .store-title {
@@ -271,46 +326,63 @@ st.markdown("""
         gap: 0.5rem;
     }
     
-    /* 🎯 STATUS BADGES - Vibrant */
+    /* ⚡ STATUS BADGES - Neon Glow */
     .status-badge-modern {
         padding: 0.5rem 1rem;
         border-radius: 12px;
         font-weight: 600;
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        text-transform: capitalize;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-weight: bold;
+        font-size: 0.85rem;
     }
     
     .status-planning {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: rgba(0, 240, 255, 0.15);
+        color: var(--neon-cyan);
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
     }
     
-    .status-in-progress {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
+    .status-in-progress, .status-in_progress {
+        background: rgba(255, 0, 229, 0.15);
+        color: var(--neon-magenta);
+        border: 1px solid rgba(255, 0, 229, 0.3);
+        box-shadow: 0 0 8px rgba(255, 0, 229, 0.15);
     }
     
     .status-completed {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        color: white;
+        background: rgba(57, 255, 20, 0.15);
+        color: var(--neon-lime);
+        border: 1px solid rgba(57, 255, 20, 0.3);
+        box-shadow: 0 0 8px rgba(57, 255, 20, 0.15);
     }
     
     .status-delayed {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-        color: white;
+        background: rgba(255, 51, 102, 0.15);
+        color: #ff3366;
+        border: 1px solid rgba(255, 51, 102, 0.3);
+        box-shadow: 0 0 8px rgba(255, 51, 102, 0.15);
     }
     
-    /* 📊 PROGRESS BARS - Animated */
+    /* ⚡ PROGRESS BARS - Neon Animated */
     .progress-bar-container {
         width: 100%;
-        height: 12px;
-        background: var(--border-light);
+        height: 10px;
+        background: rgba(0, 240, 255, 0.08);
         border-radius: 12px;
         overflow: hidden;
         margin: 1rem 0;
+        border: 1px solid rgba(0, 240, 255, 0.1);
     }
     
     .progress-bar-fill {
@@ -319,20 +391,38 @@ st.markdown("""
         border-radius: 12px;
         transition: width 1s ease-out;
         animation: progressAnimation 2s ease-out;
+        box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+        position: relative;
+    }
+
+    .progress-bar-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
     }
     
     @keyframes progressAnimation {
         from { width: 0; }
     }
     
-    /* 🔘 BUTTONS - Modern & Interactive */
-    /* Enhanced version with improved styling defined later in stylesheet for better specificity and UX */
+    /* 🔘 BUTTONS - Commented: see improved buttons below */
     
-    /* 📱 SIDEBAR - Sleek Navigation */
+    /* 📱 SIDEBAR - Dark Glass Navigation */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(180deg, #0d1117 0%, #0a0e1a 50%, #100a1e 100%);
         color: white;
         padding: 1rem 0;
+        border-right: 1px solid var(--border-light);
     }
     
     [data-testid="stSidebar"] .element-container {
@@ -340,24 +430,23 @@ st.markdown("""
     }
     
     [data-testid="stSidebar"] hr {
-        border-color: rgba(255, 255, 255, 0.25);
+        border-color: var(--border-light);
         margin: 1.25rem 0;
     }
     
     [data-testid="stSidebar"] h3 {
-        color: white;
+        color: var(--neon-cyan);
         font-weight: 600;
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.1em;
         margin-bottom: 1rem;
-        opacity: 0.9;
     }
     
     
-    /* 🎴 CARDS - Various Styles */
+    /* 🎴 CARDS - Dark Glass Styles */
     .info-card {
-        background: white;
+        background: var(--bg-card);
         padding: 1.5rem;
         border-radius: 16px;
         box-shadow: var(--shadow-sm);
@@ -366,39 +455,42 @@ st.markdown("""
     }
     
     .info-card-gradient {
-        background: var(--info-gradient);
-        color: white;
+        background: var(--bg-elevated);
+        color: var(--text-primary);
         padding: 1.5rem;
         border-radius: 16px;
         box-shadow: var(--shadow-md);
         margin-bottom: 1rem;
+        border: 1px solid var(--border-light);
     }
     
-    /* 📈 CHARTS - Enhanced Styling */
+    /* 📈 CHARTS - Dark Styling */
     .stPlotlyChart {
-        background: white;
+        background: var(--bg-card);
         border-radius: 16px;
         padding: 1rem;
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--border-light);
     }
     
-    /* 🎯 WORKFLOW STAGES - Visual Timeline */
+    /* 🎯 WORKFLOW STAGES - Neon Timeline */
     .stage-container {
         display: flex;
         align-items: center;
         gap: 1rem;
         padding: 1rem;
-        background: white;
+        background: var(--bg-card);
         border-radius: 12px;
         margin-bottom: 1rem;
         box-shadow: var(--shadow-sm);
         transition: all 0.3s ease;
+        border: 1px solid var(--border-light);
     }
     
     .stage-container:hover {
-        box-shadow: var(--shadow-md);
-        transform: translateX(4px);
+        box-shadow: var(--shadow-md), var(--shadow-neon-cyan);
+        transform: translateX(6px);
+        border-color: var(--border-medium);
     }
     
     .stage-number {
@@ -406,21 +498,24 @@ st.markdown("""
         height: 44px;
         border-radius: 50%;
         background: var(--primary-gradient);
-        color: white;
+        color: #0a0e1a;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
         font-size: 1.125rem;
         flex-shrink: 0;
+        box-shadow: var(--shadow-neon-cyan);
     }
     
     .stage-completed .stage-number {
         background: var(--success-gradient);
+        box-shadow: var(--shadow-neon-lime);
     }
     
     .stage-delayed .stage-number {
         background: var(--danger-gradient);
+        box-shadow: var(--shadow-neon-magenta);
     }
     
     /* ✨ ANIMATIONS */
@@ -439,9 +534,9 @@ st.markdown("""
         animation: fadeInUp 0.6s ease-out;
     }
     
-    /* 🎨 EXPANDER - Modern Design */
+    /* 🎨 EXPANDER - Dark Neon Design */
     .streamlit-expanderHeader {
-        background: white;
+        background: var(--bg-card);
         border-radius: 12px;
         border: 1px solid var(--border-light);
         padding: 1rem 1.5rem;
@@ -450,11 +545,12 @@ st.markdown("""
     }
     
     .streamlit-expanderHeader:hover {
-        background: var(--bg-primary);
-        border-color: var(--primary-color);
+        background: var(--bg-card-hover);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
     }
     
-    /* 📝 INPUT FIELDS - Refined */
+    /* 📝 INPUT FIELDS - Dark Neon */
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select,
     .stTextArea > div > div > textarea {
@@ -462,72 +558,78 @@ st.markdown("""
         border: 2px solid var(--border-light);
         padding: 0.75rem 1rem;
         transition: all 0.3s ease;
+        background: var(--bg-card);
+        color: var(--text-primary);
     }
     
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus,
     .stTextArea > div > div > textarea:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1), 0 0 16px rgba(0, 240, 255, 0.15);
     }
     
-    /* 🎯 TABS - Modern Design */
+    /* 🎯 TABS - Neon Design */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 1rem;
-        background: white;
+        gap: 0.5rem;
+        background: var(--bg-card);
         padding: 0.5rem;
         border-radius: 12px;
+        border: 1px solid var(--border-light);
     }
     
     .stTabs [data-baseweb="tab"] {
         border-radius: 8px;
         padding: 0.75rem 1.5rem;
         font-weight: 600;
+        color: var(--text-secondary);
     }
     
     .stTabs [aria-selected="true"] {
         background: var(--primary-gradient);
-        color: white;
+        color: #0a0e1a;
+        box-shadow: var(--shadow-neon-cyan);
     }
     
     /* 💡 ALERTS & NOTIFICATIONS */
     .stAlert {
         border-radius: 12px;
-        border: none;
+        border: 1px solid var(--border-light);
         box-shadow: var(--shadow-sm);
     }
     
-    /* 🎨 DATAFRAME - Clean Look */
+    /* 🎨 DATAFRAME - Dark Look */
     .stDataFrame {
         border-radius: 12px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-light);
     }
     
     /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* 🔐 LOGIN PAGE - Professional Design */
+    /* 🔐 LOGIN PAGE - Dark Neon Design */
     .login-container {
-        background: white;
+        background: var(--bg-card);
         padding: 3rem 2.5rem;
         border-radius: 24px;
-        box-shadow: var(--shadow-xl);
-        border: 1px solid var(--border-light);
-        animation: fadeInUp 0.6s ease-out;
+        box-shadow: var(--shadow-xl), var(--shadow-neon-cyan);
+        border: 1px solid var(--border-medium);
+        animation: fadeInUp 0.6s ease-out, borderGlow 3s ease-in-out infinite;
     }
     
     .login-header {
         font-size: 2.25rem;
         font-weight: 700;
-        color: var(--text-primary);
         margin-bottom: 0.75rem;
         text-align: center;
         background: var(--primary-gradient);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.3));
     }
     
     .login-subtitle {
@@ -538,90 +640,93 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* 👤 USER PROFILE CARD - Elegant Sidebar Profile */
+    /* 👤 USER PROFILE CARD - Neon Glass */
     .user-profile-card {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
+        background: rgba(0, 240, 255, 0.06);
+        backdrop-filter: blur(16px);
         border-radius: 16px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(0, 240, 255, 0.15);
         text-align: center;
-        transition: all 0.3s ease;
+        transition: all 0.4s ease;
     }
     
     .user-profile-card:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(0, 240, 255, 0.1);
         transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-neon-cyan);
+        border-color: rgba(0, 240, 255, 0.3);
     }
     
     .user-profile-icon {
         font-size: 3rem;
         margin-bottom: 1rem;
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.5));
     }
     
     .user-profile-name {
         font-size: 1.125rem;
         font-weight: 700;
-        color: white;
+        color: var(--text-primary);
         margin-bottom: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
     }
     
     .user-profile-role {
-        font-size: 0.875rem;
-        color: rgba(255, 255, 255, 0.85);
-        font-weight: 500;
+        font-size: 0.8rem;
+        color: var(--neon-cyan);
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        background: rgba(255, 255, 255, 0.15);
+        letter-spacing: 0.08em;
+        background: rgba(0, 240, 255, 0.1);
         padding: 0.375rem 0.75rem;
         border-radius: 8px;
         display: inline-block;
+        border: 1px solid rgba(0, 240, 255, 0.2);
     }
     
-    /* 📌 SUB-HEADER - Section Headers */
+    /* 📌 SUB-HEADER - Neon Section Headers */
     .sub-header {
         font-size: 1.5rem;
         font-weight: 700;
         color: var(--text-primary);
         margin: 2rem 0 1rem 0;
         padding-bottom: 0.75rem;
-        border-bottom: 3px solid transparent;
+        border-bottom: 2px solid transparent;
         border-image: var(--primary-gradient) 1;
         border-image-slice: 1;
     }
     
-    /* 📱 IMPROVED SIDEBAR RADIO BUTTONS - Better Contrast */
+    /* 📱 SIDEBAR RADIO BUTTONS - Neon Hover */
     [data-testid="stSidebar"] .stRadio > label {
-        background: rgba(255, 255, 255, 0.12);
+        background: rgba(0, 240, 255, 0.04);
         padding: 0.875rem 1.25rem;
         border-radius: 12px;
         margin: 0.375rem 0;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(0, 240, 255, 0.08);
         cursor: pointer;
         font-weight: 500;
         font-size: 0.95rem;
     }
     
     [data-testid="stSidebar"] .stRadio > label:hover {
-        background: rgba(255, 255, 255, 0.25);
+        background: rgba(0, 240, 255, 0.12);
         transform: translateX(6px);
-        border-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: rgba(0, 240, 255, 0.25);
+        box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
     }
     
     [data-testid="stSidebar"] .stRadio > label[data-checked="true"] {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(0, 240, 255, 0.15);
         font-weight: 600;
-        border-color: rgba(255, 255, 255, 0.4);
+        border-color: rgba(0, 240, 255, 0.35);
+        box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
     }
     
-    /* 🎨 IMPROVED FORM INPUTS - Better Visual Hierarchy */
+    /* 🎨 FORM INPUTS - Dark Neon */
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select,
     .stTextArea > div > div > textarea {
@@ -631,45 +736,51 @@ st.markdown("""
         transition: all 0.3s ease;
         font-size: 0.95rem;
         font-weight: 500;
-        background: white;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
     }
     
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus,
     .stTextArea > div > div > textarea:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1), 0 0 16px rgba(0, 240, 255, 0.15);
         outline: none;
     }
     
-    /* 🔘 IMPROVED BUTTONS - Enhanced Interactivity */
+    /* 🔘 BUTTONS - Neon Glow */
     .stButton > button {
         background: var(--primary-gradient) !important;
-        color: white !important;
+        color: #0a0e1a !important;
         border: none !important;
         border-radius: 12px !important;
         padding: 0.875rem 2rem !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         font-size: 0.95rem !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
-        text-transform: none; /* Improved readability: removed uppercase for more professional appearance */
+        box-shadow: var(--shadow-neon-cyan) !important;
+        text-transform: none;
         letter-spacing: 0.02em;
     }
     
     .stButton > button:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 60px rgba(0, 240, 255, 0.2) !important;
     }
     
     .stButton > button:active {
         transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.3) !important;
     }
     
     /* ✨ FADE-IN ANIMATION */
     .fade-in {
         animation: fadeInUp 0.6s ease-out;
+    }
+    
+    /* 🌐 GRID / LAYOUT HELPERS */
+    .stMarkdown, .stWrite {
+        color: var(--text-primary);
     }
     
     </style>
@@ -758,8 +869,8 @@ def logout():
 
 # Login Page
 if not st.session_state.authenticated:
-    st.markdown('<div class="main-header">Store Opening AI</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Professional Store Management Platform</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">⚡ Store Opening AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Next-Gen Store Management Platform</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     
@@ -890,7 +1001,7 @@ else:
         # Footer
         st.markdown("""
             <div style='color: var(--text-secondary); font-size: 0.75rem; text-align: center;'>
-                <p style='margin: 5px 0;'><strong>Store Opening AI</strong></p>
+                <p style='margin: 5px 0;'><strong style="color: var(--neon-cyan);">⚡ Store Opening AI</strong></p>
                 <p style='margin: 5px 0;'>Version 2.0.0</p>
                 <p style='margin: 5px 0;'>© 2024</p>
             </div>
@@ -903,9 +1014,9 @@ else:
         st.markdown(f'''
             <div class="animate-fade-in">
                 <div class="hero-banner">
-                    <div class="hero-title">🚀 Store Opening AI Dashboard</div>
+                    <div class="hero-title">⚡ Store Opening AI Dashboard</div>
                     <div class="hero-subtitle">Welcome back! Here's what's happening with your stores today.</div>
-                    <div style="margin-top: 1rem; opacity: 0.9; font-size: 0.95rem;">📅 {current_date}</div>
+                    <div style="margin-top: 1rem; opacity: 0.7; font-size: 0.875rem; color: var(--neon-cyan); font-family: JetBrains Mono, monospace; letter-spacing: 0.05em;">📅 {current_date}</div>
                 </div>
             </div>
         ''', unsafe_allow_html=True)
@@ -1006,7 +1117,7 @@ else:
             # 🏪 MODERN STORES SECTION
             st.markdown('''
                 <div style="margin-top: 2rem;">
-                    <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary); text-shadow: 0 0 12px rgba(0, 240, 255, 0.2);">
                         🏪 Active Store Overview
                     </h2>
                 </div>
@@ -1041,8 +1152,8 @@ else:
                             
                             <div style="margin-bottom: 1rem;">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                    <span style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 600;">Progress</span>
-                                    <span style="font-size: 0.875rem; color: var(--text-primary); font-weight: 700;">{completion:.0f}%</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;">Progress</span>
+                                    <span style="font-size: 0.875rem; color: var(--neon-cyan); font-weight: 700; font-family: JetBrains Mono, monospace;">{completion:.0f}%</span>
                                 </div>
                                 <div class="progress-bar-container">
                                     <div class="progress-bar-fill" style="width: {completion}%;"></div>
@@ -1051,16 +1162,16 @@ else:
                             
                             <div style="display: flex; gap: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-light);">
                                 <div style="flex: 1;">
-                                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Tasks</div>
-                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">{store.get('total_tasks', 0)}</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">Total Tasks</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); font-family: JetBrains Mono, monospace;">{store.get('total_tasks', 0)}</div>
                                 </div>
                                 <div style="flex: 1;">
-                                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Completed</div>
-                                    <div style="font-size: 1.5rem; font-weight: 700; color: #4ade80;">{store.get('completed_tasks', 0)}</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">Completed</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--neon-lime); font-family: JetBrains Mono, monospace;">{store.get('completed_tasks', 0)}</div>
                                 </div>
                                 <div style="flex: 1;">
-                                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Pending</div>
-                                    <div style="font-size: 1.5rem; font-weight: 700; color: #f59e0b;">{store.get('pending_tasks', 0)}</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">Pending</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--neon-orange); font-family: JetBrains Mono, monospace;">{store.get('pending_tasks', 0)}</div>
                                 </div>
                             </div>
                         </div>
@@ -1094,17 +1205,17 @@ else:
                     
                     if not df_status.empty:
                         colors = {
-                            'completed': '#4ade80',
-                            'in_progress': '#f59e0b',
-                            'planning': '#667eea',
-                            'delayed': '#ef4444'
+                            'completed': '#39ff14',
+                            'in_progress': '#ff00e5',
+                            'planning': '#00f0ff',
+                            'delayed': '#ff3366'
                         }
                         
                         fig.add_trace(go.Bar(
                             name=status.replace('_', ' ').title(),
                             x=df_status['name'],
                             y=df_status['completion_percentage'],
-                            marker_color=colors.get(status, '#667eea'),
+                            marker_color=colors.get(status, '#00f0ff'),
                             text=df_status['completion_percentage'].apply(lambda x: f'{x:.0f}%'),
                             textposition='outside',
                             hovertemplate='<b>%{x}</b><br>Completion: %{y:.1f}%<extra></extra>'
@@ -1113,22 +1224,23 @@ else:
                 fig.update_layout(
                     barmode='group',
                     height=400,
-                    plot_bgcolor='rgba(0,0,0,0)',
-                    paper_bgcolor='rgba(0,0,0,0)',
-                    font=dict(family='Inter, sans-serif', size=12, color='#1a1d29'),
+                    plot_bgcolor='rgba(10, 14, 26, 0.8)',
+                    paper_bgcolor='rgba(10, 14, 26, 0)',
+                    font=dict(family='Space Grotesk, sans-serif', size=12, color='#e8ecf4'),
                     xaxis=dict(
                         title='Store Location',
                         showgrid=False,
                         showline=True,
-                        linecolor='#e5e7eb',
-                        tickfont=dict(size=11)
+                        linecolor='rgba(0, 240, 255, 0.2)',
+                        tickfont=dict(size=11, color='#8b95a8')
                     ),
                     yaxis=dict(
                         title='Completion Percentage',
                         showgrid=True,
-                        gridcolor='#f3f4f6',
+                        gridcolor='rgba(0, 240, 255, 0.06)',
                         range=[0, 110],
-                        ticksuffix='%'
+                        ticksuffix='%',
+                        tickfont=dict(color='#8b95a8')
                     ),
                     legend=dict(
                         orientation='h',
@@ -1136,9 +1248,10 @@ else:
                         y=1.02,
                         xanchor='right',
                         x=1,
-                        bgcolor='rgba(255, 255, 255, 0.9)',
-                        bordercolor='#e5e7eb',
-                        borderwidth=1
+                        bgcolor='rgba(21, 28, 46, 0.9)',
+                        bordercolor='rgba(0, 240, 255, 0.15)',
+                        borderwidth=1,
+                        font=dict(color='#e8ecf4')
                     ),
                     margin=dict(t=80, b=60, l=60, r=40),
                     hovermode='x unified'
@@ -1752,7 +1865,7 @@ else:
                         fig.add_trace(go.Scatter(x=df_timeline['Date'], y=df_timeline['Completed'],
                                                 mode='lines+markers',
                                                 name='Completed Tasks',
-                                                line=dict(color='#667eea', width=3)))
+                                                line=dict(color='#00f0ff', width=3)))
                         fig.update_layout(title='Tasks Completed Over Time',
                                         xaxis_title='Date',
                                         yaxis_title='Tasks Completed')
@@ -1836,8 +1949,8 @@ else:
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("---")
     st.markdown("""
-        <div style='text-align: center; color: #718096; font-size: 0.9rem;'>
-            <p><strong>Store Opening AI Management System</strong> | Powered by Advanced AI & Voice Technology</p>
-            <p>Secure • Intelligent • Efficient</p>
+        <div style='text-align: center; color: var(--text-muted); font-size: 0.85rem;'>
+            <p><strong style="color: var(--neon-cyan);">⚡ Store Opening AI Management System</strong> | Powered by Advanced AI & Voice Technology</p>
+            <p style="color: var(--text-muted);">Secure • Intelligent • Efficient</p>
         </div>
     """, unsafe_allow_html=True)
