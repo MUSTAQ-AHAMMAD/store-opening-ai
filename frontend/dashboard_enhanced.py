@@ -165,9 +165,9 @@ st.markdown("""
     
     /* Login Form Styles */
     .login-container {
-        max-width: 400px;
+        max-width: 450px;
         margin: 0 auto;
-        padding: 2rem;
+        padding: 2.5rem;
         background: white;
         border-radius: 20px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -179,6 +179,50 @@ st.markdown("""
         font-weight: 700;
         color: #667eea;
         margin-bottom: 2rem;
+    }
+    
+    /* Input fields enhancement */
+    .stTextInput input {
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+        padding: 0.75rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stTextInput input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Error message styling */
+    .stAlert {
+        border-radius: 12px;
+        border-left: 4px solid;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-weight: 500;
+    }
+    
+    /* Success alert */
+    div[data-baseweb="notification"][kind="success"] {
+        background-color: #d4edda;
+        border-color: #28a745;
+        color: #155724;
+    }
+    
+    /* Error alert */
+    div[data-baseweb="notification"][kind="error"] {
+        background-color: #f8d7da;
+        border-color: #dc3545;
+        color: #721c24;
+    }
+    
+    /* Warning alert */
+    div[data-baseweb="notification"][kind="warning"] {
+        background-color: #fff3cd;
+        border-color: #ffc107;
+        color: #856404;
     }
     
     /* Animation */
@@ -219,12 +263,6 @@ st.markdown("""
         border-radius: 10px 10px 0 0;
         padding: 10px 20px;
     }
-    
-    /* Alert boxes */
-    .stAlert {
-        border-radius: 10px;
-        border-left: 4px solid #667eea;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -237,7 +275,7 @@ if 'token' not in st.session_state:
     st.session_state.token = None
 
 # Helper functions
-def api_request(endpoint, method='GET', data=None, auth_required=True):
+def api_request(endpoint, method='GET', data=None, auth_required=True, handle_session_expiry=True):
     """Make API request with authentication"""
     headers = {}
     
@@ -259,23 +297,25 @@ def api_request(endpoint, method='GET', data=None, auth_required=True):
         if response.status_code in [200, 201]:
             return response.json()
         elif response.status_code == 401:
-            st.session_state.authenticated = False
-            st.session_state.token = None
-            st.session_state.user = None
-            st.error("Session expired. Please login again.")
+            # Only handle as session expiry if we're authenticated and it's not a login attempt
+            if handle_session_expiry and st.session_state.authenticated:
+                st.session_state.authenticated = False
+                st.session_state.token = None
+                st.session_state.user = None
+                st.error("🔒 Your session has expired. Please login again to continue.")
             return None
         else:
             st.error(f"API Error: {response.status_code}")
             return None
     
     except Exception as e:
-        st.error(f"Connection Error: {e}")
+        st.error(f"⚠️ Connection Error: Unable to reach the server. Please try again.")
         return None
 
 def login(username, password):
     """Login user"""
     data = {'username': username, 'password': password}
-    result = api_request('/auth/login', method='POST', data=data, auth_required=False)
+    result = api_request('/auth/login', method='POST', data=data, auth_required=False, handle_session_expiry=False)
     
     if result:
         st.session_state.authenticated = True
@@ -316,12 +356,12 @@ if not st.session_state.authenticated:
             if login_button:
                 if username and password:
                     if login(username, password):
-                        st.success("Login successful!")
+                        st.success("✅ Login successful! Welcome back.")
                         st.rerun()
                     else:
-                        st.error("Invalid credentials")
+                        st.error("🔐 Invalid username or password. Please try again.")
                 else:
-                    st.warning("Please enter both username and password")
+                    st.warning("⚠️ Please enter both username and password")
             
             if register_button:
                 st.session_state.show_register = True
@@ -355,14 +395,16 @@ if not st.session_state.authenticated:
                             'full_name': new_full_name,
                             'role': 'team_member'
                         }
-                        result = api_request('/auth/register', method='POST', data=reg_data, auth_required=False)
+                        result = api_request('/auth/register', method='POST', data=reg_data, auth_required=False, handle_session_expiry=False)
                         
                         if result:
-                            st.success("Account created successfully! Please login.")
+                            st.success("✅ Account created successfully! Please login with your credentials.")
                             st.session_state.show_register = False
                             st.rerun()
+                        else:
+                            st.error("❌ Registration failed. Username or email may already exist.")
                     else:
-                        st.warning("Please fill in all required fields")
+                        st.warning("⚠️ Please fill in all required fields (Username, Email, and Password)")
                 
                 if cancel_register:
                     st.session_state.show_register = False
