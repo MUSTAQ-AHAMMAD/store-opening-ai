@@ -33,17 +33,18 @@ st.markdown("""
     <style>
     /* CSS Variables for Professional Theme */
     :root {
-        --primary-color: #667eea;
-        --secondary-color: #764ba2;
-        --success-color: #10b981;
-        --warning-color: #f59e0b;
-        --danger-color: #ef4444;
-        --info-color: #3b82f6;
-        --light-bg: #f8fafc;
+        --primary-color: #2563eb;
+        --primary-hover: #1d4ed8;
+        --primary-light: #dbeafe;
+        --success-color: #059669;
+        --warning-color: #d97706;
+        --danger-color: #dc2626;
+        --info-color: #0891b2;
+        --light-bg: #f9fafb;
         --card-bg: #ffffff;
-        --text-primary: #1e293b;
-        --text-secondary: #64748b;
-        --border-color: #e2e8f0;
+        --text-primary: #111827;
+        --text-secondary: #6b7280;
+        --border-color: #e5e7eb;
         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -123,27 +124,27 @@ st.markdown("""
     }
     
     .metric-card-primary .metric-card-icon {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: var(--primary-color);
         color: white;
     }
     
     .metric-card-success .metric-card-icon {
-        background: linear-gradient(135deg, #10b981, #059669);
+        background: var(--success-color);
         color: white;
     }
     
     .metric-card-warning .metric-card-icon {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: var(--warning-color);
         color: white;
     }
     
     .metric-card-danger .metric-card-icon {
-        background: linear-gradient(135deg, #ef4444, #dc2626);
+        background: var(--danger-color);
         color: white;
     }
     
     .metric-card-info .metric-card-icon {
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        background: var(--info-color);
         color: white;
     }
     
@@ -179,12 +180,12 @@ st.markdown("""
     
     /* Executive Summary Banner */
     .executive-banner {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: var(--primary-color);
         padding: 1.5rem;
         border-radius: 12px;
         color: white;
         margin-bottom: 1.5rem;
-        box-shadow: var(--shadow-lg);
+        box-shadow: var(--shadow-md);
     }
     
     /* Professional Header */
@@ -277,7 +278,7 @@ st.markdown("""
     
     /* Button Styles - Modern and Clean */
     .stButton>button {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: var(--primary-color);
         color: white;
         border: none;
         border-radius: 8px;
@@ -289,6 +290,7 @@ st.markdown("""
     }
     
     .stButton>button:hover {
+        background: var(--primary-hover);
         box-shadow: var(--shadow-md);
         transform: translateY(-1px);
     }
@@ -305,7 +307,7 @@ st.markdown("""
     
     /* Sidebar User Profile Section */
     .user-profile-card {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: var(--primary-color);
         padding: 1.25rem;
         border-radius: 12px;
         color: white;
@@ -409,7 +411,7 @@ st.markdown("""
     
     /* Progress bar - Modern */
     .stProgress > div > div > div {
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        background: var(--primary-color);
         border-radius: 4px;
     }
     
@@ -493,6 +495,60 @@ st.markdown("""
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+    }
+    
+    /* Navigation Menu Styling */
+    [data-testid="stSidebar"] .stRadio > div {
+        gap: 0.25rem;
+    }
+    
+    [data-testid="stSidebar"] .stRadio > div > label {
+        background: transparent;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+    
+    [data-testid="stSidebar"] .stRadio > div > label:hover {
+        background: var(--primary-light);
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    [data-testid="stSidebar"] .stRadio > div > label[data-baseweb="radio"] > div:first-child {
+        display: none;
+    }
+    
+    [data-testid="stSidebar"] .stRadio > div > label > div {
+        color: inherit;
+    }
+    
+    [data-testid="stSidebar"] .stRadio input:checked + div + div {
+        background: var(--primary-light);
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    /* Hide default radio button circles */
+    [data-testid="stSidebar"] .stRadio [role="radio"] {
+        display: none;
+    }
+    
+    /* Style for active navigation item */
+    [data-testid="stSidebar"] .stRadio input[type="radio"]:checked ~ label,
+    [data-testid="stSidebar"] .stRadio input[type="radio"]:checked + div {
+        background: var(--primary-light) !important;
+        color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+        font-weight: 600 !important;
     }
     
     /* Animation */
@@ -774,7 +830,7 @@ else:
             
             # Executive Summary Card
             st.markdown(f"""
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                <div style="background: var(--primary-color); 
                             padding: 1.5rem; border-radius: 12px; color: white; margin-bottom: 1.5rem;
                             box-shadow: var(--shadow-md);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
