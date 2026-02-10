@@ -56,6 +56,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 ### 3. Install dependencies
 ```bash
+# Upgrade pip first to ensure compatibility with pre-built wheels
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
