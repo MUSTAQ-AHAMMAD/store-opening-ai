@@ -39,6 +39,15 @@ class FollowUpScheduler:
             replace_existing=True
         )
         
+        # Check workflow stage delays every 2 hours
+        self.scheduler.add_job(
+            self.check_workflow_delays,
+            trigger=CronTrigger(hour='*/2'),  # Run every 2 hours
+            id='check_workflow_delays',
+            name='Check for workflow stage delays',
+            replace_existing=True
+        )
+        
         # Daily summary at 9 AM
         self.scheduler.add_job(
             self.send_daily_summary,
@@ -227,6 +236,91 @@ class FollowUpScheduler:
             
             db.session.commit()
             print(f"Processed {len(overdue_tasks)} overdue tasks with AI and voice escalations")
+    
+    def check_workflow_delays(self):
+        """Check for delayed workflow stages and send escalations"""
+        if not self.app:
+            return
+        
+        with self.app.app_context():
+            from app import db
+            from backend.models.models import Store, WorkflowStage, TeamMember
+            from backend.services.workflow_service import get_workflow_service
+            from backend.services.email_service import get_email_service
+            from backend.services.voice_service import get_voice_service
+            
+            now = datetime.utcnow()
+            workflow_service = get_workflow_service()
+            email_service = get_email_service()
+            voice_service = get_voice_service()
+            
+            # Get all active stores
+            stores = Store.query.filter(Store.status.in_(['planning', 'in_progress'])).all()
+            
+            for store in stores:
+                delayed_stages = workflow_service.check_stage_delays(store)
+                
+                for stage in delayed_stages:
+                    if stage.due_date:
+                        days_overdue = (now - stage.due_date).days
+                        
+                        # Determine escalation level based on days overdue
+                        if days_overdue >= 5:
+                            escalation_level = 4  # Emergency - Email + Call to manager
+                        elif days_overdue >= 3:
+                            escalation_level = 3  # Critical - Call to manager
+                        elif days_overdue >= 2:
+                            escalation_level = 2  # Urgent - SMS + WhatsApp
+                        elif days_overdue >= 1:
+                            escalation_level = 1  # Warning - WhatsApp
+                        else:
+                            continue
+                        
+                        # Check if we already escalated recently
+                        recent_escalation = db.session.query(EscalationHistory).filter(
+                            EscalationHistory.workflow_stage_id == stage.id,
+                            EscalationHistory.escalation_level >= escalation_level,
+                            EscalationHistory.created_at >= now - timedelta(hours=12)
+                        ).first()
+                        
+                        if not recent_escalation:
+                            # Find manager for escalation
+                            manager = TeamMember.query.filter_by(
+                                store_id=store.id,
+                                role='manager'
+                            ).first()
+                            
+                            if not manager:
+                                # Try to find any team member with manager role
+                                manager = TeamMember.query.filter(
+                                    TeamMember.role.like('%manager%')
+                                ).first()
+                            
+                            if manager and escalation_level >= 3:
+                                # Send email to manager
+                                if email_service.enabled and manager.email:
+                                    email_service.send_escalation_email(
+                                        manager.email,
+                                        store.to_dict(),
+                                        stage.to_dict(),
+                                        days_overdue
+                                    )
+                                
+                                # Make voice call for critical delays
+                                if voice_service.enabled and escalation_level >= 3:
+                                    voice_service.make_manager_escalation_call(
+                                        manager_phone=manager.phone,
+                                        manager_name=manager.name,
+                                        team_member_name=stage.assigned_to.name if stage.assigned_to else 'Team',
+                                        task_title=stage.stage_name,
+                                        store_name=store.name,
+                                        days_overdue=days_overdue
+                                    )
+                            
+                            # Escalate through workflow service
+                            workflow_service.escalate_delayed_stage(stage, escalation_level)
+            
+            print(f"Checked workflow delays for {len(stores)} stores")
     
     def send_daily_summary(self):
         """Send daily summary to store managers"""
