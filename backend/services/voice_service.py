@@ -9,6 +9,10 @@ from twilio.rest import Client
 from twilio.twiml.voice_response import VoiceResponse, Say, Gather
 from datetime import datetime
 from backend.database import db
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 class VoiceCallingService:
     """Service for making automated voice calls for escalations"""
@@ -85,7 +89,7 @@ class VoiceCallingService:
             }
         
         except Exception as e:
-            print(f"Error making escalation call: {e}")
+            logger.error(f"Error making escalation call: {e}")
             return {
                 'success': False,
                 'error': str(e),
@@ -214,7 +218,7 @@ class VoiceCallingService:
             }
         
         except Exception as e:
-            print(f"Error making manager escalation call: {e}")
+            logger.error(f"Error making manager escalation call: {e}")
             return {
                 'success': False,
                 'error': str(e)

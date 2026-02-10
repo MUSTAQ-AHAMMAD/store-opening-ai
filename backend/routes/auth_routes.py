@@ -13,7 +13,10 @@ import os
 
 bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+# Require SECRET_KEY to be set
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable must be set for security")
 
 def generate_token(user_id, role):
     """Generate JWT token for user"""

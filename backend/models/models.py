@@ -12,12 +12,13 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
+    password_hash = db.Column(db.String(512), nullable=False)  # Increased for bcrypt
     full_name = db.Column(db.String(120))
     role = db.Column(db.String(50), default='team_member')  # admin, manager, team_member
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime)
+    requires_password_change = db.Column(db.Boolean, default=True)  # Force password change on first login
     
     def set_password(self, password):
         """Hash and set the password"""

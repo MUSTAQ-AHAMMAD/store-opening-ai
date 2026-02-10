@@ -144,10 +144,13 @@ class FollowUpScheduler:
                         
                         if escalation_level >= 2:
                             # Critical: Voice call to manager
-                            manager = TeamMember.query.filter(
-                                TeamMember.store_id == store.id if store else None,
-                                TeamMember.role.in_(['manager', 'store_manager'])
-                            ).first()
+                            if store:
+                                manager = TeamMember.query.filter(
+                                    TeamMember.store_id == store.id,
+                                    TeamMember.role.in_(['manager', 'store_manager'])
+                                ).first()
+                            else:
+                                manager = None
                             
                             if manager and voice_service.enabled:
                                 result = voice_service.make_manager_escalation_call(

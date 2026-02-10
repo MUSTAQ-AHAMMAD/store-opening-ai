@@ -447,7 +447,7 @@ else:
             with col3:
                 completion_pct = 0
                 if summary.get('total_tasks', 0) > 0:
-                    completion_pct = (summary.get('completed_tasks', 0) / summary.get('total_tasks', 1)) * 100
+                    completion_pct = (summary.get('completed_tasks', 0) / summary.get('total_tasks')) * 100
                 
                 st.markdown(f"""
                     <div class="metric-card warning-card fade-in">

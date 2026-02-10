@@ -7,6 +7,10 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 import openai
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 class AIService:
     """AI service for intelligent task management"""
@@ -61,7 +65,7 @@ Keep the tone professional but supportive."""
             return response.choices[0].message.content.strip()
         
         except Exception as e:
-            print(f"AI service error: {e}")
+            logger.error(f"AI service error: {e}")
             return self._default_follow_up_message(task, team_member)
     
     def _default_follow_up_message(self, task: Dict, team_member: Dict) -> str:
@@ -129,7 +133,7 @@ Provide a risk assessment (low/medium/high) and a brief explanation (max 100 wor
             }
         
         except Exception as e:
-            print(f"AI risk prediction error: {e}")
+            logger.error(f"AI risk prediction error: {e}")
             return self._default_risk_assessment(task)
     
     def _default_risk_assessment(self, task: Dict) -> Dict:
@@ -195,7 +199,7 @@ Format: Task Title - Reasoning (one line each)"""
             return tasks
         
         except Exception as e:
-            print(f"AI prioritization error: {e}")
+            logger.error(f"AI prioritization error: {e}")
             return tasks
     
     def generate_escalation_message(self, task: Dict, recipient: Dict, escalation_level: int, context: Dict) -> str:
@@ -242,7 +246,7 @@ Level {escalation_level} means {"critical urgency" if escalation_level >= 2 else
             return response.choices[0].message.content.strip()
         
         except Exception as e:
-            print(f"AI escalation message error: {e}")
+            logger.error(f"AI escalation message error: {e}")
             return self._default_escalation_message(task, recipient, escalation_level, context)
     
     def _default_escalation_message(self, task: Dict, recipient: Dict, escalation_level: int, context: Dict) -> str:

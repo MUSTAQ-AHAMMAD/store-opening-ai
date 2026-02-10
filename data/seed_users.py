@@ -77,7 +77,13 @@ def seed_admin_user():
         print(f"  Password: user123")
         print(f"  Email: user@storeai.com")
         print("\n" + "="*50)
-        print("⚠️  IMPORTANT: Change these passwords in production!")
+        print("⚠️  SECURITY WARNING!")
+        print("="*50)
+        print("These are DEFAULT passwords for DEVELOPMENT ONLY!")
+        print("For PRODUCTION:")
+        print("1. Generate strong random passwords")
+        print("2. Force password change on first login")
+        print("3. Never use predictable passwords like these")
         print("="*50 + "\n")
 
 if __name__ == '__main__':

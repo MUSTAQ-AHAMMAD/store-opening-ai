@@ -5,7 +5,7 @@ Handles voice call escalations and acknowledgments
 
 from flask import Blueprint, request, jsonify
 from backend.database import db
-from backend.models.models import Task, TeamMember, Store, FollowUp
+from backend.models.models import Task, TeamMember, Store, FollowUp, Checklist
 from backend.services.voice_service import get_voice_service
 from datetime import datetime
 
