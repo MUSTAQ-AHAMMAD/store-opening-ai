@@ -786,7 +786,7 @@ else:
             "📞 Voice Escalations": "voice"
         }
         
-        selected_page = st.radio("", list(pages.keys()), label_visibility="collapsed")
+        selected_page = st.radio("", list(pages.keys()))
         page = pages[selected_page]
         
         st.markdown("---")
