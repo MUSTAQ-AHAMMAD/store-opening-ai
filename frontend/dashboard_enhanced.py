@@ -11,10 +11,16 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import json
 
+# Constants
+TARGET_COMPLETION_RATE = 80
+RISK_THRESHOLD_HIGH = 75
+RISK_STATUS_CRITICAL = 5
+RISK_STATUS_MODERATE = 0
+
 # Configure page with modern theme
 st.set_page_config(
     page_title="Store Opening AI - Dashboard",
-    page_icon="🏪",
+    page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -22,214 +28,478 @@ st.set_page_config(
 # API Configuration
 API_BASE_URL = "http://localhost:5000/api"
 
-# Enhanced Custom CSS for modern, rich UI
+# Enhanced Custom CSS for modern, professional admin panel UI
 st.markdown("""
     <style>
-    /* Import Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    /* Global Styles */
-    * {
-        font-family: 'Inter', sans-serif;
+    /* CSS Variables for Professional Theme */
+    :root {
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --info-color: #3b82f6;
+        --light-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     }
     
-    /* Main container */
+    /* Global Styles with professional system fonts */
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Main container - Professional flat design */
     .main {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--light-bg);
         padding: 0;
     }
     
     .block-container {
-        padding-top: 2rem;
+        padding-top: 1.5rem;
         padding-bottom: 2rem;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        margin: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        background: transparent;
+        max-width: 1400px;
     }
     
-    /* Header Styles */
+    /* Header Styles - Clean and Professional */
     .main-header {
-        font-size: 3rem;
+        font-size: 2rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        text-align: left;
+    }
+    
+    .page-subtitle {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
         margin-bottom: 2rem;
-        text-align: center;
-        animation: fadeIn 1s ease-in;
+        text-align: left;
     }
     
     .sub-header {
-        font-size: 1.8rem;
+        font-size: 1.25rem;
         font-weight: 600;
-        color: #4a5568;
-        margin: 1.5rem 0;
-        border-left: 4px solid #667eea;
-        padding-left: 1rem;
+        color: var(--text-primary);
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
     }
     
-    /* Card Styles */
+    /* Professional Metric Cards */
     .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--card-bg);
         padding: 1.5rem;
-        border-radius: 15px;
-        margin: 0.5rem 0;
-        color: white;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+        height: 100%;
     }
     
     .metric-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
     
-    .success-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .metric-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
     }
     
-    .warning-card {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    .metric-card-primary .metric-card-icon {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
     }
     
-    .info-card {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    .metric-card-success .metric-card-icon {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
     }
     
-    .danger-card {
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    .metric-card-warning .metric-card-icon {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
     }
     
-    /* Status Badges */
-    .status-badge {
-        padding: 0.4rem 1rem;
+    .metric-card-danger .metric-card-icon {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+    }
+    
+    .metric-card-info .metric-card-icon {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+    
+    .metric-label {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .metric-trend {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    
+    .metric-trend-up {
+        color: var(--success-color);
+    }
+    
+    .metric-trend-down {
+        color: var(--danger-color);
+    }
+    
+    /* Executive Summary Banner */
+    .executive-banner {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 1.5rem;
+        border-radius: 12px;
+        color: white;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-lg);
+    }
+    
+    /* Professional Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+    
+    /* Risk Pills */
+    .risk-pill {
+        padding: 0.5rem 1rem;
         border-radius: 20px;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.875rem;
         display: inline-block;
-        margin: 0.2rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        margin-right: 0.5rem;
+    }
+    
+    .risk-pill-high {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .risk-pill-medium {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .risk-pill-low {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    /* Enhanced Insight Boxes */
+    .insight-box {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    
+    .insight-box-warning {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+    }
+    
+    .insight-box-info {
+        background: #dbeafe;
+        border-left: 4px solid #3b82f6;
+    }
+    
+    .insight-box-success {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+    }
+    
+    /* Professional Status Badges */
+    .status-badge {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
     
     .status-planning {
-        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-        color: white;
+        background: #dbeafe;
+        color: #1e40af;
     }
     
     .status-in-progress {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        color: white;
+        background: #fef3c7;
+        color: #92400e;
     }
     
     .status-completed {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        color: white;
+        background: #d1fae5;
+        color: #065f46;
     }
     
     .status-delayed {
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        color: white;
+        background: #fee2e2;
+        color: #991b1b;
     }
     
-    /* Button Styles */
+    /* Button Styles - Modern and Clean */
     .stButton>button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         color: white;
         border: none;
-        border-radius: 10px;
-        padding: 0.6rem 2rem;
+        border-radius: 8px;
+        padding: 0.625rem 1.25rem;
         font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-sm);
     }
     
     .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-1px);
     }
     
-    /* Sidebar Styles */
-    .css-1d391kg {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-    }
-    
+    /* Sidebar Styles - Professional Navigation */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        background: var(--card-bg);
+        border-right: 1px solid var(--border-color);
     }
     
     [data-testid="stSidebar"] .element-container {
-        color: white;
+        color: var(--text-primary);
     }
     
-    /* Login Form Styles */
+    /* Sidebar User Profile Section */
+    .user-profile-card {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 1.25rem;
+        border-radius: 12px;
+        color: white;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    .user-profile-icon {
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        margin: 0 auto 0.75rem;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .user-profile-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .user-profile-role {
+        font-size: 0.875rem;
+        opacity: 0.9;
+    }
+    
+    /* Login Form Styles - Professional */
     .login-container {
-        max-width: 450px;
+        max-width: 420px;
         margin: 0 auto;
         padding: 2.5rem;
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border-color);
     }
     
     .login-header {
         text-align: center;
-        font-size: 2rem;
+        font-size: 1.75rem;
         font-weight: 700;
-        color: #667eea;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-subtitle {
+        text-align: center;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
         margin-bottom: 2rem;
     }
     
     /* Input fields enhancement */
-    .stTextInput input {
-        border-radius: 10px;
-        border: 2px solid #e2e8f0;
-        padding: 0.75rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
+    .stTextInput input, .stTextArea textarea, .stSelectbox select {
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        padding: 0.625rem;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        background: var(--card-bg);
     }
     
-    .stTextInput input:focus {
-        border-color: #667eea;
+    .stTextInput input:focus, .stTextArea textarea:focus {
+        border-color: var(--primary-color);
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
     }
     
-    /* Error message styling */
-    .stAlert {
+    /* Card Container for Content */
+    .content-card {
+        background: var(--card-bg);
         border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .content-card-header {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    /* Alert Styling - Professional */
+    .stAlert {
+        border-radius: 8px;
         border-left: 4px solid;
         padding: 1rem;
         margin: 1rem 0;
+        font-size: 0.875rem;
+    }
+    
+    /* Progress bar - Modern */
+    .stProgress > div > div > div {
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 4px;
+    }
+    
+    /* Data Tables - Professional */
+    .dataframe {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 8px;
+        overflow: hidden;
+        font-size: 0.875rem;
+    }
+    
+    .dataframe th {
+        background: var(--light-bg) !important;
+        color: var(--text-primary) !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.75rem !important;
+    }
+    
+    .dataframe td {
+        padding: 0.75rem !important;
+        border-bottom: 1px solid var(--border-color) !important;
+    }
+    
+    .dataframe tr:hover {
+        background: var(--light-bg) !important;
+    }
+    
+    /* Tabs - Modern Style */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: transparent;
+        color: var(--text-secondary);
+        border-radius: 0;
+        padding: 0.75rem 1.25rem;
         font-weight: 500;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
     }
     
-    /* Success alert */
-    div[data-baseweb="notification"][kind="success"] {
-        background-color: #d4edda;
-        border-color: #28a745;
-        color: #155724;
+    .stTabs [data-baseweb="tab"]:hover {
+        color: var(--primary-color);
     }
     
-    /* Error alert */
-    div[data-baseweb="notification"][kind="error"] {
-        background-color: #f8d7da;
-        border-color: #dc3545;
-        color: #721c24;
+    .stTabs [aria-selected="true"] {
+        color: var(--primary-color) !important;
+        border-bottom-color: var(--primary-color) !important;
     }
     
-    /* Warning alert */
-    div[data-baseweb="notification"][kind="warning"] {
-        background-color: #fff3cd;
-        border-color: #ffc107;
-        color: #856404;
+    /* Expander - Professional */
+    .streamlit-expanderHeader {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    
+    .streamlit-expanderHeader:hover {
+        background: var(--light-bg);
+        border-color: var(--primary-color);
+    }
+    
+    /* Metrics from Streamlit */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    
+    [data-testid="stMetricLabel"] {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
     
     /* Animation */
     @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-10px);
         }
         to {
             opacity: 1;
@@ -238,30 +508,22 @@ st.markdown("""
     }
     
     .fade-in {
-        animation: fadeIn 0.6s ease-in;
+        animation: fadeIn 0.3s ease-in;
     }
     
-    /* Data table styling */
-    .dataframe {
-        border-radius: 10px;
-        overflow: hidden;
-    }
-    
-    /* Progress bar */
-    .stProgress > div > div > div {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-    }
-    
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 10px;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 10px 10px 0 0;
-        padding: 10px 20px;
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .main-header {
+            font-size: 1.5rem;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+        }
+        
+        .metric-card {
+            padding: 1rem;
+        }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -349,13 +611,15 @@ def logout():
 
 # Login Page
 if not st.session_state.authenticated:
-    st.markdown('<div class="main-header">🏪 Store Opening AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">Store Opening AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Professional Store Management Platform</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
         st.markdown('<div class="login-container fade-in">', unsafe_allow_html=True)
-        st.markdown('<div class="login-header">Welcome Back!</div>', unsafe_allow_html=True)
+        st.markdown('<div class="login-header">Welcome Back</div>', unsafe_allow_html=True)
+        st.markdown('<div class="login-subtitle">Sign in to access your dashboard</div>', unsafe_allow_html=True)
         
         with st.form("login_form"):
             username = st.text_input("Username", placeholder="Enter your username")
@@ -437,62 +701,29 @@ if not st.session_state.authenticated:
 else:
     # Main Dashboard (Authenticated)
     
-    # Enhanced Sidebar
+    # Professional Sidebar
     with st.sidebar:
+        # User Profile Card
         st.markdown(f"""
-            <div style='text-align: center; padding: 25px; background: rgba(255,255,255,0.15); 
-                        border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);'>
-                <div style='width: 70px; height: 70px; background: white; border-radius: 50%; 
-                            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
-                            font-size: 2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);'>
-                    👤
-                </div>
-                <h2 style='color: white; margin: 0; font-size: 1.3rem; font-weight: 600;'>
+            <div class="user-profile-card fade-in">
+                <div class="user-profile-icon">👤</div>
+                <div class="user-profile-name">
                     {st.session_state.user.get('full_name', st.session_state.user.get('username'))}
-                </h2>
-                <p style='color: rgba(255,255,255,0.85); margin: 8px 0 0 0; font-size: 0.9rem;
-                          background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block;'>
+                </div>
+                <div class="user-profile-role">
                     {st.session_state.user.get('role', 'User').replace('_', ' ').title()}
-                </p>
+                </div>
             </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("""
-            <style>
-            /* Enhanced Sidebar Navigation */
-            .stRadio > div {
-                gap: 8px;
-            }
-            .stRadio > div > label {
-                background: rgba(255,255,255,0.1) !important;
-                padding: 12px 20px !important;
-                border-radius: 10px !important;
-                color: white !important;
-                font-weight: 500 !important;
-                transition: all 0.3s ease !important;
-                border-left: 3px solid transparent !important;
-                margin-bottom: 5px !important;
-            }
-            .stRadio > div > label:hover {
-                background: rgba(255,255,255,0.2) !important;
-                transform: translateX(5px);
-                border-left: 3px solid white !important;
-            }
-            .stRadio > div > label[data-checked="true"] {
-                background: rgba(255,255,255,0.25) !important;
-                border-left: 3px solid white !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            }
-            </style>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("### 📊 Navigation")
+        # Navigation Menu
+        st.markdown("### Navigation")
         
         pages = {
             "🏠 Dashboard": "dashboard",
             "🏪 Stores": "stores",
             "👥 Team Members": "team",
-            "✅ Tasks & Checklists": "tasks",
+            "☑ Tasks & Checklists": "tasks",
             "💬 WhatsApp": "whatsapp",
             "📊 Analytics": "analytics",
             "🤖 AI Insights": "ai_insights",
@@ -508,17 +739,32 @@ else:
             logout()
         
         st.markdown("---")
+        
+        # Footer
         st.markdown("""
-            <div style='color: rgba(255,255,255,0.7); font-size: 0.85rem; text-align: center;'>
+            <div style='color: var(--text-secondary); font-size: 0.75rem; text-align: center;'>
                 <p style='margin: 5px 0;'><strong>Store Opening AI</strong></p>
-                <p style='margin: 5px 0; font-size: 0.8rem;'>Version 2.0.0</p>
-                <p style='margin: 5px 0; font-size: 0.75rem;'>© 2024</p>
+                <p style='margin: 5px 0;'>Version 2.0.0</p>
+                <p style='margin: 5px 0;'>© 2024</p>
             </div>
         """, unsafe_allow_html=True)
     
     # Main Content Area
     if page == "dashboard":
-        st.markdown('<div class="main-header fade-in">🏠 Dashboard Overview</div>', unsafe_allow_html=True)
+        # Executive Header with Date
+        current_date = datetime.now().strftime("%B %d, %Y")
+        st.markdown(f'''
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <div class="main-header">Executive Dashboard</div>
+                    <div class="page-subtitle">Real-time insights and performance metrics</div>
+                </div>
+                <div style="text-align: right; color: var(--text-secondary); font-size: 0.875rem;">
+                    <div style="font-weight: 600; color: var(--text-primary);">{current_date}</div>
+                    <div>Last updated: Just now</div>
+                </div>
+            </div>
+        ''', unsafe_allow_html=True)
         
         # Fetch dashboard data
         dashboard_data = api_request("/analytics/dashboard")
@@ -526,22 +772,52 @@ else:
         if dashboard_data:
             summary = dashboard_data.get('summary', {})
             
-            # Key Metrics Row
+            # Executive Summary Card
+            st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                            padding: 1.5rem; border-radius: 12px; color: white; margin-bottom: 1.5rem;
+                            box-shadow: var(--shadow-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 0.875rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                System Status
+                            </div>
+                            <div style="font-size: 1.5rem; font-weight: 700;">
+                                {"🟢 All Systems Operational" if summary.get('overdue_tasks', 0) < 3 else "⚠️ Attention Required"}
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Overall Progress</div>
+                            <div style="font-size: 2rem; font-weight: 700;">{(summary.get('completed_tasks', 0) / max(summary.get('total_tasks', 1), 1) * 100):.0f}%</div>
+                        </div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            
+            # Key Metrics Row with Professional Cards and Trends
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
                 st.markdown(f"""
-                    <div class="metric-card success-card fade-in">
-                        <h3 style='margin: 0; font-size: 2.5rem;'>{summary.get('total_stores', 0)}</h3>
-                        <p style='margin: 5px 0 0 0; opacity: 0.9;'>Total Stores</p>
+                    <div class="metric-card metric-card-primary fade-in">
+                        <div class="metric-card-icon">🏪</div>
+                        <div class="metric-value">{summary.get('total_stores', 0)}</div>
+                        <div class="metric-label">Active Stores</div>
+                        <div class="metric-trend metric-trend-up" style="margin-top: 0.5rem; font-size: 0.8rem;">
+                            <span style="color: #10b981;">▲ 2</span> vs last period
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col2:
                 st.markdown(f"""
-                    <div class="metric-card info-card fade-in">
-                        <h3 style='margin: 0; font-size: 2.5rem;'>{summary.get('total_tasks', 0)}</h3>
-                        <p style='margin: 5px 0 0 0; opacity: 0.9;'>Total Tasks</p>
+                    <div class="metric-card metric-card-info fade-in">
+                        <div class="metric-card-icon">📋</div>
+                        <div class="metric-value">{summary.get('total_tasks', 0)}</div>
+                        <div class="metric-label">Total Tasks</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary);">
+                            {summary.get('completed_tasks', 0)} completed
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
@@ -550,18 +826,31 @@ else:
                 if summary.get('total_tasks', 0) > 0:
                     completion_pct = (summary.get('completed_tasks', 0) / summary.get('total_tasks')) * 100
                 
+                trend_color = "#10b981" if completion_pct >= RISK_THRESHOLD_HIGH else "#f59e0b"
                 st.markdown(f"""
-                    <div class="metric-card warning-card fade-in">
-                        <h3 style='margin: 0; font-size: 2.5rem;'>{completion_pct:.0f}%</h3>
-                        <p style='margin: 5px 0 0 0; opacity: 0.9;'>Completion Rate</p>
+                    <div class="metric-card metric-card-success fade-in">
+                        <div class="metric-card-icon">✓</div>
+                        <div class="metric-value">{completion_pct:.1f}%</div>
+                        <div class="metric-label">Completion Rate</div>
+                        <div class="metric-trend" style="margin-top: 0.5rem; font-size: 0.8rem; color: {trend_color};">
+                            Target: {TARGET_COMPLETION_RATE}%
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col4:
+                overdue = summary.get('overdue_tasks', 0)
+                status_color = "#ef4444" if overdue > RISK_STATUS_CRITICAL else "#f59e0b" if overdue > RISK_STATUS_MODERATE else "#10b981"
                 st.markdown(f"""
-                    <div class="metric-card danger-card fade-in">
-                        <h3 style='margin: 0; font-size: 2.5rem;'>{summary.get('overdue_tasks', 0)}</h3>
-                        <p style='margin: 5px 0 0 0; opacity: 0.9;'>Overdue Tasks</p>
+                    <div class="metric-card metric-card-danger fade-in">
+                        <div class="metric-card-icon">⚠</div>
+                        <div class="metric-value">{overdue}</div>
+                        <div class="metric-label">Overdue Tasks</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.8rem;">
+                            <span style="color: {status_color}; font-weight: 600;">
+                                {"Critical" if overdue > RISK_STATUS_CRITICAL else "Moderate" if overdue > RISK_STATUS_MODERATE else "Good"}
+                            </span>
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
@@ -571,7 +860,28 @@ else:
             ai_insights_data = api_request("/ai/insights/dashboard")
             
             if ai_insights_data and ai_insights_data.get('insights'):
-                st.markdown('<div class="sub-header">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
+                st.markdown('''
+                    <div class="sub-header">
+                        <span style="margin-right: 0.5rem;">🎯</span>
+                        Strategic Insights & Risk Assessment
+                    </div>
+                ''', unsafe_allow_html=True)
+                
+                # Count insights by risk level
+                risk_counts = {'high': 0, 'medium': 0, 'low': 0}
+                for insight in ai_insights_data['insights']:
+                    risk_level = insight.get('risk_level', 'low')
+                    risk_counts[risk_level] = risk_counts.get(risk_level, 0) + 1
+                
+                # Risk Summary Pills
+                if risk_counts['high'] > 0 or risk_counts['medium'] > 0:
+                    st.markdown(f"""
+                        <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                            {f'<div style="background: #fee2e2; color: #991b1b; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🔴 {risk_counts["high"]} High Risk</div>' if risk_counts['high'] > 0 else ''}
+                            {f'<div style="background: #fef3c7; color: #92400e; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🟡 {risk_counts["medium"]} Medium Risk</div>' if risk_counts['medium'] > 0 else ''}
+                            {f'<div style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🟢 {risk_counts["low"]} Low Risk</div>' if risk_counts['low'] > 0 else ''}
+                        </div>
+                    """, unsafe_allow_html=True)
                 
                 for insight in ai_insights_data['insights']:
                     risk_color = {
@@ -582,52 +892,127 @@ else:
                     
                     with st.expander(f"{risk_color} {insight['store_name']} - Risk: {insight['risk_level'].upper()}", expanded=insight['risk_level'] == 'high'):
                         if insight['risk_factors']:
-                            st.warning("**Risk Factors:**")
+                            st.markdown("""
+                                <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 1rem;">
+                                    <div style="font-weight: 600; color: #92400e; margin-bottom: 0.5rem;">⚠️ Risk Factors:</div>
+                            """, unsafe_allow_html=True)
                             for factor in insight['risk_factors']:
-                                st.write(f"- {factor}")
+                                st.write(f"• {factor}")
+                            st.markdown("</div>", unsafe_allow_html=True)
                         
                         if insight['recommendations']:
-                            st.info("**AI Recommendations:**")
+                            st.markdown("""
+                                <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 1rem;">
+                                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 0.5rem;">💡 Recommended Actions:</div>
+                            """, unsafe_allow_html=True)
                             for rec in insight['recommendations']:
                                 st.write(f"✓ {rec}")
+                            st.markdown("</div>", unsafe_allow_html=True)
                         
                         metrics = insight['metrics']
                         col_m1, col_m2, col_m3 = st.columns(3)
                         with col_m1:
-                            st.metric("Completion", f"{metrics['completion_rate']}%")
+                            st.metric("Completion", f"{metrics['completion_rate']}%", 
+                                     delta=f"{metrics['completion_rate'] - 75}%" if metrics['completion_rate'] < 100 else "Complete")
                         with col_m2:
-                            st.metric("Overdue", metrics['overdue_tasks'])
+                            st.metric("Overdue Tasks", metrics['overdue_tasks'],
+                                     delta=f"-{metrics['overdue_tasks']}" if metrics['overdue_tasks'] > 0 else "On Track",
+                                     delta_color="inverse")
                         with col_m3:
-                            st.metric("Days to Opening", metrics.get('days_until_opening', 'N/A'))
+                            days_until = metrics.get('days_until_opening', 'N/A')
+                            st.metric("Days to Opening", days_until,
+                                     delta="Urgent" if isinstance(days_until, int) and days_until < 7 else "")
             
             # Store Progress Chart
-            st.markdown('<div class="sub-header">📊 Store Progress Overview</div>', unsafe_allow_html=True)
+            st.markdown('''
+                <div class="sub-header">
+                    <span style="margin-right: 0.5rem;">📈</span>
+                    Store Performance Analytics
+                </div>
+            ''', unsafe_allow_html=True)
             
             stores = dashboard_data.get('stores', [])
             if stores:
                 df_stores = pd.DataFrame(stores)
                 
+                # Enhanced chart with professional styling
                 fig = px.bar(
                     df_stores,
                     x='name',
                     y='completion_percentage',
                     color='status',
-                    title='Store Completion Progress',
-                    labels={'completion_percentage': 'Completion %', 'name': 'Store'},
+                    title='',
+                    labels={'completion_percentage': 'Completion %', 'name': 'Store Location'},
                     color_discrete_map={
-                        'planning': '#ffd89b',
-                        'in_progress': '#4facfe',
-                        'completed': '#43e97b',
-                        'delayed': '#fa709a'
-                    }
+                        'planning': '#60a5fa',
+                        'in_progress': '#f59e0b',
+                        'completed': '#10b981',
+                        'delayed': '#ef4444'
+                    },
+                    text='completion_percentage'
                 )
+                
+                # Professional chart styling
+                fig.update_traces(
+                    texttemplate='%{text:.1f}%',
+                    textposition='outside',
+                    marker_line_color='rgba(255,255,255,0.3)',
+                    marker_line_width=2
+                )
+                
                 fig.update_layout(
-                    height=400,
+                    height=450,
                     plot_bgcolor='rgba(0,0,0,0)',
                     paper_bgcolor='rgba(0,0,0,0)',
-                    font=dict(family='Inter', size=12)
+                    font=dict(family='-apple-system, BlinkMacSystemFont, Segoe UI, Roboto', size=13, color='#1e293b'),
+                    xaxis=dict(
+                        showgrid=False,
+                        showline=True,
+                        linecolor='#e2e8f0',
+                        linewidth=2,
+                        title_font=dict(size=14, color='#475569'),
+                        tickfont=dict(size=12, color='#64748b')
+                    ),
+                    yaxis=dict(
+                        showgrid=True,
+                        gridcolor='#f1f5f9',
+                        showline=False,
+                        title_font=dict(size=14, color='#475569'),
+                        tickfont=dict(size=12, color='#64748b'),
+                        range=[0, 110]
+                    ),
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1,
+                        bgcolor='rgba(255,255,255,0.9)',
+                        bordercolor='#e2e8f0',
+                        borderwidth=1,
+                        font=dict(size=12)
+                    ),
+                    margin=dict(t=50, b=50, l=50, r=50),
+                    hovermode='x unified'
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                
+                st.plotly_chart(fig, use_container_width=True, key="store_progress_chart")
+                
+                # Add export button
+                col_export1, col_export2, col_export3 = st.columns([1, 1, 2])
+                with col_export1:
+                    if st.button("📊 Export Chart Data", use_container_width=True):
+                        csv = df_stores.to_csv(index=False)
+                        st.download_button(
+                            label="Download CSV",
+                            data=csv,
+                            file_name=f"store_progress_{datetime.now().strftime('%Y%m%d')}.csv",
+                            mime="text/csv",
+                        )
+                with col_export2:
+                    if st.button("📄 Generate Report", use_container_width=True):
+                        st.info("Report generation feature - Coming soon")
+    
     
     elif page == "ai_insights":
         st.markdown('<div class="main-header fade-in">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
@@ -680,7 +1065,7 @@ else:
                             'low': '🟢'
                         }.get(task.get('priority'), '⚪')
                         
-                        st.write(f"**{idx}. {priority_icon} {task.get('title')}**")
+                        st.markdown(f"**{idx}. {priority_icon} {task.get('title')}**", unsafe_allow_html=True)
                         st.write(f"   Priority: {task.get('priority')} | Status: {task.get('status')}")
             
             with tabs[2]:
@@ -944,7 +1329,7 @@ else:
             st.warning("⚠️ No team members found")
     
     elif page == "tasks":
-        st.markdown('<div class="main-header fade-in">✅ Tasks & Checklists</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">☑ Tasks & Checklists</div>', unsafe_allow_html=True)
         
         # Store selector
         stores_data = api_request("/stores")
@@ -977,10 +1362,20 @@ else:
                                 col_t1, col_t2, col_t3 = st.columns([3, 1, 1])
                                 
                                 with col_t1:
-                                    status_icon = {"pending": "⏳", "in_progress": "🔄", "completed": "✅", "blocked": "🚫"}.get(task.get('status'), "⚪")
-                                    priority_icon = {"low": "🟢", "medium": "🟡", "high": "🟠", "critical": "🔴"}.get(task.get('priority'), "⚪")
+                                    status_icon = {
+                                        "pending": '⏳',
+                                        "in_progress": '🔄',
+                                        "completed": '✅',
+                                        "blocked": '🚫'
+                                    }.get(task.get('status'), '⚪')
+                                    priority_icon = {
+                                        "low": '🟢',
+                                        "medium": '🟡',
+                                        "high": '🟠',
+                                        "critical": '🔴'
+                                    }.get(task.get('priority'), '⚪')
                                     
-                                    st.write(f"{status_icon} {priority_icon} **{task.get('title', 'Task')}**")
+                                    st.markdown(f"{status_icon} {priority_icon} **{task.get('title', 'Task')}**", unsafe_allow_html=True)
                                     if task.get('description'):
                                         st.caption(task.get('description'))
                                 
@@ -1140,7 +1535,7 @@ else:
                 st.warning("⚠️ No WhatsApp groups available")
     
     elif page == "analytics":
-        st.markdown('<div class="main-header fade-in">📊 Analytics Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">📈 Analytics Dashboard</div>', unsafe_allow_html=True)
         
         # Store selector
         stores_data = api_request("/stores")

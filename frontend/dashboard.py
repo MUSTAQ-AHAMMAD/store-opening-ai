@@ -14,7 +14,7 @@ import json
 # Configure page
 st.set_page_config(
     page_title="Store Opening AI Dashboard",
-    page_icon="🏪",
+    page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -25,6 +25,12 @@ API_BASE_URL = "http://localhost:5000/api"
 # Custom CSS
 st.markdown("""
     <style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
     .main-header {
         font-size: 2.5rem;
         font-weight: bold;
@@ -96,7 +102,7 @@ pages = {
     "🏠 Dashboard": "dashboard",
     "🏪 Stores": "stores",
     "👥 Team Members": "team",
-    "✅ Checklists & Tasks": "tasks",
+    "☑ Checklists & Tasks": "tasks",
     "💬 WhatsApp Groups": "whatsapp",
     "📊 Analytics": "analytics"
 }
@@ -106,7 +112,7 @@ page = pages[selected_page]
 
 # Main content
 if page == "dashboard":
-    st.markdown('<div class="main-header">🏪 Store Opening Dashboard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">🏢 Store Opening Dashboard</div>', unsafe_allow_html=True)
     
     # Fetch dashboard data
     dashboard_data = get_api_data("/analytics/dashboard")
@@ -281,7 +287,7 @@ elif page == "team":
             st.info("No team members found")
 
 elif page == "tasks":
-    st.markdown('<div class="main-header">✅ Tasks & Checklists</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">☑ Tasks & Checklists</div>', unsafe_allow_html=True)
     
     # Store selector
     stores = get_api_data("/stores")
@@ -318,7 +324,7 @@ elif page == "tasks":
                                     'high': '🟠',
                                     'critical': '🔴'
                                 }
-                                st.write(f"{priority_colors.get(task['priority'], '⚪')} {task['priority']}")
+                                st.markdown(f"{priority_colors.get(task['priority'], '⚪')} {task['priority']}", unsafe_allow_html=True)
                             
                             with col3:
                                 if task.get('due_date'):
@@ -332,7 +338,7 @@ elif page == "tasks":
                                     'completed': '✅',
                                     'blocked': '🚫'
                                 }
-                                st.write(f"{status_colors.get(task['status'], '⚪')} {task['status']}")
+                                st.markdown(f"{status_colors.get(task['status'], '⚪')} {task['status']}", unsafe_allow_html=True)
                     else:
                         st.info("No tasks in this checklist")
         else:
@@ -384,7 +390,7 @@ elif page == "whatsapp":
         st.info("No WhatsApp groups found")
 
 elif page == "analytics":
-    st.markdown('<div class="main-header">📊 Analytics & Reports</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">📈 Analytics & Reports</div>', unsafe_allow_html=True)
     
     # Report type selector
     report_type = st.selectbox("Select Report Type", ["Dashboard Overview", "Store Progress", "Task Analysis"])
