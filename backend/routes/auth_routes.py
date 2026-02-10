@@ -3,7 +3,7 @@ Authentication Routes
 Handles user login, registration, and session management
 """
 
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime, timedelta
 from backend.database import db
@@ -13,10 +13,9 @@ import os
 
 bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
-# Require SECRET_KEY to be set
-SECRET_KEY = os.getenv('SECRET_KEY')
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable must be set for security")
+def _get_secret_key():
+    """Get SECRET_KEY from Flask app config at runtime"""
+    return current_app.config['SECRET_KEY']
 
 def generate_token(user_id, role):
     """Generate JWT token for user"""
@@ -25,12 +24,12 @@ def generate_token(user_id, role):
         'role': role,
         'exp': datetime.utcnow() + timedelta(days=7)  # Token expires in 7 days
     }
-    return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    return jwt.encode(payload, _get_secret_key(), algorithm='HS256')
 
 def verify_token(token):
     """Verify JWT token"""
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token, _get_secret_key(), algorithms=['HS256'])
         return payload
     except jwt.ExpiredSignatureError:
         return None
