@@ -86,7 +86,7 @@ st.markdown("""
     
     /* 🎯 HEADER STYLES - Bold & Impactful */
     .main-header {
-        font-size: 3rem;
+        font-size: 2.5rem;
         font-weight: 800;
         background: var(--primary-gradient);
         -webkit-background-clip: text;
@@ -103,7 +103,7 @@ st.markdown("""
     }
     
     .page-subtitle {
-        font-size: 1.125rem;
+        font-size: 1rem;
         color: var(--text-secondary);
         margin-bottom: 2.5rem;
         font-weight: 500;
@@ -138,20 +138,20 @@ st.markdown("""
     }
     
     .metric-icon-gradient {
-        width: 64px;
-        height: 64px;
-        border-radius: 16px;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 2rem;
+        font-size: 1.75rem;
         margin-bottom: 1rem;
         background: var(--primary-gradient);
         box-shadow: var(--shadow-md);
     }
     
     .metric-value-large {
-        font-size: 3rem;
+        font-size: 2.5rem;
         font-weight: 800;
         color: var(--text-primary);
         line-height: 1;
@@ -213,7 +213,7 @@ st.markdown("""
     }
     
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.75rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
         position: relative;
@@ -221,7 +221,7 @@ st.markdown("""
     }
     
     .hero-subtitle {
-        font-size: 1.125rem;
+        font-size: 1rem;
         opacity: 0.95;
         position: relative;
         z-index: 1;
@@ -326,29 +326,13 @@ st.markdown("""
     }
     
     /* 🔘 BUTTONS - Modern & Interactive */
-    .stButton > button {
-        background: var(--primary-gradient) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 12px !important;
-        padding: 0.75rem 2rem !important;
-        font-weight: 600 !important;
-        font-size: 0.95rem !important;
-        transition: all 0.3s ease !important;
-        box-shadow: var(--shadow-md) !important;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    
-    .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg) !important;
-    }
+    /* (Enhanced version defined later for better specificity) */
     
     /* 📱 SIDEBAR - Sleek Navigation */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
         color: white;
+        padding: 1rem 0;
     }
     
     [data-testid="stSidebar"] .element-container {
@@ -356,23 +340,20 @@ st.markdown("""
     }
     
     [data-testid="stSidebar"] hr {
-        border-color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.25);
+        margin: 1.25rem 0;
     }
     
-    /* Sidebar Navigation Items */
-    [data-testid="stSidebar"] .stRadio > label {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 0.75rem 1rem;
-        border-radius: 12px;
-        margin: 0.25rem 0;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
+    [data-testid="stSidebar"] h3 {
+        color: white;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1rem;
+        opacity: 0.9;
     }
     
-    [data-testid="stSidebar"] .stRadio > label:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateX(4px);
-    }
     
     /* 🎴 CARDS - Various Styles */
     .info-card {
@@ -421,8 +402,8 @@ st.markdown("""
     }
     
     .stage-number {
-        width: 48px;
-        height: 48px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         background: var(--primary-gradient);
         color: white;
@@ -430,7 +411,7 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 1.25rem;
+        font-size: 1.125rem;
         flex-shrink: 0;
     }
     
@@ -526,6 +507,170 @@ st.markdown("""
     /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    
+    /* 🔐 LOGIN PAGE - Professional Design */
+    .login-container {
+        background: white;
+        padding: 3rem 2.5rem;
+        border-radius: 24px;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border-light);
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .login-header {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        text-align: center;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .login-subtitle {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+    
+    /* 👤 USER PROFILE CARD - Elegant Sidebar Profile */
+    .user-profile-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .user-profile-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .user-profile-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+    
+    .user-profile-name {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .user-profile-role {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 0.375rem 0.75rem;
+        border-radius: 8px;
+        display: inline-block;
+    }
+    
+    /* 📌 SUB-HEADER - Section Headers */
+    .sub-header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid transparent;
+        border-image: var(--primary-gradient) 1;
+        border-image-slice: 1;
+    }
+    
+    /* 📱 IMPROVED SIDEBAR RADIO BUTTONS - Better Contrast */
+    [data-testid="stSidebar"] .stRadio > label {
+        background: rgba(255, 255, 255, 0.12);
+        padding: 0.875rem 1.25rem;
+        border-radius: 12px;
+        margin: 0.375rem 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+    
+    [data-testid="stSidebar"] .stRadio > label:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateX(6px);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    [data-testid="stSidebar"] .stRadio > label[data-checked="true"] {
+        background: rgba(255, 255, 255, 0.3);
+        font-weight: 600;
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+    
+    /* 🎨 IMPROVED FORM INPUTS - Better Visual Hierarchy */
+    .stTextInput > div > div > input,
+    .stSelectbox > div > div > select,
+    .stTextArea > div > div > textarea {
+        border-radius: 12px;
+        border: 2px solid var(--border-light);
+        padding: 0.875rem 1.25rem;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        font-weight: 500;
+        background: white;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stSelectbox > div > div > select:focus,
+    .stTextArea > div > div > textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+        outline: none;
+    }
+    
+    /* 🔘 IMPROVED BUTTONS - Enhanced Interactivity */
+    .stButton > button {
+        background: var(--primary-gradient) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 0.875rem 2rem !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+        text-transform: none;
+        letter-spacing: 0.02em;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+    }
+    
+    .stButton > button:active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+    }
+    
+    /* ✨ FADE-IN ANIMATION */
+    .fade-in {
+        animation: fadeInUp 0.6s ease-out;
+    }
     
     </style>
 """, unsafe_allow_html=True)
