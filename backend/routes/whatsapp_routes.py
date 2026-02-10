@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app import db
+from backend.database import db
 from backend.models.models import WhatsAppGroup, ArchivedConversation, Store
 from backend.services.whatsapp_service import WhatsAppService
 from datetime import datetime

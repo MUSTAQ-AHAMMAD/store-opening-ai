@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app import db
+from backend.database import db
 from backend.models.models import Checklist, Task, Store, TeamMember
 from datetime import datetime
 

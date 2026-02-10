@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app import db
+from backend.database import db
 from backend.models.models import Store, Task, Checklist
 from datetime import datetime, timedelta
 from sqlalchemy import func

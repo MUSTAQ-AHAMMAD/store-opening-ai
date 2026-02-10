@@ -8,7 +8,8 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from datetime import datetime, timedelta
-from app import app, db
+from app import app
+from backend.database import db
 from backend.models.models import (
     Store, TeamMember, Checklist, Task, 
     WhatsAppGroup, ArchivedConversation, FollowUp
