@@ -297,6 +297,12 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
 # Run migration (implement with Flask-Migrate if needed)
 ```
 
+## 📚 Documentation
+
+- [API Documentation](./docs/API_DOCUMENTATION.md)
+- [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Typing Best Practices](./docs/TYPING_BEST_PRACTICES.md) - **Important for Python 3.13+ compatibility**
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
@@ -329,6 +335,11 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
    - **Note**: NumPy 2.x requires Python 3.9 or higher. If you're using Python 3.8, you'll need to use numpy 1.x (not compatible with this project's current configuration)
    - **Recommended**: Use Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
    - If you still encounter build errors, ensure your Python version is 3.9 or higher
+
+6. **NamedTuple or typing errors**
+   - See [Typing Best Practices](./docs/TYPING_BEST_PRACTICES.md) for correct NamedTuple syntax
+   - Common issue: Using dict syntax `{'field': type}` instead of list syntax `[('field', type)]`
+   - **Python 3.13+ compatibility**: Always use class-based `NamedTuple` syntax (recommended)
 
 ## 📝 License
 
