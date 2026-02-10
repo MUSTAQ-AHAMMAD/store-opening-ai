@@ -1,5 +1,18 @@
 # Store Opening AI Management System
 
+## 🎉 NEW: Version 2.0 - Enhanced with AI & Modern UI!
+
+**Major Updates:**
+- 🔐 **User Authentication** - Secure login with JWT
+- 🎨 **Modern Rich UI** - Professional gradient dashboard
+- 🤖 **AI Features** - Intelligent follow-ups and predictions
+- 📞 **Voice Calling** - Automated escalations via phone
+- 📊 **Advanced Analytics** - Real-time insights and risk assessment
+
+> **Quick Start**: See [QUICKSTART_V2.md](./QUICKSTART_V2.md) for the new features guide!
+
+---
+
 A comprehensive Python-based AI system for managing store opening logistics with automated WhatsApp follow-ups, real-time tracking, and data archival.
 
 ## 🌟 Features
