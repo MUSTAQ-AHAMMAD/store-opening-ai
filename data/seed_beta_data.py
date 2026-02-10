@@ -3,6 +3,10 @@ Beta testing data seed script
 Generates sample data for testing the Store Opening AI system
 """
 
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from datetime import datetime, timedelta
 from app import app, db
 from backend.models.models import (

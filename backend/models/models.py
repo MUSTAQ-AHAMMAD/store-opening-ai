@@ -1,4 +1,6 @@
 from datetime import datetime
+
+# Import db from app module
 from app import db
 
 class Store(db.Model):
