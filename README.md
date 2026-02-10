@@ -1,8 +1,20 @@
 # Store Opening AI Management System
 
-## 🎉 NEW: Version 2.0 - Enhanced with AI & Modern UI!
+## 🎉 NEW: Version 3.0 - Complete Workflow Automation!
 
-**Major Updates:**
+**Latest Updates:**
+- 🔄 **7-Stage Workflow Process** - Automated store opening process management
+- 📧 **Email Notifications** - Multi-channel communication (WhatsApp + Email + SMS + Voice)
+- 🤖 **AI-Powered Follow-ups** - Intelligent, context-aware messaging
+- ⚡ **Automatic Timeline Recalculation** - Dynamic deadline management
+- 🔔 **Multi-Level Escalations** - Automatic escalations for delays
+- 📦 **Material Tracking** - Track shipments from warehouse to store
+- 💻 **TeamViewer Integration** - Remote support during installation
+- 🎯 **100% On-Time Store Openings** - Strict follow-ups and process automation
+
+> **Workflow Guide**: See [WORKFLOW_AUTOMATION.md](./docs/WORKFLOW_AUTOMATION.md) for the complete workflow automation guide!
+
+## 🎉 Version 2.0 Features
 - 🔐 **User Authentication** - Secure login with JWT
 - 🎨 **Modern Rich UI** - Professional gradient dashboard
 - 🤖 **AI Features** - Intelligent follow-ups and predictions
@@ -18,11 +30,16 @@ A comprehensive Python-based AI system for managing store opening logistics with
 ## 🌟 Features
 
 ### Core Functionality
+- **7-Stage Workflow Process**: Automated process from store creation to opening
 - **Store Management**: Create and track multiple store openings with timelines
 - **Team Management**: Manage team members across different stores
 - **Task Tracking**: Comprehensive checklist system with priority levels
 - **WhatsApp Integration**: Automated messaging and group management via Twilio
+- **Email Notifications**: Professional HTML emails for all workflow events
+- **SMS & Voice Escalations**: Multi-channel escalations for delays
 - **Automated Follow-ups**: Scheduled reminders and escalations for overdue tasks
+- **Material Tracking**: Track shipments from warehouse → nearby store → actual store
+- **TeamViewer Support**: Remote installation support with mandatory ID tracking
 - **Analytics Dashboard**: Real-time progress tracking and reporting
 - **Data Archival**: Preserve group conversations and historical data
 
@@ -31,6 +48,9 @@ A comprehensive Python-based AI system for managing store opening logistics with
 - **Frontend**: Streamlit (Interactive dashboard)
 - **Database**: SQLite (development) with PostgreSQL migration support
 - **WhatsApp**: Twilio WhatsApp Business API
+- **Email**: SMTP (Gmail, Outlook, etc.)
+- **SMS & Voice**: Twilio API
+- **AI**: OpenAI GPT for intelligent messaging
 - **Scheduling**: APScheduler for automated tasks
 - **Visualization**: Plotly for charts and analytics
 
@@ -38,7 +58,9 @@ A comprehensive Python-based AI system for managing store opening logistics with
 
 - Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
 - pip (Python package manager)
-- Twilio account (for WhatsApp integration)
+- Twilio account (for WhatsApp, SMS, and Voice integration)
+- Email account with SMTP access (for email notifications)
+- OpenAI API key (optional, for AI-powered messages)
 
 ## 🚀 Installation
 
@@ -76,15 +98,66 @@ SECRET_KEY=your-secret-key-here
 # Database
 DATABASE_URL=sqlite:///store_opening.db
 
-# Twilio WhatsApp Configuration
+# Twilio Configuration
 TWILIO_ACCOUNT_SID=your_twilio_account_sid
 TWILIO_AUTH_TOKEN=your_twilio_auth_token
 TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+TWILIO_PHONE_NUMBER=+1234567890
+
+# Email Configuration (SMTP)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+FROM_EMAIL=your_email@gmail.com
+
+# OpenAI Configuration (optional, for AI-powered messages)
+OPENAI_API_KEY=your_openai_api_key_here
 
 # Scheduler Configuration
 SCHEDULER_TIMEZONE=UTC
 ENABLE_SCHEDULER=true
 ```
+
+## 📊 7-Stage Workflow Process
+
+The system implements a comprehensive workflow automation:
+
+1. **Stage 1 - Update Nearby Store Details** (20 days before opening)
+   - Team member provides nearby store information
+   - Contact person and mobile number required
+
+2. **Stage 2 - Complete Checklist & Send to Warehouse** (18 days before)
+   - Team completes all checklist items
+   - Material requirements sent to warehouse
+
+3. **Stage 3 - Confirm Material at Nearby Store** (15 days before)
+   - Same team member confirms material arrival at nearby store
+
+4. **Stage 4 - Confirm Material at Actual Store** (12 days before)
+   - Material transported and confirmed at actual store location
+
+5. **Stage 5 - Start Installation & TeamViewer ID** (1 day before or on opening day)
+   - Installation process begins
+   - **TeamViewer ID mandatory** for remote support
+
+6. **Stage 6 - Final Checklist** (Opening day)
+   - Complete final verification checklist
+   - Ensure all systems operational
+
+7. **Stage 7 - Store Opening Complete** (Opening day)
+   - Store opening marked as complete
+   - Success notification sent to all
+
+### Automatic Features:
+- 📧 Email notifications for each stage
+- 💬 WhatsApp group updates in real-time
+- ⏰ Automatic deadline calculations
+- 🔄 Timeline recalculation when opening date changes
+- 🚨 Multi-level escalations for delays (WhatsApp → SMS → Call → Email)
+- 🤖 AI-generated follow-up messages
+
+> See [WORKFLOW_AUTOMATION.md](./docs/WORKFLOW_AUTOMATION.md) for complete workflow documentation
 
 ## 🗄️ Database Setup
 
@@ -96,6 +169,7 @@ python data/seed_beta_data.py
 This will create:
 - **Default user accounts** for login (admin, manager, user)
 - 5 sample stores with different opening dates
+- **Workflow stages** for each store
 - 20+ team members across stores
 - Complete checklists for each store (Hardware, Software, Connectivity, Training)
 - Sample tasks with various statuses and priorities
@@ -218,6 +292,24 @@ The dashboard will open in your browser at `http://localhost:8501`
 - `POST /api/whatsapp/groups/<id>/send` - Send message
 - `POST /api/whatsapp/groups/<id>/archive` - Archive group
 - `GET /api/whatsapp/groups/<id>/archive` - Get archived conversations
+
+#### Workflow (NEW!)
+- `GET /api/workflow/store/<id>/stages` - Get all workflow stages
+- `GET /api/workflow/store/<id>/stages/<num>` - Get specific stage
+- `POST /api/workflow/store/<id>/nearby-store` - Update nearby store details (Stage 1)
+- `GET /api/workflow/store/<id>/nearby-store` - Get nearby store details
+- `POST /api/workflow/store/<id>/warehouse-shipment` - Confirm warehouse shipment (Stage 2)
+- `POST /api/workflow/store/<id>/nearby-store-receipt` - Confirm nearby store receipt (Stage 3)
+- `POST /api/workflow/store/<id>/store-receipt` - Confirm store receipt (Stage 4)
+- `POST /api/workflow/store/<id>/installation` - Start installation with TeamViewer (Stage 5)
+- `GET /api/workflow/store/<id>/installation` - Get installation details
+- `PUT /api/workflow/store/<id>/installation` - Update installation notes
+- `POST /api/workflow/store/<id>/final-checklist` - Complete final checklist (Stage 6)
+- `POST /api/workflow/store/<id>/complete` - Mark store opening complete (Stage 7)
+- `GET /api/workflow/store/<id>/material-tracking` - Get material tracking status
+- `PUT /api/workflow/store/<id>/opening-date` - Update opening date (recalculates timelines)
+- `GET /api/workflow/store/<id>/escalations` - Get escalation history
+- `GET /api/workflow/store/<id>/delayed-stages` - Get delayed stages
 
 #### Analytics
 - `GET /api/analytics/dashboard` - Dashboard analytics
