@@ -1248,7 +1248,7 @@ else:
             elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
                 st.error(f"⚠️ Error loading stores: {stores_data['error']}")
             else:
-                st.warning("⚠️ No stores found or unable to fetch stores")
+                st.info("📭 No stores found. Add a new store to get started!")
         
         with tab2:
             st.markdown("### ➕ Create New Store")
