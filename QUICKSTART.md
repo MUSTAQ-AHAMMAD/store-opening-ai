@@ -21,7 +21,8 @@ python test_system.py
 
 **Terminal 1 - API Server:**
 ```bash
-python app.py
+python main.py
+# or: python app.py
 ```
 
 **Terminal 2 - Dashboard:**

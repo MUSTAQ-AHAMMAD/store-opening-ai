@@ -192,6 +192,8 @@ After seeding, you can login with these credentials:
 
 ### Start the Backend API Server
 ```bash
+python main.py
+# or alternatively:
 python app.py
 ```
 
@@ -428,7 +430,11 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
    - **Recommended**: Use Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
    - If you still encounter build errors, ensure your Python version is 3.9 or higher
 
-6. **NamedTuple or typing errors**
+6. **`can't open file 'main.py'` error**
+   - Both `python main.py` and `python app.py` are valid entry points
+   - Make sure you are in the `store-opening-ai` project directory before running the command
+
+7. **NamedTuple or typing errors**
    - See [Typing Best Practices](./docs/TYPING_BEST_PRACTICES.md) for correct NamedTuple syntax
    - Common issue: Using dict syntax `{'field': type}` instead of list syntax `[('field', type)]`
    - **Python 3.13+ compatibility**: Always use class-based `NamedTuple` syntax (recommended)
