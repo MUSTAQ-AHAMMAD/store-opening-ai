@@ -29,7 +29,13 @@ class TaskSummary(NamedTuple):
 
 
 class TeamMemberInfo(NamedTuple):
-    """Team member information"""
+    """
+    Team member information
+    
+    Note: phone is required (not Optional) because it's used for WhatsApp integration
+    and SMS notifications. Email is optional as it's not used for primary communication.
+    This mirrors the database model where phone is NOT NULL and email is nullable.
+    """
     id: int
     name: str
     role: str
