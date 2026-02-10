@@ -69,7 +69,7 @@ def initialize_db():
         db.create_all()
         print("Database tables created successfully")
         
-        # Auto-seed default admin user if no users exist
+        # Auto-seed default demo users (admin, manager, team_member) if no users exist
         from backend.models.models import User
         if User.query.count() == 0:
             from data.seed_users import seed_admin_user
