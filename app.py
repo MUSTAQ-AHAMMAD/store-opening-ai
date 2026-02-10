@@ -64,10 +64,16 @@ def health():
     return {'status': 'healthy'}
 
 def initialize_db():
-    """Initialize database tables"""
+    """Initialize database tables and seed default users"""
     with app.app_context():
         db.create_all()
         print("Database tables created successfully")
+        
+        # Auto-seed default demo users (admin, manager, team_member) if no users exist
+        from backend.models.models import User
+        if User.query.count() == 0:
+            from data.seed_users import seed_admin_user
+            seed_admin_user(use_existing_context=True)
 
 if __name__ == '__main__':
     # Initialize database
