@@ -14,7 +14,7 @@ import json
 # Configure page with modern theme
 st.set_page_config(
     page_title="Store Opening AI - Dashboard",
-    page_icon="🏪",
+    page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -25,12 +25,13 @@ API_BASE_URL = "http://localhost:5000/api"
 # Enhanced Custom CSS for modern, rich UI
 st.markdown("""
     <style>
-    /* Import Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    /* Import Google Fonts and Font Awesome */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
     
     /* Global Styles */
     * {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
     /* Main container */
@@ -349,7 +350,7 @@ def logout():
 
 # Login Page
 if not st.session_state.authenticated:
-    st.markdown('<div class="main-header">🏪 Store Opening AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header"><i class="fas fa-store-alt"></i> Store Opening AI</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     
@@ -486,17 +487,17 @@ else:
             </style>
         """, unsafe_allow_html=True)
         
-        st.markdown("### 📊 Navigation")
+        st.markdown("### <i class='fas fa-bars'></i> Navigation", unsafe_allow_html=True)
         
         pages = {
-            "🏠 Dashboard": "dashboard",
-            "🏪 Stores": "stores",
-            "👥 Team Members": "team",
-            "✅ Tasks & Checklists": "tasks",
-            "💬 WhatsApp": "whatsapp",
-            "📊 Analytics": "analytics",
-            "🤖 AI Insights": "ai_insights",
-            "📞 Voice Escalations": "voice"
+            "<i class='fas fa-home'></i> Dashboard": "dashboard",
+            "<i class='fas fa-store'></i> Stores": "stores",
+            "<i class='fas fa-users'></i> Team Members": "team",
+            "<i class='fas fa-tasks'></i> Tasks & Checklists": "tasks",
+            "<i class='fab fa-whatsapp'></i> WhatsApp": "whatsapp",
+            "<i class='fas fa-chart-line'></i> Analytics": "analytics",
+            "<i class='fas fa-brain'></i> AI Insights": "ai_insights",
+            "<i class='fas fa-phone-volume'></i> Voice Escalations": "voice"
         }
         
         selected_page = st.radio("", list(pages.keys()), label_visibility="collapsed")
@@ -518,7 +519,7 @@ else:
     
     # Main Content Area
     if page == "dashboard":
-        st.markdown('<div class="main-header fade-in">🏠 Dashboard Overview</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fas fa-home"></i> Dashboard Overview</div>', unsafe_allow_html=True)
         
         # Fetch dashboard data
         dashboard_data = api_request("/analytics/dashboard")
@@ -571,16 +572,16 @@ else:
             ai_insights_data = api_request("/ai/insights/dashboard")
             
             if ai_insights_data and ai_insights_data.get('insights'):
-                st.markdown('<div class="sub-header">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
+                st.markdown('<div class="sub-header"><i class="fas fa-brain"></i> AI-Powered Insights</div>', unsafe_allow_html=True)
                 
                 for insight in ai_insights_data['insights']:
                     risk_color = {
-                        'low': '🟢',
-                        'medium': '🟡',
-                        'high': '🔴'
-                    }.get(insight['risk_level'], '⚪')
+                        'low': '<i class="fas fa-circle" style="color: #22c55e;"></i>',
+                        'medium': '<i class="fas fa-circle" style="color: #eab308;"></i>',
+                        'high': '<i class="fas fa-circle" style="color: #ef4444;"></i>'
+                    }.get(insight['risk_level'], '<i class="far fa-circle"></i>')
                     
-                    with st.expander(f"{risk_color} {insight['store_name']} - Risk: {insight['risk_level'].upper()}", expanded=insight['risk_level'] == 'high'):
+                    with st.expander(f"{insight['store_name']} - Risk: {insight['risk_level'].upper()}", expanded=insight['risk_level'] == 'high'):
                         if insight['risk_factors']:
                             st.warning("**Risk Factors:**")
                             for factor in insight['risk_factors']:
@@ -601,7 +602,7 @@ else:
                             st.metric("Days to Opening", metrics.get('days_until_opening', 'N/A'))
             
             # Store Progress Chart
-            st.markdown('<div class="sub-header">📊 Store Progress Overview</div>', unsafe_allow_html=True)
+            st.markdown('<div class="sub-header"><i class="fas fa-chart-bar"></i> Store Progress Overview</div>', unsafe_allow_html=True)
             
             stores = dashboard_data.get('stores', [])
             if stores:
@@ -630,7 +631,7 @@ else:
                 st.plotly_chart(fig, use_container_width=True)
     
     elif page == "ai_insights":
-        st.markdown('<div class="main-header fade-in">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fas fa-brain"></i> AI-Powered Insights</div>', unsafe_allow_html=True)
         
         st.info("💡 This section provides intelligent insights powered by AI to help you make better decisions.")
         
@@ -674,13 +675,13 @@ else:
                     tasks = prioritization_data['tasks']
                     for idx, task in enumerate(tasks[:5], 1):
                         priority_icon = {
-                            'critical': '🔴',
-                            'high': '🟠',
-                            'medium': '🟡',
-                            'low': '🟢'
-                        }.get(task.get('priority'), '⚪')
+                            'critical': '<i class="fas fa-exclamation-circle" style="color: #ef4444;"></i>',
+                            'high': '<i class="fas fa-exclamation-triangle" style="color: #f97316;"></i>',
+                            'medium': '<i class="fas fa-exclamation" style="color: #eab308;"></i>',
+                            'low': '<i class="fas fa-info-circle" style="color: #22c55e;"></i>'
+                        }.get(task.get('priority'), '<i class="far fa-circle"></i>')
                         
-                        st.write(f"**{idx}. {priority_icon} {task.get('title')}**")
+                        st.markdown(f"**{idx}. {priority_icon} {task.get('title')}**", unsafe_allow_html=True)
                         st.write(f"   Priority: {task.get('priority')} | Status: {task.get('status')}")
             
             with tabs[2]:
@@ -691,7 +692,7 @@ else:
                 st.info("Feature: Analyzes historical data to predict task completion risks")
     
     elif page == "stores":
-        st.markdown('<div class="main-header fade-in">🏪 Store Management</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fas fa-store"></i> Store Management</div>', unsafe_allow_html=True)
         
         # Tab layout for stores
         tab1, tab2 = st.tabs(["📋 All Stores", "➕ Add New Store"])
@@ -844,7 +845,7 @@ else:
                         st.warning("⚠️ Please fill in all required fields (Name, Location, Size)")
     
     elif page == "team":
-        st.markdown('<div class="main-header fade-in">👥 Team Management</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fas fa-users"></i> Team Management</div>', unsafe_allow_html=True)
         
         team_data = api_request("/team")
         
@@ -944,7 +945,7 @@ else:
             st.warning("⚠️ No team members found")
     
     elif page == "tasks":
-        st.markdown('<div class="main-header fade-in">✅ Tasks & Checklists</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fas fa-tasks"></i> Tasks & Checklists</div>', unsafe_allow_html=True)
         
         # Store selector
         stores_data = api_request("/stores")
@@ -977,10 +978,20 @@ else:
                                 col_t1, col_t2, col_t3 = st.columns([3, 1, 1])
                                 
                                 with col_t1:
-                                    status_icon = {"pending": "⏳", "in_progress": "🔄", "completed": "✅", "blocked": "🚫"}.get(task.get('status'), "⚪")
-                                    priority_icon = {"low": "🟢", "medium": "🟡", "high": "🟠", "critical": "🔴"}.get(task.get('priority'), "⚪")
+                                    status_icon = {
+                                        "pending": '<i class="far fa-clock" style="color: #6b7280;"></i>',
+                                        "in_progress": '<i class="fas fa-spinner" style="color: #3b82f6;"></i>',
+                                        "completed": '<i class="fas fa-check-circle" style="color: #22c55e;"></i>',
+                                        "blocked": '<i class="fas fa-ban" style="color: #ef4444;"></i>'
+                                    }.get(task.get('status'), '<i class="far fa-circle"></i>')
+                                    priority_icon = {
+                                        "low": '<i class="fas fa-arrow-down" style="color: #22c55e;"></i>',
+                                        "medium": '<i class="fas fa-minus" style="color: #eab308;"></i>',
+                                        "high": '<i class="fas fa-arrow-up" style="color: #f97316;"></i>',
+                                        "critical": '<i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>'
+                                    }.get(task.get('priority'), '<i class="far fa-circle"></i>')
                                     
-                                    st.write(f"{status_icon} {priority_icon} **{task.get('title', 'Task')}**")
+                                    st.markdown(f"{status_icon} {priority_icon} **{task.get('title', 'Task')}**", unsafe_allow_html=True)
                                     if task.get('description'):
                                         st.caption(task.get('description'))
                                 
@@ -1042,7 +1053,7 @@ else:
             st.warning("⚠️ No stores found")
     
     elif page == "whatsapp":
-        st.markdown('<div class="main-header fade-in">💬 WhatsApp Management</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fab fa-whatsapp"></i> WhatsApp Management</div>', unsafe_allow_html=True)
         
         tab1, tab2 = st.tabs(["📱 Groups", "💬 Send Message"])
         
@@ -1140,7 +1151,7 @@ else:
                 st.warning("⚠️ No WhatsApp groups available")
     
     elif page == "analytics":
-        st.markdown('<div class="main-header fade-in">📊 Analytics Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fas fa-chart-line"></i> Analytics Dashboard</div>', unsafe_allow_html=True)
         
         # Store selector
         stores_data = api_request("/stores")
@@ -1262,7 +1273,7 @@ else:
             st.warning("⚠️ No stores found")
     
     elif page == "voice":
-        st.markdown('<div class="main-header fade-in">📞 Voice Escalation System</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in"><i class="fas fa-phone-volume"></i> Voice Escalation System</div>', unsafe_allow_html=True)
         
         st.success("🎯 AI-powered voice calling for critical task escalations")
         
