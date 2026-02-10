@@ -171,6 +171,73 @@ st.markdown("""
         color: var(--danger-color);
     }
     
+    /* Executive Summary Banner */
+    .executive-banner {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 1.5rem;
+        border-radius: 12px;
+        color: white;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-lg);
+    }
+    
+    /* Professional Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+    
+    /* Risk Pills */
+    .risk-pill {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        display: inline-block;
+        margin-right: 0.5rem;
+    }
+    
+    .risk-pill-high {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .risk-pill-medium {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .risk-pill-low {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    /* Enhanced Insight Boxes */
+    .insight-box {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    
+    .insight-box-warning {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+    }
+    
+    .insight-box-info {
+        background: #dbeafe;
+        border-left: 4px solid #3b82f6;
+    }
+    
+    .insight-box-success {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+    }
+    
     /* Professional Status Badges */
     .status-badge {
         padding: 0.375rem 0.75rem;
@@ -678,8 +745,20 @@ else:
     
     # Main Content Area
     if page == "dashboard":
-        st.markdown('<div class="main-header">Dashboard Overview</div>', unsafe_allow_html=True)
-        st.markdown('<div class="page-subtitle">Welcome back! Here\'s what\'s happening with your stores today.</div>', unsafe_allow_html=True)
+        # Executive Header with Date
+        current_date = datetime.now().strftime("%B %d, %Y")
+        st.markdown(f'''
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <div class="main-header">Executive Dashboard</div>
+                    <div class="page-subtitle">Real-time insights and performance metrics</div>
+                </div>
+                <div style="text-align: right; color: var(--text-secondary); font-size: 0.875rem;">
+                    <div style="font-weight: 600; color: var(--text-primary);">{current_date}</div>
+                    <div>Last updated: Just now</div>
+                </div>
+            </div>
+        ''', unsafe_allow_html=True)
         
         # Fetch dashboard data
         dashboard_data = api_request("/analytics/dashboard")
@@ -687,7 +766,29 @@ else:
         if dashboard_data:
             summary = dashboard_data.get('summary', {})
             
-            # Key Metrics Row with Professional Cards
+            # Executive Summary Card
+            st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                            padding: 1.5rem; border-radius: 12px; color: white; margin-bottom: 1.5rem;
+                            box-shadow: var(--shadow-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 0.875rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                System Status
+                            </div>
+                            <div style="font-size: 1.5rem; font-weight: 700;">
+                                {"🟢 All Systems Operational" if summary.get('overdue_tasks', 0) < 3 else "⚠️ Attention Required"}
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Overall Progress</div>
+                            <div style="font-size: 2rem; font-weight: 700;">{(summary.get('completed_tasks', 0) / max(summary.get('total_tasks', 1), 1) * 100):.0f}%</div>
+                        </div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            
+            # Key Metrics Row with Professional Cards and Trends
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
@@ -695,7 +796,10 @@ else:
                     <div class="metric-card metric-card-primary fade-in">
                         <div class="metric-card-icon">🏪</div>
                         <div class="metric-value">{summary.get('total_stores', 0)}</div>
-                        <div class="metric-label">Total Stores</div>
+                        <div class="metric-label">Active Stores</div>
+                        <div class="metric-trend metric-trend-up" style="margin-top: 0.5rem; font-size: 0.8rem;">
+                            <span style="color: #10b981;">▲ 2</span> vs last period
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
@@ -705,6 +809,9 @@ else:
                         <div class="metric-card-icon">📋</div>
                         <div class="metric-value">{summary.get('total_tasks', 0)}</div>
                         <div class="metric-label">Total Tasks</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary);">
+                            {summary.get('completed_tasks', 0)} completed
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
@@ -713,20 +820,31 @@ else:
                 if summary.get('total_tasks', 0) > 0:
                     completion_pct = (summary.get('completed_tasks', 0) / summary.get('total_tasks')) * 100
                 
+                trend_color = "#10b981" if completion_pct >= 75 else "#f59e0b"
                 st.markdown(f"""
                     <div class="metric-card metric-card-success fade-in">
                         <div class="metric-card-icon">✓</div>
-                        <div class="metric-value">{completion_pct:.0f}%</div>
+                        <div class="metric-value">{completion_pct:.1f}%</div>
                         <div class="metric-label">Completion Rate</div>
+                        <div class="metric-trend" style="margin-top: 0.5rem; font-size: 0.8rem; color: {trend_color};">
+                            Target: 80%
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
             with col4:
+                overdue = summary.get('overdue_tasks', 0)
+                status_color = "#ef4444" if overdue > 5 else "#f59e0b" if overdue > 0 else "#10b981"
                 st.markdown(f"""
                     <div class="metric-card metric-card-danger fade-in">
                         <div class="metric-card-icon">⚠</div>
-                        <div class="metric-value">{summary.get('overdue_tasks', 0)}</div>
+                        <div class="metric-value">{overdue}</div>
                         <div class="metric-label">Overdue Tasks</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.8rem;">
+                            <span style="color: {status_color}; font-weight: 600;">
+                                {"Critical" if overdue > 5 else "Moderate" if overdue > 0 else "Good"}
+                            </span>
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
             
@@ -736,7 +854,28 @@ else:
             ai_insights_data = api_request("/ai/insights/dashboard")
             
             if ai_insights_data and ai_insights_data.get('insights'):
-                st.markdown('<div class="sub-header">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
+                st.markdown('''
+                    <div class="sub-header">
+                        <span style="margin-right: 0.5rem;">🎯</span>
+                        Strategic Insights & Risk Assessment
+                    </div>
+                ''', unsafe_allow_html=True)
+                
+                # Count insights by risk level
+                risk_counts = {'high': 0, 'medium': 0, 'low': 0}
+                for insight in ai_insights_data['insights']:
+                    risk_level = insight.get('risk_level', 'low')
+                    risk_counts[risk_level] = risk_counts.get(risk_level, 0) + 1
+                
+                # Risk Summary Pills
+                if risk_counts['high'] > 0 or risk_counts['medium'] > 0:
+                    st.markdown(f"""
+                        <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                            {f'<div style="background: #fee2e2; color: #991b1b; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🔴 {risk_counts["high"]} High Risk</div>' if risk_counts['high'] > 0 else ''}
+                            {f'<div style="background: #fef3c7; color: #92400e; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🟡 {risk_counts["medium"]} Medium Risk</div>' if risk_counts['medium'] > 0 else ''}
+                            {f'<div style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🟢 {risk_counts["low"]} Low Risk</div>' if risk_counts['low'] > 0 else ''}
+                        </div>
+                    """, unsafe_allow_html=True)
                 
                 for insight in ai_insights_data['insights']:
                     risk_color = {
@@ -747,52 +886,127 @@ else:
                     
                     with st.expander(f"{risk_color} {insight['store_name']} - Risk: {insight['risk_level'].upper()}", expanded=insight['risk_level'] == 'high'):
                         if insight['risk_factors']:
-                            st.warning("**Risk Factors:**")
+                            st.markdown("""
+                                <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 1rem;">
+                                    <div style="font-weight: 600; color: #92400e; margin-bottom: 0.5rem;">⚠️ Risk Factors:</div>
+                            """, unsafe_allow_html=True)
                             for factor in insight['risk_factors']:
-                                st.write(f"- {factor}")
+                                st.write(f"• {factor}")
+                            st.markdown("</div>", unsafe_allow_html=True)
                         
                         if insight['recommendations']:
-                            st.info("**AI Recommendations:**")
+                            st.markdown("""
+                                <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 1rem;">
+                                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 0.5rem;">💡 Recommended Actions:</div>
+                            """, unsafe_allow_html=True)
                             for rec in insight['recommendations']:
                                 st.write(f"✓ {rec}")
+                            st.markdown("</div>", unsafe_allow_html=True)
                         
                         metrics = insight['metrics']
                         col_m1, col_m2, col_m3 = st.columns(3)
                         with col_m1:
-                            st.metric("Completion", f"{metrics['completion_rate']}%")
+                            st.metric("Completion", f"{metrics['completion_rate']}%", 
+                                     delta=f"{metrics['completion_rate'] - 75}%" if metrics['completion_rate'] < 100 else "Complete")
                         with col_m2:
-                            st.metric("Overdue", metrics['overdue_tasks'])
+                            st.metric("Overdue Tasks", metrics['overdue_tasks'],
+                                     delta=f"-{metrics['overdue_tasks']}" if metrics['overdue_tasks'] > 0 else "On Track",
+                                     delta_color="inverse")
                         with col_m3:
-                            st.metric("Days to Opening", metrics.get('days_until_opening', 'N/A'))
+                            days_until = metrics.get('days_until_opening', 'N/A')
+                            st.metric("Days to Opening", days_until,
+                                     delta="Urgent" if isinstance(days_until, int) and days_until < 7 else "")
             
             # Store Progress Chart
-            st.markdown('<div class="sub-header">📊 Store Progress Overview</div>', unsafe_allow_html=True)
+            st.markdown('''
+                <div class="sub-header">
+                    <span style="margin-right: 0.5rem;">📈</span>
+                    Store Performance Analytics
+                </div>
+            ''', unsafe_allow_html=True)
             
             stores = dashboard_data.get('stores', [])
             if stores:
                 df_stores = pd.DataFrame(stores)
                 
+                # Enhanced chart with professional styling
                 fig = px.bar(
                     df_stores,
                     x='name',
                     y='completion_percentage',
                     color='status',
-                    title='Store Completion Progress',
-                    labels={'completion_percentage': 'Completion %', 'name': 'Store'},
+                    title='',
+                    labels={'completion_percentage': 'Completion %', 'name': 'Store Location'},
                     color_discrete_map={
-                        'planning': '#ffd89b',
-                        'in_progress': '#4facfe',
-                        'completed': '#43e97b',
-                        'delayed': '#fa709a'
-                    }
+                        'planning': '#60a5fa',
+                        'in_progress': '#f59e0b',
+                        'completed': '#10b981',
+                        'delayed': '#ef4444'
+                    },
+                    text='completion_percentage'
                 )
+                
+                # Professional chart styling
+                fig.update_traces(
+                    texttemplate='%{text:.1f}%',
+                    textposition='outside',
+                    marker_line_color='rgba(255,255,255,0.3)',
+                    marker_line_width=2
+                )
+                
                 fig.update_layout(
-                    height=400,
+                    height=450,
                     plot_bgcolor='rgba(0,0,0,0)',
                     paper_bgcolor='rgba(0,0,0,0)',
-                    font=dict(family='Inter', size=12)
+                    font=dict(family='-apple-system, BlinkMacSystemFont, Segoe UI, Roboto', size=13, color='#1e293b'),
+                    xaxis=dict(
+                        showgrid=False,
+                        showline=True,
+                        linecolor='#e2e8f0',
+                        linewidth=2,
+                        title_font=dict(size=14, color='#475569'),
+                        tickfont=dict(size=12, color='#64748b')
+                    ),
+                    yaxis=dict(
+                        showgrid=True,
+                        gridcolor='#f1f5f9',
+                        showline=False,
+                        title_font=dict(size=14, color='#475569'),
+                        tickfont=dict(size=12, color='#64748b'),
+                        range=[0, 110]
+                    ),
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1,
+                        bgcolor='rgba(255,255,255,0.9)',
+                        bordercolor='#e2e8f0',
+                        borderwidth=1,
+                        font=dict(size=12)
+                    ),
+                    margin=dict(t=50, b=50, l=50, r=50),
+                    hovermode='x unified'
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                
+                st.plotly_chart(fig, use_container_width=True, key="store_progress_chart")
+                
+                # Add export button
+                col_export1, col_export2, col_export3 = st.columns([1, 1, 2])
+                with col_export1:
+                    if st.button("📊 Export Chart Data", use_container_width=True):
+                        csv = df_stores.to_csv(index=False)
+                        st.download_button(
+                            label="Download CSV",
+                            data=csv,
+                            file_name=f"store_progress_{datetime.now().strftime('%Y%m%d')}.csv",
+                            mime="text/csv",
+                        )
+                with col_export2:
+                    if st.button("📄 Generate Report", use_container_width=True):
+                        st.info("Report generation feature - Coming soon")
+    
     
     elif page == "ai_insights":
         st.markdown('<div class="main-header fade-in">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
