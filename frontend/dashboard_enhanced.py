@@ -304,12 +304,28 @@ def api_request(endpoint, method='GET', data=None, auth_required=True, handle_se
                 st.session_state.user = None
                 st.error("🔒 Your session has expired. Please login again to continue.")
             return None
+        elif response.status_code >= 400:
+            # Try to get error message from response
+            try:
+                error_data = response.json()
+                error_msg = error_data.get('error', f'API Error: {response.status_code}')
+                return {'error': error_msg}
+            except:
+                return {'error': f'API Error: {response.status_code}'}
         else:
             st.error(f"API Error: {response.status_code}")
             return None
     
+    except requests.exceptions.ConnectionError:
+        st.error(f"⚠️ Connection Error: Unable to reach the server. Please check if the backend is running.")
+        return None
+    except requests.exceptions.Timeout:
+        st.error(f"⚠️ Request Timeout: The server is taking too long to respond. Please try again.")
+        return None
     except Exception as e:
-        st.error(f"⚠️ Connection Error: Unable to reach the server. Please try again.")
+        # Log the actual error for debugging
+        print(f"API Request Error: {str(e)}")
+        st.error(f"⚠️ An unexpected error occurred. Please try again.")
         return None
 
 def login(username, password):
@@ -397,12 +413,15 @@ if not st.session_state.authenticated:
                         }
                         result = api_request('/auth/register', method='POST', data=reg_data, auth_required=False, handle_session_expiry=False)
                         
-                        if result:
+                        if result and 'error' not in result:
                             st.success("✅ Account created successfully! Please login with your credentials.")
                             st.session_state.show_register = False
                             st.rerun()
+                        elif result and 'error' in result:
+                            # Show specific error message from API
+                            st.error(f"❌ Registration failed: {result['error']}")
                         else:
-                            st.error("❌ Registration failed. Username or email may already exist.")
+                            st.error("❌ Registration failed. Please try again.")
                     else:
                         st.warning("⚠️ Please fill in all required fields (Username, Email, and Password)")
                 
