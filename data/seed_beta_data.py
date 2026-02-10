@@ -316,7 +316,7 @@ def seed_all():
         clear_data()
         
         # Seed data in order (users first for authentication)
-        seed_admin_user(skip_context=True)
+        seed_admin_user(use_existing_context=True)
         stores = seed_stores()
         team_members = seed_team_members(stores)
         tasks = seed_checklists_and_tasks(stores, team_members)
