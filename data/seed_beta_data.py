@@ -12,9 +12,12 @@ from app import app
 from backend.database import db
 from backend.models.models import (
     Store, TeamMember, Checklist, Task, 
-    WhatsAppGroup, ArchivedConversation, FollowUp, User
+    WhatsAppGroup, ArchivedConversation, FollowUp
 )
 import random
+
+# Import user seeding function
+from data.seed_users import seed_admin_user
 
 def clear_data():
     """Clear all existing data"""
@@ -22,65 +25,6 @@ def clear_data():
         db.drop_all()
         db.create_all()
         print("Database cleared and recreated")
-
-def seed_users():
-    """Create default users for authentication"""
-    # Check if admin already exists
-    existing_admin = User.query.filter_by(username='admin').first()
-    
-    if existing_admin:
-        print("Users already exist, skipping user creation")
-        return
-    
-    # Create admin user
-    admin = User(
-        username='admin',
-        email='admin@storeai.com',
-        full_name='System Administrator',
-        role='admin',
-        is_active=True
-    )
-    admin.set_password('admin123')
-    
-    # Create manager user
-    manager = User(
-        username='manager',
-        email='manager@storeai.com',
-        full_name='Store Manager',
-        role='manager',
-        is_active=True
-    )
-    manager.set_password('manager123')
-    
-    # Create team member user
-    team_member = User(
-        username='user',
-        email='user@storeai.com',
-        full_name='Team Member',
-        role='team_member',
-        is_active=True
-    )
-    team_member.set_password('user123')
-    
-    db.session.add(admin)
-    db.session.add(manager)
-    db.session.add(team_member)
-    db.session.commit()
-    
-    print("Created 3 default users (admin, manager, user)")
-    print("\n" + "="*50)
-    print("DEFAULT LOGIN CREDENTIALS")
-    print("="*50)
-    print("\nAdmin Account:")
-    print(f"  Username: admin")
-    print(f"  Password: admin123")
-    print("\nManager Account:")
-    print(f"  Username: manager")
-    print(f"  Password: manager123")
-    print("\nTeam Member Account:")
-    print(f"  Username: user")
-    print(f"  Password: user123")
-    print("="*50 + "\n")
 
 def seed_stores():
     """Create 5 sample stores"""
@@ -372,7 +316,7 @@ def seed_all():
         clear_data()
         
         # Seed data in order (users first for authentication)
-        seed_users()
+        seed_admin_user(skip_context=True)
         stores = seed_stores()
         team_members = seed_team_members(stores)
         tasks = seed_checklists_and_tasks(stores, team_members)
