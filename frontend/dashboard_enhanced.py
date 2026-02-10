@@ -1018,8 +1018,8 @@ else:
                 
                 fig.update_layout(
                     height=450,
-                    plot_bgcolor='rgba(0,0,0,0)',
-                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='#ffffff',
+                    paper_bgcolor='#ffffff',
                     font=dict(family='-apple-system, BlinkMacSystemFont, Segoe UI, Roboto', size=13, color='#1e293b'),
                     xaxis=dict(
                         showgrid=False,
