@@ -89,7 +89,7 @@ def format_status_badge(status):
     return f'<span class="status-badge status-{status}">{status.upper()}</span>'
 
 # Sidebar navigation
-st.sidebar.image("https://via.placeholder.com/200x80/1f77b4/ffffff?text=Store+Opening+AI", use_container_width=True)
+st.sidebar.image("https://via.placeholder.com/200x80/1f77b4/ffffff?text=Store+Opening+AI", use_column_width=True)
 st.sidebar.title("Navigation")
 
 pages = {

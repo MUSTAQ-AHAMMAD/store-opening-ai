@@ -1,7 +1,7 @@
 from datetime import datetime
 
-# Import db from app module
-from app import db
+# Import db from database module
+from backend.database import db
 
 class Store(db.Model):
     """Store opening project model"""
