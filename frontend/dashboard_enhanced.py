@@ -1318,7 +1318,7 @@ else:
                                search_member.lower() in m.get('email', '').lower() or
                                search_member.lower() in m.get('phone', '').lower()]
             
-            if store_filter != "All Stores" and stores_data:
+            if store_filter != "All Stores" and stores_data and isinstance(stores_data, list):
                 store_id = next((s['id'] for s in stores_data if s['name'] == store_filter), None)
                 if store_id:
                     filtered_team = [m for m in filtered_team if m.get('store_id') == store_id]
@@ -1337,7 +1337,7 @@ else:
                         st.write(f"📱 {member.get('phone', 'N/A')}")
                     
                     with col3:
-                        store_name = next((s['name'] for s in stores_data if s['id'] == member.get('store_id')), 'N/A') if stores_data else 'N/A'
+                        store_name = next((s['name'] for s in stores_data if s['id'] == member.get('store_id')), 'N/A') if stores_data and isinstance(stores_data, list) else 'N/A'
                         st.write(f"🏪 **Store:**")
                         st.write(store_name)
                     
@@ -1361,7 +1361,7 @@ else:
                     new_member_phone = st.text_input("Phone*")
                     new_member_role = st.selectbox("Role", ["team_member", "manager", "admin"])
                     
-                    if stores_data:
+                    if stores_data and isinstance(stores_data, list):
                         store_options = {s['name']: s['id'] for s in stores_data}
                         new_member_store = st.selectbox("Assign to Store", list(store_options.keys()))
                         new_member_store_id = store_options[new_member_store]
