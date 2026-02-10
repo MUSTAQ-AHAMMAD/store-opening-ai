@@ -1,6 +1,10 @@
 from flask import Blueprint, request, jsonify
 from backend.database import db
-from backend.models.models import Store
+from backend.models.models import Store, WhatsAppGroup
+from backend.services.workflow_service import get_workflow_service
+from backend.services.whatsapp_service import WhatsAppService
+from backend.services.email_service import get_email_service
+from backend.utils.common_utils import parse_iso_datetime
 from datetime import datetime
 
 bp = Blueprint('stores', __name__, url_prefix='/api/stores')
@@ -34,18 +38,74 @@ def get_store(store_id):
 
 @bp.route('', methods=['POST'])
 def create_store():
-    """Create a new store"""
+    """Create a new store with workflow initialization"""
     data = request.get_json()
     
     try:
         store = Store(
             name=data['name'],
             location=data['location'],
-            opening_date=datetime.fromisoformat(data['opening_date'].replace('Z', '+00:00')),
-            status=data.get('status', 'planning')
+            opening_date=parse_iso_datetime(data['opening_date']),
+            status=data.get('status', 'planning'),
+            workflow_stage=0
         )
         db.session.add(store)
+        db.session.flush()  # Get store ID
+        
+        # Initialize workflow stages
+        workflow_service = get_workflow_service()
+        workflow_service.initialize_workflow(store)
+        
+        # Create WhatsApp group
+        whatsapp_service = WhatsAppService()
+        group_name = f"Store Opening - {store.name}"
+        whatsapp_group = WhatsAppGroup(
+            store_id=store.id,
+            group_name=group_name,
+            is_active=True
+        )
+        db.session.add(whatsapp_group)
+        
         db.session.commit()
+        
+        # Send welcome message to WhatsApp group
+        welcome_message = f"""🎉 Welcome to {group_name}!
+
+Store: {store.name}
+Location: {store.location}
+Opening Date: {store.opening_date.strftime('%Y-%m-%d')}
+
+This group will be used for all communications regarding this store opening project.
+
+The 7-stage workflow process has been initiated:
+1. Update nearby store details
+2. Complete checklist & send to warehouse
+3. Confirm material reached nearby store
+4. Confirm material sent to actual store
+5. Start installation & update TeamViewer ID
+6. Complete final checklist on opening day
+7. Store opening complete
+
+Let's work together to ensure a successful store opening! 🚀
+"""
+        
+        # Send to all team members if they exist
+        if store.team_members:
+            whatsapp_service.send_message_to_group(
+                whatsapp_group,
+                welcome_message,
+                store.team_members
+            )
+        
+        # Send email notifications
+        email_service = get_email_service()
+        if store.team_members:
+            team_emails = [m.email for m in store.team_members if m.email]
+            if team_emails:
+                email_service.send_store_creation_email(
+                    store.to_dict(),
+                    [m.to_dict() for m in store.team_members]
+                )
         
         return jsonify(store.to_dict()), 201
     except Exception as e:
@@ -64,7 +124,7 @@ def update_store(store_id):
         if 'location' in data:
             store.location = data['location']
         if 'opening_date' in data:
-            store.opening_date = datetime.fromisoformat(data['opening_date'].replace('Z', '+00:00'))
+            store.opening_date = parse_iso_datetime(data['opening_date'])
         if 'status' in data:
             store.status = data['status']
         
