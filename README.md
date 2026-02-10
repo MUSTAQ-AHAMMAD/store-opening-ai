@@ -307,6 +307,11 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
    - Check `ENABLE_SCHEDULER=true` in `.env`
    - Review logs for errors
 
+5. **Dependency installation fails on Windows**
+   - Ensure pip is up to date: `pip install --upgrade pip`
+   - The requirements.txt uses numpy 1.26.4 which has pre-built wheels for Windows
+   - If issues persist, ensure Python version is 3.8 or higher
+
 ## 📝 License
 
 This project is for educational and internal use.
