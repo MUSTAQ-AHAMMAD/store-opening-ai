@@ -36,7 +36,7 @@ A comprehensive Python-based AI system for managing store opening logistics with
 
 ## 📋 Prerequisites
 
-- Python 3.8 or higher
+- Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
 - pip (Python package manager)
 - Twilio account (for WhatsApp integration)
 
@@ -313,10 +313,10 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
      pip install --upgrade pip setuptools wheel
      pip install -r requirements.txt
      ```
-   - The requirements.txt now uses numpy >=2.1.0 which has pre-built wheels for Python 3.8+, including Python 3.12
-   - **Note**: If you're using Python 3.12+, the updated requirements ensure compatibility without needing a C compiler
-   - For Python 3.8-3.11, both old (1.26.x) and new (2.x) numpy versions work
-   - If you still encounter build errors, ensure your Python version is 3.8 or higher
+   - The requirements.txt now uses numpy >=2.1.0 which has pre-built wheels for Python 3.9+, including Python 3.12+
+   - **Note**: NumPy 2.x requires Python 3.9 or higher. If you're using Python 3.8, you'll need to use numpy 1.x (not compatible with this project's current configuration)
+   - **Recommended**: Use Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
+   - If you still encounter build errors, ensure your Python version is 3.9 or higher
 
 ## 📝 License
 
