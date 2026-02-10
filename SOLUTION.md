@@ -135,7 +135,7 @@ python test_api.py
 1. **app.py** - Complete rewrite for proper Flask initialization
 2. **backend/database.py** - NEW: Separate database instance
 3. **backend/models/models.py** - Updated import path
-4. **backend/routes/**.py** - Updated import paths (5 files)
+4. **backend/routes/\*.py** - Updated import paths (5 files)
 5. **data/seed_beta_data.py** - Updated import path
 6. **frontend/dashboard.py** - Fixed Streamlit parameter
 7. **.env** - Created from template
