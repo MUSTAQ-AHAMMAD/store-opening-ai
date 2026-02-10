@@ -15,6 +15,9 @@ from backend.models.models import User
 def seed_admin_user():
     """Create default admin user"""
     with app.app_context():
+        # Ensure database tables exist
+        db.create_all()
+        
         # Check if admin already exists
         existing_admin = User.query.filter_by(username='admin').first()
         
