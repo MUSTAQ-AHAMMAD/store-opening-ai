@@ -4,6 +4,7 @@ from backend.models.models import Store, WhatsAppGroup
 from backend.services.workflow_service import get_workflow_service
 from backend.services.whatsapp_service import WhatsAppService
 from backend.services.email_service import get_email_service
+from backend.utils.common_utils import parse_iso_datetime
 from datetime import datetime
 
 bp = Blueprint('stores', __name__, url_prefix='/api/stores')
@@ -44,7 +45,7 @@ def create_store():
         store = Store(
             name=data['name'],
             location=data['location'],
-            opening_date=datetime.fromisoformat(data['opening_date'].replace('Z', '+00:00')),
+            opening_date=parse_iso_datetime(data['opening_date']),
             status=data.get('status', 'planning'),
             workflow_stage=0
         )
@@ -123,7 +124,7 @@ def update_store(store_id):
         if 'location' in data:
             store.location = data['location']
         if 'opening_date' in data:
-            store.opening_date = datetime.fromisoformat(data['opening_date'].replace('Z', '+00:00'))
+            store.opening_date = parse_iso_datetime(data['opening_date'])
         if 'status' in data:
             store.status = data['status']
         

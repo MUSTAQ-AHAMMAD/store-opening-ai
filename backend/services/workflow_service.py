@@ -75,7 +75,7 @@ class WorkflowService:
                 store_id=store.id,
                 stage_number=stage_num,
                 stage_name=stage_info['name'],
-                status='pending' if stage_num == 1 else 'pending',
+                status='pending',
                 due_date=due_date
             )
             db.session.add(stage)

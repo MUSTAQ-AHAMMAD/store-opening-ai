@@ -357,6 +357,7 @@ class WorkflowStage(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
+    assigned_to = db.relationship('TeamMember', foreign_keys=[assigned_to_id])
     escalations = db.relationship('EscalationHistory', backref='workflow_stage', lazy=True, cascade='all, delete-orphan')
     
     def to_dict(self):
@@ -367,6 +368,7 @@ class WorkflowStage(db.Model):
             'stage_name': self.stage_name,
             'status': self.status,
             'assigned_to_id': self.assigned_to_id,
+            'assigned_to_name': self.assigned_to.name if self.assigned_to else None,
             'due_date': self.due_date.isoformat() if self.due_date else None,
             'started_at': self.started_at.isoformat() if self.started_at else None,
             'completed_at': self.completed_at.isoformat() if self.completed_at else None,

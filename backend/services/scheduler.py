@@ -244,7 +244,7 @@ class FollowUpScheduler:
         
         with self.app.app_context():
             from app import db
-            from backend.models.models import Store, WorkflowStage, TeamMember
+            from backend.models.models import Store, WorkflowStage, TeamMember, EscalationHistory
             from backend.services.workflow_service import get_workflow_service
             from backend.services.email_service import get_email_service
             from backend.services.voice_service import get_voice_service

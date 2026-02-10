@@ -12,6 +12,7 @@ from backend.models.models import (
 )
 from backend.services.workflow_service import get_workflow_service
 from backend.services.email_service import get_email_service
+from backend.utils.common_utils import parse_iso_datetime
 
 bp = Blueprint('workflow', __name__, url_prefix='/api/workflow')
 
@@ -262,7 +263,7 @@ def update_opening_date(store_id):
         return jsonify({'error': 'Missing required field: opening_date'}), 400
     
     try:
-        new_opening_date = datetime.fromisoformat(data['opening_date'].replace('Z', '+00:00'))
+        new_opening_date = parse_iso_datetime(data['opening_date'])
         old_opening_date = store.opening_date
         
         workflow_service = get_workflow_service()

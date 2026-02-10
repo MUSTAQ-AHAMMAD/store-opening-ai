@@ -17,6 +17,9 @@ from backend.models.models import (
 )
 from backend.services.workflow_service import get_workflow_service
 
+# Test constants
+DATETIME_TOLERANCE_SECONDS = 60  # Allow 1 minute tolerance for datetime comparisons
+
 
 @pytest.fixture
 def client():
@@ -222,7 +225,7 @@ def test_timeline_recalculation(client, sample_store):
                 
                 # New due date should be 10 days later
                 expected_due_date = old_due_date + timedelta(days=10)
-                assert abs((new_due_date - expected_due_date).total_seconds()) < 60  # Within 1 minute
+                assert abs((new_due_date - expected_due_date).total_seconds()) < DATETIME_TOLERANCE_SECONDS
 
 
 def test_delayed_stage_detection(client, sample_store):
