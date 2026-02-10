@@ -56,8 +56,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 ### 3. Install dependencies
 ```bash
-# Upgrade pip first to ensure compatibility with pre-built wheels
-pip install --upgrade pip
+# Upgrade pip, setuptools, and wheel to ensure compatibility with pre-built wheels
+pip install --upgrade pip setuptools wheel
 pip install -r requirements.txt
 ```
 
@@ -308,9 +308,15 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
    - Review logs for errors
 
 5. **Dependency installation fails on Windows**
-   - Ensure pip is up to date: `pip install --upgrade pip`
-   - The requirements.txt uses numpy 1.26.4 which has pre-built wheels for Windows
-   - If issues persist, ensure Python version is 3.8 or higher
+   - **Solution**: Ensure pip, setuptools, and wheel are up to date:
+     ```bash
+     pip install --upgrade pip setuptools wheel
+     pip install -r requirements.txt
+     ```
+   - The requirements.txt now uses numpy >=2.1.0 which has pre-built wheels for Python 3.8+, including Python 3.12
+   - **Note**: If you're using Python 3.12+, the updated requirements ensure compatibility without needing a C compiler
+   - For Python 3.8-3.11, both old (1.26.x) and new (2.x) numpy versions work
+   - If you still encounter build errors, ensure your Python version is 3.8 or higher
 
 ## 📝 License
 
