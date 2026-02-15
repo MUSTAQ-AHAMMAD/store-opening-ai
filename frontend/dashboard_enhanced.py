@@ -34,74 +34,80 @@ API_BASE_URL = "http://localhost:5000/api"
 st.markdown("""
     <style>
     /* Professional Enterprise Design System */
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
     
     :root {
         /* Professional Primary Colors */
-        --primary-blue: #3B82F6;
-        --primary-blue-dark: #2563EB;
-        --primary-purple: #8B5CF6;
-        --primary-purple-dark: #7C3AED;
+        --primary-blue: #4F46E5;
+        --primary-blue-dark: #4338CA;
+        --primary-purple: #7C3AED;
+        --primary-purple-dark: #6D28D9;
         
         /* Professional Secondary Colors */
-        --secondary-gray: #6B7280;
-        --secondary-gray-light: #9CA3AF;
-        --secondary-silver: #E5E7EB;
-        --secondary-silver-light: #F3F4F6;
+        --secondary-gray: #64748B;
+        --secondary-gray-light: #94A3B8;
+        --secondary-silver: #E2E8F0;
+        --secondary-silver-light: #F1F5F9;
         
         /* Professional Accent Colors */
-        --accent-orange: #F97316;
-        --accent-orange-light: #FB923C;
+        --accent-orange: #F59E0B;
+        --accent-orange-light: #FBBF24;
         --accent-emerald: #10B981;
         --accent-emerald-light: #34D399;
         
-        /* Professional Dark Backgrounds */
-        --bg-primary: #111827;
-        --bg-secondary: #1F2937;
-        --bg-card: #1F2937;
-        --bg-card-hover: #374151;
-        --bg-elevated: #374151;
+        /* Professional Light Backgrounds - Modern Dashboard Style */
+        --bg-primary: #F8F9FA;
+        --bg-secondary: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --bg-card-hover: #F8F9FA;
+        --bg-elevated: #FFFFFF;
         
-        /* Professional Text Colors */
-        --text-primary: #F9FAFB;
-        --text-secondary: #D1D5DB;
-        --text-muted: #9CA3AF;
+        /* Professional Text Colors - For Light Background */
+        --text-primary: #1E293B;
+        --text-secondary: #64748B;
+        --text-muted: #94A3B8;
         
         /* Professional Borders */
-        --border-light: rgba(229, 231, 235, 0.1);
-        --border-medium: rgba(229, 231, 235, 0.2);
-        --border-accent: rgba(59, 130, 246, 0.3);
+        --border-light: rgba(226, 232, 240, 0.8);
+        --border-medium: rgba(203, 213, 225, 1);
+        --border-accent: rgba(79, 70, 229, 0.3);
         
         /* Professional Glass Effect */
-        --glass-bg: rgba(31, 41, 55, 0.8);
-        --glass-border: rgba(229, 231, 235, 0.15);
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --glass-border: rgba(226, 232, 240, 0.8);
         
-        /* Professional Shadows */
-        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        /* Professional Shadows - Enhanced for Light BG */
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
         
         /* Professional Gradient System */
-        --primary-gradient: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-        --secondary-gradient: linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%);
+        --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        --secondary-gradient: linear-gradient(135deg, #64748B 0%, #94A3B8 100%);
         --success-gradient: linear-gradient(135deg, #10B981 0%, #34D399 100%);
-        --warning-gradient: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+        --warning-gradient: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
         --danger-gradient: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
         
+        /* Sidebar - Professional Dark Contrast */
+        --sidebar-bg: #2C3E50;
+        --sidebar-hover: #34495E;
+        --sidebar-active: #4F46E5;
+        
         /* Legacy Color Aliases for Compatibility */
-        --primary-color: #3B82F6;
-        --primary-dark: #2563EB;
+        --primary-color: #4F46E5;
+        --primary-dark: #4338CA;
     }
     
     /* ⚡ GLOBAL STYLES */
     * {
-        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
     
-    /* Main Container - Professional Dark Background */
+    /* Main Container - Professional Light Background */
     .main {
         background: var(--bg-primary);
         color: var(--text-primary);
@@ -137,13 +143,13 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* Professional Metric Cards with Clean Glassmorphism */
+    /* Professional Metric Cards with Clean Glassmorphism - Light Theme */
     .metric-card-modern {
-        background: var(--glass-bg);
+        background: var(--bg-card);
         backdrop-filter: blur(16px);
         padding: 1.5rem;
         border-radius: 16px;
-        border: 1px solid var(--glass-border);
+        border: 1px solid var(--border-light);
         box-shadow: var(--shadow-md);
         transition: all 0.3s ease;
         position: relative;
@@ -156,7 +162,7 @@ st.markdown("""
         top: 0;
         left: 0;
         right: 0;
-        height: 2px;
+        height: 3px;
         background: var(--primary-gradient);
     }
     
@@ -175,8 +181,9 @@ st.markdown("""
         justify-content: center;
         font-size: 1.75rem;
         margin-bottom: 1rem;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
         border: 1px solid var(--border-accent);
+        color: var(--primary-color);
     }
     
     .metric-value-large {
@@ -220,17 +227,17 @@ st.markdown("""
         border: 1px solid rgba(239, 68, 68, 0.2);
     }
     
-    /* Professional Hero Banner - Clean Gradient */
+    /* Professional Hero Banner - Light Theme */
     .hero-banner {
-        background: linear-gradient(135deg, #1F2937 0%, #374151 50%, #1F2937 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
         padding: 2.5rem;
         border-radius: 16px;
-        color: white;
+        color: var(--text-primary);
         margin-bottom: 2rem;
         box-shadow: var(--shadow-lg);
         position: relative;
         overflow: hidden;
-        border: 1px solid var(--border-medium);
+        border: 1px solid var(--border-light);
     }
     
     .hero-title {
@@ -239,11 +246,12 @@ st.markdown("""
         margin-bottom: 0.5rem;
         position: relative;
         z-index: 1;
+        color: var(--text-primary);
     }
     
     .hero-subtitle {
         font-size: 1rem;
-        opacity: 0.85;
+        opacity: 0.75;
         position: relative;
         z-index: 1;
         color: var(--text-secondary);
@@ -364,12 +372,12 @@ st.markdown("""
     
     /* 🔘 BUTTONS - Commented: see improved buttons below */
     
-    /* Professional Sidebar */
+    /* Professional Sidebar - Dark Contrast with Light Main */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1F2937 0%, #111827 100%);
+        background: var(--sidebar-bg);
         color: white;
         padding: 1rem 0;
-        border-right: 1px solid var(--border-light);
+        border-right: 1px solid var(--border-medium);
     }
     
     [data-testid="stSidebar"] .element-container {
@@ -377,12 +385,12 @@ st.markdown("""
     }
     
     [data-testid="stSidebar"] hr {
-        border-color: var(--border-light);
+        border-color: rgba(255, 255, 255, 0.1);
         margin: 1.25rem 0;
     }
     
     [data-testid="stSidebar"] h3 {
-        color: var(--primary-blue);
+        color: #FFFFFF;
         font-weight: 600;
         font-size: 0.8rem;
         text-transform: uppercase;
@@ -551,13 +559,13 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* Professional Login Page */
+    /* Professional Login Page - Light Theme */
     .login-container {
         background: var(--bg-card);
         padding: 3rem 2.5rem;
         border-radius: 16px;
         box-shadow: var(--shadow-xl);
-        border: 1px solid var(--border-medium);
+        border: 1px solid var(--border-light);
         animation: fadeInUp 0.6s ease-out;
     }
     
@@ -580,48 +588,49 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* Professional User Profile Card */
+    /* Professional User Profile Card - Light Theme */
     .user-profile-card {
-        background: rgba(59, 130, 246, 0.06);
+        background: rgba(79, 70, 229, 0.08);
         backdrop-filter: blur(16px);
         border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        border: 1px solid rgba(59, 130, 246, 0.15);
+        border: 1px solid rgba(79, 70, 229, 0.2);
         text-align: center;
         transition: all 0.3s ease;
     }
     
     .user-profile-card:hover {
-        background: rgba(59, 130, 246, 0.1);
+        background: rgba(79, 70, 229, 0.12);
         transform: translateY(-2px);
         box-shadow: var(--shadow-md);
-        border-color: rgba(59, 130, 246, 0.3);
+        border-color: rgba(79, 70, 229, 0.3);
     }
     
     .user-profile-icon {
         font-size: 3rem;
         margin-bottom: 1rem;
+        color: var(--primary-color);
     }
     
     .user-profile-name {
         font-size: 1.125rem;
         font-weight: 700;
-        color: var(--text-primary);
+        color: white;
         margin-bottom: 0.5rem;
     }
     
     .user-profile-role {
         font-size: 0.8rem;
-        color: var(--primary-blue);
+        color: rgba(255, 255, 255, 0.9);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        background: rgba(59, 130, 246, 0.1);
+        background: rgba(79, 70, 229, 0.3);
         padding: 0.375rem 0.75rem;
         border-radius: 6px;
         display: inline-block;
-        border: 1px solid rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(79, 70, 229, 0.4);
     }
     
     /* Professional Section Headers */
@@ -638,31 +647,32 @@ st.markdown("""
     
     /* Professional Sidebar Radio Buttons */
     [data-testid="stSidebar"] .stRadio > label {
-        background: rgba(59, 130, 246, 0.04);
+        background: rgba(255, 255, 255, 0.05);
         padding: 0.875rem 1.25rem;
         border-radius: 8px;
         margin: 0.375rem 0;
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(59, 130, 246, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         cursor: pointer;
         font-weight: 500;
         font-size: 0.95rem;
     }
     
     [data-testid="stSidebar"] .stRadio > label:hover {
-        background: rgba(59, 130, 246, 0.12);
+        background: var(--sidebar-hover);
         transform: translateX(4px);
-        border-color: rgba(59, 130, 246, 0.25);
+        border-color: rgba(255, 255, 255, 0.15);
     }
     
     [data-testid="stSidebar"] .stRadio > label[data-checked="true"] {
-        background: rgba(59, 130, 246, 0.15);
+        background: var(--sidebar-active);
         font-weight: 600;
-        border-color: rgba(59, 130, 246, 0.35);
+        border-color: rgba(79, 70, 229, 0.5);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
     }
     
-    /* Professional Form Inputs */
+    /* Professional Form Inputs - Light Theme */
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select,
     .stTextArea > div > div > textarea {
@@ -679,8 +689,8 @@ st.markdown("""
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus,
     .stTextArea > div > div > textarea:focus {
-        border-color: var(--primary-blue);
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         outline: none;
     }
     
