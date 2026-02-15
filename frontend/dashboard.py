@@ -26,10 +26,10 @@ API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:5000/api")
 # Enhanced Custom CSS
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&display=swap');
     
     * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
     /* Sidebar styling */
@@ -41,6 +41,26 @@ st.markdown("""
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
         color: white;
         font-weight: 500;
+    }
+    
+    /* Sidebar button styling - ensure text is visible */
+    [data-testid="stSidebar"] button {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        font-weight: 500 !important;
+        transition: all 0.2s !important;
+    }
+    
+    [data-testid="stSidebar"] button:hover {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        transform: translateX(3px);
+    }
+    
+    [data-testid="stSidebar"] button p {
+        color: white !important;
+        font-size: 0.95rem !important;
     }
     
     /* Main header */
@@ -285,7 +305,7 @@ with st.sidebar:
     st.markdown("""
         <div style="text-align: center; padding: 1rem 0 2rem 0;">
             <h1 style="color: white; font-size: 1.75rem; font-weight: 700; margin: 0;">
-                🏢 Store Opening AI
+                Store Opening AI
             </h1>
             <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin: 0.5rem 0 0 0;">
                 Management System
@@ -295,23 +315,23 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Navigation menu with icons
+    # Navigation menu without icons
     pages = [
-        {"icon": "🏠", "name": "Dashboard", "key": "dashboard"},
-        {"icon": "🏪", "name": "Stores", "key": "stores"},
-        {"icon": "🔄", "name": "Workflow Stages", "key": "workflow"},
-        {"icon": "👥", "name": "Team Members", "key": "team"},
-        {"icon": "✅", "name": "Tasks & Checklists", "key": "tasks"},
-        {"icon": "💬", "name": "Communications", "key": "whatsapp"},
-        {"icon": "🚨", "name": "Escalations", "key": "escalations"},
-        {"icon": "📊", "name": "Analytics & Reports", "key": "analytics"},
+        {"name": "Dashboard", "key": "dashboard"},
+        {"name": "Stores", "key": "stores"},
+        {"name": "Workflow Stages", "key": "workflow"},
+        {"name": "Team Members", "key": "team"},
+        {"name": "Tasks & Checklists", "key": "tasks"},
+        {"name": "Communications", "key": "whatsapp"},
+        {"name": "Escalations", "key": "escalations"},
+        {"name": "Analytics & Reports", "key": "analytics"},
     ]
     
     st.markdown('<p style="color: rgba(255,255,255,0.9); font-weight: 600; margin-bottom: 0.5rem;">NAVIGATION</p>', unsafe_allow_html=True)
     
     for page_info in pages:
         if st.button(
-            f"{page_info['icon']}  {page_info['name']}", 
+            page_info['name'], 
             key=f"nav_{page_info['key']}",
             use_container_width=True
         ):
@@ -325,7 +345,7 @@ with st.sidebar:
         st.markdown("""
             <div style="background: rgba(251, 191, 36, 0.2); padding: 0.75rem; border-radius: 0.5rem; border-left: 4px solid #fbbf24;">
                 <p style="color: #fbbf24; font-weight: 600; margin: 0; font-size: 0.85rem;">
-                    🧪 TEST MODE ACTIVE
+                    TEST MODE ACTIVE
                 </p>
                 <p style="color: rgba(255,255,255,0.8); font-size: 0.75rem; margin: 0.25rem 0 0 0;">
                     Messages are logged, not sent
@@ -359,7 +379,7 @@ if check_test_mode():
 
 # Main content based on selected page
 if page == "dashboard":
-    st.markdown('<div class="page-title">🏠 Dashboard Overview</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Dashboard Overview</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Welcome to your Store Opening Management System</div>', unsafe_allow_html=True)
     
     # Fetch dashboard data
@@ -375,36 +395,36 @@ if page == "dashboard":
         
         with col1:
             st.metric(
-                label="📦 Total Stores",
+                label="Total Stores",
                 value=summary.get('total_stores', 0),
                 delta=None
             )
             st.metric(
-                label="🚀 Active Stores",
+                label="Active Stores",
                 value=summary.get('active_stores', 0),
                 delta=None
             )
         
         with col2:
             st.metric(
-                label="📝 Total Tasks",
+                label="Total Tasks",
                 value=summary.get('total_tasks', 0),
                 delta=None
             )
             st.metric(
-                label="✅ Completed Tasks",
+                label="Completed Tasks",
                 value=summary.get('completed_tasks', 0),
                 delta=f"{summary.get('completed_tasks', 0)} completed"
             )
         
         with col3:
             st.metric(
-                label="⏳ Pending Tasks",
+                label="Pending Tasks",
                 value=summary.get('pending_tasks', 0),
                 delta=None
             )
             st.metric(
-                label="⚠️ Overdue Tasks",
+                label="Overdue Tasks",
                 value=summary.get('overdue_tasks', 0),
                 delta=f"{summary.get('overdue_tasks', 0)} overdue",
                 delta_color="inverse"
@@ -412,12 +432,12 @@ if page == "dashboard":
         
         with col4:
             st.metric(
-                label="🔴 High Priority",
+                label="High Priority",
                 value=summary.get('high_priority_tasks', 0),
                 delta=None
             )
             st.metric(
-                label="🚨 Critical Priority",
+                label="Critical Priority",
                 value=summary.get('critical_priority_tasks', 0),
                 delta=f"{summary.get('critical_priority_tasks', 0)} critical",
                 delta_color="inverse"
@@ -426,7 +446,7 @@ if page == "dashboard":
         st.markdown("---")
         
         # Upcoming openings
-        st.markdown("### 📅 Upcoming Store Openings (Next 30 Days)")
+        st.markdown("### Upcoming Store Openings (Next 30 Days)")
         upcoming = dashboard_data.get('upcoming_openings', [])
         
         if upcoming:
@@ -487,7 +507,7 @@ if page == "dashboard":
         st.warning("⚠️ Unable to load dashboard data. Please ensure the API server is running.")
 
 elif page == "stores":
-    st.markdown('<div class="page-title">🏪 Store Management</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Store Management</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Manage your store openings and track progress</div>', unsafe_allow_html=True)
     
     # Add new store button
@@ -572,7 +592,7 @@ elif page == "stores":
         st.info("ℹ️ No stores found. Create your first store to get started!")
 
 elif page == "workflow":
-    st.markdown('<div class="page-title">🔄 Workflow Stages</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Workflow Stages</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Track the 7-stage store opening workflow process</div>', unsafe_allow_html=True)
     
     # Store selector
@@ -771,7 +791,7 @@ elif page == "workflow":
         st.info("ℹ️ No stores found. Create a store first to see the workflow.")
 
 elif page == "escalations":
-    st.markdown('<div class="page-title">🚨 Escalations & AI Follow-ups</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Escalations & AI Follow-ups</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Automated AI escalations and manager notifications for delayed tasks</div>', unsafe_allow_html=True)
     
     # Store selector
@@ -966,7 +986,7 @@ elif page == "escalations":
         st.info("ℹ️ No stores found. Create a store first to see escalations.")
 
 elif page == "team":
-    st.markdown('<div class="page-title">👥 Team Management</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Team Management</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Manage team members across all stores</div>', unsafe_allow_html=True)
     
     # Store selector
@@ -999,7 +1019,7 @@ elif page == "team":
             st.info("ℹ️ No team members found")
 
 elif page == "tasks":
-    st.markdown('<div class="page-title">✅ Tasks & Checklists</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Tasks & Checklists</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Track and manage all tasks across stores</div>', unsafe_allow_html=True)
     
     # Store selector
@@ -1062,7 +1082,7 @@ elif page == "tasks":
             st.info("ℹ️ No checklists found for this store")
 
 elif page == "whatsapp":
-    st.markdown('<div class="page-title">💬 Communications</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Communications</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Manage WhatsApp groups and team communications</div>', unsafe_allow_html=True)
     
     with st.spinner("Loading communication groups..."):
@@ -1116,7 +1136,7 @@ elif page == "whatsapp":
         st.info("ℹ️ No WhatsApp groups found")
 
 elif page == "analytics":
-    st.markdown('<div class="page-title">📊 Analytics & Reports</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Analytics & Reports</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Comprehensive analytics and reporting</div>', unsafe_allow_html=True)
     
     # Report type selector
