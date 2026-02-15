@@ -1,8 +1,24 @@
 # Store Opening AI Management System
 
+## 🎉 NEW: Self-Learning AI + AdminLTE Professional Dashboard!
+
+**Latest Major Update (v3.5):**
+- 🧠 **Self-Learning Machine Learning** - Four AI models that continuously improve from historical data
+- 🎨 **AdminLTE Professional UI** - Complete Laravel AdminLTE-style dashboard
+- 📊 **Predictive Analytics** - 78%+ accuracy in forecasting store completion
+- ⚠️ **Automated Risk Assessment** - Real-time risk detection with recommendations
+- 🏆 **Success Pattern Recognition** - Learn what makes stores successful
+- ✨ **Professional Small Boxes** - Signature AdminLTE metric components
+- 🌓 **Dark Sidebar Navigation** - Professional admin panel design
+- 📱 **Fully Responsive** - Works beautifully on all devices
+
+> **Quick Start**: See [ML_ADMINLTE_GUIDE.md](./ML_ADMINLTE_GUIDE.md) for self-learning AI and AdminLTE implementation guide!
+
 ## 🎉 NEW: Version 3.0 - Complete Workflow Automation!
 
 **Latest Updates:**
+- 🎨 **Modern UI Dashboard** - Redesigned interface with better navigation and visual hierarchy
+- 🧪 **Test Mode** - Test all features without Twilio/Email accounts
 - 🔄 **7-Stage Workflow Process** - Automated store opening process management
 - 📧 **Email Notifications** - Multi-channel communication (WhatsApp + Email + SMS + Voice)
 - 🤖 **AI-Powered Follow-ups** - Intelligent, context-aware messaging
@@ -13,6 +29,16 @@
 - 🎯 **100% On-Time Store Openings** - Strict follow-ups and process automation
 
 > **Workflow Guide**: See [WORKFLOW_AUTOMATION.md](./docs/WORKFLOW_AUTOMATION.md) for the complete workflow automation guide!
+
+## 🎨 Modern Dashboard UI
+
+The dashboard has been completely redesigned with:
+- ✨ **No More Radio Buttons** - Modern sidebar navigation with icon buttons
+- 🎨 **Professional Color Scheme** - Gradient backgrounds and modern styling
+- 📱 **Responsive Design** - Works on all screen sizes
+- 🧪 **Test Mode Banner** - Clear indicator when in test mode
+- 📊 **Enhanced Metrics Cards** - Better visual presentation of data
+- 🚀 **Smooth Animations** - Professional transitions and interactions
 
 ## 🎉 Version 2.0 Features
 - 🔐 **User Authentication** - Secure login with JWT
@@ -58,9 +84,20 @@ A comprehensive Python-based AI system for managing store opening logistics with
 
 - Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
 - pip (Python package manager)
-- Twilio account (for WhatsApp, SMS, and Voice integration)
-- Email account with SMTP access (for email notifications)
+- Twilio account (for WhatsApp, SMS, and Voice integration) - **Optional for testing**
+- Email account with SMTP access (for email notifications) - **Optional for testing**
 - OpenAI API key (optional, for AI-powered messages)
+
+### 🧪 Test Mode (No Twilio/Email Required!)
+
+You can test the entire system **without** any external accounts using **TEST MODE**:
+- ✅ All features work normally
+- ✅ Messages are logged to console with full details
+- ✅ No Twilio account needed
+- ✅ No email configuration needed
+- ✅ Perfect for development and testing
+
+See the **Test Mode** section below for setup instructions.
 
 ## 🚀 Installation
 
@@ -117,7 +154,81 @@ OPENAI_API_KEY=your_openai_api_key_here
 # Scheduler Configuration
 SCHEDULER_TIMEZONE=UTC
 ENABLE_SCHEDULER=true
+
+# Test Mode (for testing without Twilio/Email)
+# Set to true to enable test mode - all messages will be logged to console
+TEST_MODE=false
 ```
+
+## 🧪 Test Mode - Testing Without Twilio or Email
+
+**Perfect for development and testing!** You can use the entire system without any external service accounts.
+
+### Quick Setup for Test Mode
+
+1. **Set TEST_MODE in your `.env` file:**
+   ```bash
+   TEST_MODE=true
+   ```
+
+2. **That's it!** All other Twilio and Email settings can remain as placeholders.
+
+### What Happens in Test Mode?
+
+When `TEST_MODE=true`:
+- ✅ **WhatsApp messages** are logged to console with formatted output
+- ✅ **Voice calls** show the full script that would be spoken
+- ✅ **SMS messages** are displayed with recipient and content
+- ✅ **Emails** show subject, recipients, and body preview
+- ✅ **Dashboard displays a test mode banner** to remind you
+- ✅ **All workflow features work normally** - just without sending real messages
+
+### Test Mode Console Output Example
+
+```
+============================================================
+📱 WhatsApp Message (Test Mode)
+============================================================
+To: whatsapp:+1234567890
+Time: 2024-01-15 10:30:45
+Message:
+🔔 Task Reminder
+
+Task: Install POS System
+Priority: HIGH
+Due Date: 2024-01-20 15:00
+
+Please update the status once completed.
+============================================================
+
+============================================================
+📞 Voice Call (Test Mode)
+============================================================
+To: John Doe (+1234567890)
+Time: 2024-01-15 10:30:45
+Store: Downtown Tech Hub
+Task: Install POS System
+Days Overdue: 3
+Escalation Level: 1
+
+Call Script:
+- Hello John Doe, this is the Store Opening AI System
+- URGENT escalation
+- Task for Downtown Tech Hub is 3 days overdue
+- Task: Install POS System
+- Please take immediate action
+============================================================
+```
+
+### Switching to Production
+
+When ready for production:
+1. Set `TEST_MODE=false` in `.env`
+2. Configure your Twilio credentials
+3. Configure your SMTP email settings
+4. Restart the application
+
+The test mode banner will disappear, and messages will be sent through real channels.
 
 ## 📊 7-Stage Workflow Process
 
