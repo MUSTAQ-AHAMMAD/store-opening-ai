@@ -602,8 +602,12 @@ elif page == "workflow":
                 with col2:
                     st.write(f"**Location:** {store.get('location', 'N/A')}")
                 with col3:
-                    opening_date = datetime.fromisoformat(store['opening_date'].replace('Z', '+00:00'))
-                    st.write(f"**Opening Date:** {opening_date.strftime('%Y-%m-%d')}")
+                    opening_date_str = store.get('opening_date', '')
+                    if opening_date_str:
+                        opening_date = datetime.fromisoformat(opening_date_str.replace('Z', '+00:00'))
+                        st.write(f"**Opening Date:** {opening_date.strftime('%Y-%m-%d')}")
+                    else:
+                        st.write(f"**Opening Date:** N/A")
                 with col4:
                     st.write(f"**Status:** {store.get('status', 'N/A').upper()}")
                 
@@ -650,24 +654,30 @@ elif page == "workflow":
                                 """, unsafe_allow_html=True)
                         
                         with col2:
-                            st.markdown(f"**Stage {stage_num}: {stage['name'] if stage else 'Not Started'}**")
+                            st.markdown(f"**Stage {stage_num}: {stage.get('name', 'Not Started') if stage else 'Not Started'}**")
                             st.write(stage_descriptions.get(stage_num, ""))
                             
                             if stage:
-                                if stage['status'] == 'completed':
-                                    completed_at = datetime.fromisoformat(stage['completed_at'].replace('Z', '+00:00'))
-                                    st.success(f"✅ Completed on {completed_at.strftime('%Y-%m-%d %H:%M')}")
-                                    if stage.get('completed_by'):
-                                        st.caption(f"By: {stage['completed_by']}")
-                                elif stage['status'] == 'in_progress':
+                                stage_status = stage.get('status', 'pending')
+                                if stage_status == 'completed':
+                                    completed_at_str = stage.get('completed_at')
+                                    if completed_at_str:
+                                        completed_at = datetime.fromisoformat(completed_at_str.replace('Z', '+00:00'))
+                                        st.success(f"✅ Completed on {completed_at.strftime('%Y-%m-%d %H:%M')}")
+                                        if stage.get('completed_by'):
+                                            st.caption(f"By: {stage['completed_by']}")
+                                    else:
+                                        st.success(f"✅ Completed")
+                                elif stage_status == 'in_progress':
                                     st.info(f"🔄 In Progress")
                                 else:
                                     st.warning(f"⏳ Pending")
                         
                         with col3:
                             if stage:
-                                if stage.get('deadline'):
-                                    deadline = datetime.fromisoformat(stage['deadline'].replace('Z', '+00:00'))
+                                deadline_str = stage.get('deadline')
+                                if deadline_str:
+                                    deadline = datetime.fromisoformat(deadline_str.replace('Z', '+00:00'))
                                     st.write(f"**Deadline:**")
                                     st.write(deadline.strftime('%Y-%m-%d'))
                                     
@@ -799,7 +809,7 @@ elif page == "escalations":
             
             # Sort escalations by date (newest first)
             escalations_sorted = sorted(
-                escalations,
+                [e for e in escalations if e.get('created_at')],  # Filter out entries without created_at
                 key=lambda x: x.get('created_at', ''),
                 reverse=True
             )
@@ -827,17 +837,22 @@ elif page == "escalations":
                     st.markdown(f"#### {level_names.get(level, f'Level {level}')}")
                     
                     for escalation in level_escalations:
+                        created_at_str = escalation.get('created_at', '')
+                        if not created_at_str:
+                            continue  # Skip escalations without created_at
+                        
+                        created_at = datetime.fromisoformat(created_at_str.replace('Z', '+00:00'))
                         with st.expander(
-                            f"🚨 {escalation['escalation_type'].upper()} - "
-                            f"{datetime.fromisoformat(escalation['created_at'].replace('Z', '+00:00')).strftime('%Y-%m-%d %H:%M')} "
+                            f"🚨 {escalation.get('escalation_type', 'UNKNOWN').upper()} - "
+                            f"{created_at.strftime('%Y-%m-%d %H:%M')} "
                             f"{'- ' + escalation.get('store_name', '') if 'store_name' in escalation else ''}"
                         ):
                             col1, col2 = st.columns([1, 2])
                             
                             with col1:
                                 st.write("**Escalation Details:**")
-                                st.write(f"**Level:** {escalation['escalation_level']}")
-                                st.write(f"**Type:** {escalation['escalation_type'].upper()}")
+                                st.write(f"**Level:** {escalation.get('escalation_level', 'N/A')}")
+                                st.write(f"**Type:** {escalation.get('escalation_type', 'N/A').upper()}")
                                 st.write(f"**Status:** {escalation.get('status', 'sent').upper()}")
                                 
                                 if escalation.get('recipient_phone'):
@@ -845,11 +860,11 @@ elif page == "escalations":
                                 if escalation.get('recipient_email'):
                                     st.write(f"**Email:** {escalation['recipient_email']}")
                                 
-                                created_at = datetime.fromisoformat(escalation['created_at'].replace('Z', '+00:00'))
                                 st.write(f"**Date:** {created_at.strftime('%Y-%m-%d %H:%M')}")
                                 
-                                if escalation.get('response_received_at'):
-                                    response_at = datetime.fromisoformat(escalation['response_received_at'].replace('Z', '+00:00'))
+                                response_at_str = escalation.get('response_received_at')
+                                if response_at_str:
+                                    response_at = datetime.fromisoformat(response_at_str.replace('Z', '+00:00'))
                                     st.write(f"**Response:** {response_at.strftime('%Y-%m-%d %H:%M')}")
                             
                             with col2:
@@ -860,49 +875,58 @@ elif page == "escalations":
                                     st.caption("No message recorded")
                                 
                                 # Show which stage or task this is related to
-                                if escalation.get('workflow_stage_id'):
-                                    st.write(f"**Related to:** Workflow Stage #{escalation['workflow_stage_id']}")
-                                if escalation.get('task_id'):
-                                    st.write(f"**Related to:** Task #{escalation['task_id']}")
+                                workflow_stage_id = escalation.get('workflow_stage_id')
+                                if workflow_stage_id:
+                                    st.write(f"**Related to:** Workflow Stage #{workflow_stage_id}")
+                                task_id = escalation.get('task_id')
+                                if task_id:
+                                    st.write(f"**Related to:** Task #{task_id}")
             
             st.markdown("---")
             
             # Escalation by Type Chart
             st.markdown("### 📈 Escalation Distribution")
             
-            df_escalations = pd.DataFrame(escalations)
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                # By type
-                type_counts = df_escalations['escalation_type'].value_counts()
-                fig_type = px.pie(
-                    values=type_counts.values,
-                    names=type_counts.index,
-                    title='Escalations by Type',
-                    color_discrete_sequence=['#667eea', '#764ba2', '#f97316', '#fbbf24']
-                )
-                fig_type.update_layout(font=dict(family="Inter, sans-serif"))
-                st.plotly_chart(fig_type, use_container_width=True)
-            
-            with col2:
-                # By level
-                level_counts = df_escalations['escalation_level'].value_counts().sort_index()
-                fig_level = px.bar(
-                    x=[level_names.get(l, f'Level {l}') for l in level_counts.index],
-                    y=level_counts.values,
-                    title='Escalations by Level',
-                    color=level_counts.values,
-                    color_continuous_scale=['#fbbf24', '#f97316', '#ef4444', '#dc2626']
-                )
-                fig_level.update_layout(
-                    font=dict(family="Inter, sans-serif"),
-                    showlegend=False,
-                    xaxis_title='Escalation Level',
-                    yaxis_title='Count'
-                )
-                st.plotly_chart(fig_level, use_container_width=True)
+            if escalations:
+                df_escalations = pd.DataFrame(escalations)
+                
+                # Verify required columns exist
+                if 'escalation_type' in df_escalations.columns and 'escalation_level' in df_escalations.columns:
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        # By type
+                        type_counts = df_escalations['escalation_type'].value_counts()
+                        fig_type = px.pie(
+                            values=type_counts.values,
+                            names=type_counts.index,
+                            title='Escalations by Type',
+                            color_discrete_sequence=['#667eea', '#764ba2', '#f97316', '#fbbf24']
+                        )
+                        fig_type.update_layout(font=dict(family="Inter, sans-serif"))
+                        st.plotly_chart(fig_type, use_container_width=True)
+                    
+                    with col2:
+                        # By level
+                        level_counts = df_escalations['escalation_level'].value_counts().sort_index()
+                        fig_level = px.bar(
+                            x=[level_names.get(l, f'Level {l}') for l in level_counts.index],
+                            y=level_counts.values,
+                            title='Escalations by Level',
+                            color=level_counts.values,
+                            color_continuous_scale=['#fbbf24', '#f97316', '#ef4444', '#dc2626']
+                        )
+                        fig_level.update_layout(
+                            font=dict(family="Inter, sans-serif"),
+                            showlegend=False,
+                            xaxis_title='Escalation Level',
+                            yaxis_title='Count'
+                        )
+                        st.plotly_chart(fig_level, use_container_width=True)
+                else:
+                    st.warning("⚠️ Unable to display charts: Required data columns are missing")
+            else:
+                st.info("ℹ️ No escalations to display in charts")
             
         else:
             st.success("🎉 Great! No escalations have been triggered. All tasks are on track!")
