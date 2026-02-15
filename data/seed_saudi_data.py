@@ -163,6 +163,11 @@ def seed_checklists_and_tasks(stores, team_members):
     for store in stores:
         store_team = [m for m in team_members if m.store_id == store.id]
         
+        # Make store.opening_date timezone-aware if it's naive (from database)
+        store_opening_date = store.opening_date
+        if store_opening_date.tzinfo is None:
+            store_opening_date = store_opening_date.replace(tzinfo=timezone.utc)
+        
         for checklist_name, checklist_data in checklist_templates.items():
             checklist = Checklist(
                 name=checklist_name,
@@ -178,13 +183,16 @@ def seed_checklists_and_tasks(stores, team_members):
                 assigned_to = random.choice(store_team) if store_team else None
                 
                 # Calculate due date based on opening date
-                due_date = store.opening_date + timedelta(days=task_data['days_offset'])
+                due_date = store_opening_date + timedelta(days=task_data['days_offset'])
+                
+                # Get current time - use timezone-aware for comparison
+                now_utc = datetime.now(timezone.utc)
                 
                 # Determine status based on due date and store status
                 if store.status == 'completed':
                     status = 'completed'
                     completed_at = due_date + timedelta(hours=random.randint(1, 48))
-                elif due_date < datetime.now(timezone.utc):
+                elif due_date < now_utc:
                     # Overdue tasks - some completed, some not
                     if random.random() > 0.3:  # 70% completed
                         status = 'completed'
@@ -282,13 +290,21 @@ def seed_follow_ups(tasks, team_members):
     """Create follow-up reminders for tasks"""
     follow_ups = []
     
+    # Get current time - use timezone-aware for comparison
+    now_utc = datetime.now(timezone.utc)
+    
     # Create follow-ups for overdue/upcoming tasks
     for task in tasks:
         if task.status in ['pending', 'in_progress', 'blocked']:
+            # Make task.due_date timezone-aware if it's naive (from database)
+            task_due_date = task.due_date
+            if task_due_date.tzinfo is None:
+                task_due_date = task_due_date.replace(tzinfo=timezone.utc)
+            
             # Determine follow-up type
-            if task.due_date < datetime.now(timezone.utc):
+            if task_due_date < now_utc:
                 # Overdue - create escalation
-                days_overdue = (datetime.now(timezone.utc) - task.due_date).days
+                days_overdue = (now_utc - task_due_date).days
                 
                 if days_overdue >= 7:
                     escalation_level = 2
@@ -300,13 +316,13 @@ def seed_follow_ups(tasks, team_members):
                     escalation_level = 0
                     message = f"Reminder: Task '{task.title}' is {days_overdue} days overdue."
                 
-                scheduled_time = datetime.now(timezone.utc) + timedelta(hours=random.randint(1, 6))
+                scheduled_time = now_utc + timedelta(hours=random.randint(1, 6))
             else:
                 # Upcoming - create reminder
                 escalation_level = 0
-                days_until_due = (task.due_date - datetime.now(timezone.utc)).days
+                days_until_due = (task_due_date - now_utc).days
                 message = f"Reminder: Task '{task.title}' is due in {days_until_due} days."
-                scheduled_time = task.due_date - timedelta(days=1)
+                scheduled_time = task_due_date - timedelta(days=1)
             
             # Only create follow-up for assigned tasks
             if task.assigned_to_id:
@@ -314,9 +330,9 @@ def seed_follow_ups(tasks, team_members):
                     task_id=task.id,
                     message=message,
                     scheduled_time=scheduled_time,
-                    status='pending' if scheduled_time > datetime.now(timezone.utc) else 'sent',
+                    status='pending' if scheduled_time > now_utc else 'sent',
                     escalation_level=escalation_level,
-                    sent_at=datetime.now(timezone.utc) if scheduled_time <= datetime.now(timezone.utc) else None
+                    sent_at=now_utc if scheduled_time <= now_utc else None
                 )
                 db.session.add(follow_up)
                 follow_ups.append(follow_up)
