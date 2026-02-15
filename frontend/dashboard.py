@@ -806,10 +806,10 @@ def api_request(endpoint, method='GET', data=None, auth_required=True, handle_se
             return None
     
     except requests.exceptions.ConnectionError:
-        st.error(f"⚠️ Connection Error: Unable to reach the server. Please check if the backend is running.")
+        st.error(f"Connection Error: Unable to reach the server. Please check if the backend is running.")
         return None
     except requests.exceptions.Timeout:
-        st.error(f"⚠️ Request Timeout: The server is taking too long to respond. Please try again.")
+        st.error(f"Request Timeout: The server is taking too long to respond. Please try again.")
         return None
     except Exception as e:
         # Log the actual error for debugging
@@ -866,7 +866,7 @@ if not st.session_state.authenticated:
                         st.success("Login successful! Welcome back.")
                         st.rerun()
                     else:
-                        st.error("🔐 Invalid username or password. Please try again.")
+                        st.error("Invalid username or password. Please try again.")
                 else:
                     st.warning("Please enter both username and password")
             
@@ -1285,7 +1285,7 @@ else:
                 # This would require selecting a task - simplified for now
                 st.info("Feature: Analyzes historical data to predict task completion risks")
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
-            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+            st.error(f"Error loading stores: {stores_data['error']}")
         else:
             st.warning("Unable to load stores. Please check if the backend is running.")
     
@@ -1400,7 +1400,7 @@ else:
                                 del st.session_state.edit_store_id
                                 st.rerun()
             elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
-                st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+                st.error(f"Error loading stores: {stores_data['error']}")
             else:
                 st.info("📭 No stores found. Add a new store to get started!")
         
@@ -1650,7 +1650,7 @@ else:
                                     st.success("✅ Checklist created!")
                                     st.rerun()
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
-            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+            st.error(f"Error loading stores: {stores_data['error']}")
         else:
             st.warning("⚠️ No stores found")
     
@@ -1720,7 +1720,7 @@ else:
                                 else:
                                     st.error("❌ Failed to create group")
                 elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
-                    st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+                    st.error(f"Error loading stores: {stores_data['error']}")
                 else:
                     st.warning("⚠️ No stores found")
         
@@ -1876,7 +1876,7 @@ else:
                                      title='Store Status Distribution')
                         st.plotly_chart(fig2, use_container_width=True)
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
-            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+            st.error(f"Error loading stores: {stores_data['error']}")
         else:
             st.warning("⚠️ No stores found")
     
@@ -1905,7 +1905,7 @@ else:
             # In a real implementation, we'd list overdue tasks here
             st.write("Feature: Manual voice call escalation for selected tasks")
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
-            st.error(f"⚠️ Error loading stores: {stores_data['error']}")
+            st.error(f"Error loading stores: {stores_data['error']}")
         else:
             st.warning("⚠️ No stores found")
     
