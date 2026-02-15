@@ -616,21 +616,21 @@ st.markdown("""
     .user-profile-name {
         font-size: 1.125rem;
         font-weight: 700;
-        color: white;
+        color: var(--text-primary);
         margin-bottom: 0.5rem;
     }
     
     .user-profile-role {
         font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--primary-color);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        background: rgba(79, 70, 229, 0.3);
+        background: rgba(79, 70, 229, 0.1);
         padding: 0.375rem 0.75rem;
         border-radius: 6px;
         display: inline-block;
-        border: 1px solid rgba(79, 70, 229, 0.4);
+        border: 1px solid rgba(79, 70, 229, 0.3);
     }
     
     /* Professional Section Headers */
@@ -746,14 +746,13 @@ st.markdown("""
         background: transparent;
     }
     
-    /* Override Streamlit's default dark colors */
-    .element-container, .stMarkdown, p, span, div {
-        color: var(--text-primary) !important;
+    /* Override Streamlit's default dark colors - targeted selectors */
+    .main .element-container {
+        color: var(--text-primary);
     }
     
-    /* Ensure headers are visible */
-    h1, h2, h3, h4, h5, h6 {
-        color: var(--text-primary) !important;
+    .main .stMarkdown p, .main .stMarkdown span {
+        color: var(--text-primary);
     }
     
     </style>
