@@ -299,9 +299,11 @@ with st.sidebar:
     pages = [
         {"icon": "🏠", "name": "Dashboard", "key": "dashboard"},
         {"icon": "🏪", "name": "Stores", "key": "stores"},
+        {"icon": "🔄", "name": "Workflow Stages", "key": "workflow"},
         {"icon": "👥", "name": "Team Members", "key": "team"},
         {"icon": "✅", "name": "Tasks & Checklists", "key": "tasks"},
         {"icon": "💬", "name": "Communications", "key": "whatsapp"},
+        {"icon": "🚨", "name": "Escalations", "key": "escalations"},
         {"icon": "📊", "name": "Analytics & Reports", "key": "analytics"},
     ]
     
@@ -568,6 +570,348 @@ elif page == "stores":
                     st.rerun()
     else:
         st.info("ℹ️ No stores found. Create your first store to get started!")
+
+elif page == "workflow":
+    st.markdown('<div class="page-title">🔄 Workflow Stages</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Track the 7-stage store opening workflow process</div>', unsafe_allow_html=True)
+    
+    # Store selector
+    stores = get_api_data("/stores")
+    if stores:
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            store_options = {s['name']: s['id'] for s in stores}
+            selected_store_name = st.selectbox("🔍 Select Store", list(store_options.keys()))
+        
+        if selected_store_name:
+            store_id = store_options[selected_store_name]
+            
+            # Fetch workflow stages for the selected store
+            with st.spinner("Loading workflow stages..."):
+                workflow_data = get_api_data(f"/workflow/store/{store_id}/stages")
+            
+            if workflow_data:
+                store = workflow_data.get('store', {})
+                stages = workflow_data.get('stages', [])
+                
+                # Store information
+                st.markdown("### 🏪 Store Information")
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.write(f"**Name:** {store.get('name', 'N/A')}")
+                with col2:
+                    st.write(f"**Location:** {store.get('location', 'N/A')}")
+                with col3:
+                    opening_date = datetime.fromisoformat(store['opening_date'].replace('Z', '+00:00'))
+                    st.write(f"**Opening Date:** {opening_date.strftime('%Y-%m-%d')}")
+                with col4:
+                    st.write(f"**Status:** {store.get('status', 'N/A').upper()}")
+                
+                st.markdown("---")
+                
+                # The 7-Stage Workflow Process
+                st.markdown("### 📋 Workflow Process Stages")
+                
+                stage_descriptions = {
+                    1: "Sales team shares nearby store/warehouse details with contact person info",
+                    2: "IT team sends materials (POS, Cash Drawer, Printer, etc.) to warehouse",
+                    3: "Warehouse team confirms receipt of materials",
+                    4: "Warehouse ships materials to store; Store team confirms receipt",
+                    5: "Installation begins; Team provides TeamViewer ID for remote support",
+                    6: "Final checks and verification before opening",
+                    7: "Store opening completed successfully"
+                }
+                
+                # Display each stage
+                for stage_num in range(1, 8):
+                    stage = next((s for s in stages if s['stage_number'] == stage_num), None)
+                    
+                    with st.container():
+                        col1, col2, col3 = st.columns([1, 4, 2])
+                        
+                        with col1:
+                            # Stage number badge
+                            if stage:
+                                status_color = "#10b981" if stage['status'] == 'completed' else "#fbbf24" if stage['status'] == 'in_progress' else "#64748b"
+                                st.markdown(f"""
+                                    <div style="background: {status_color}; color: white; padding: 1rem; border-radius: 50%; 
+                                    width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; 
+                                    font-weight: 700; font-size: 1.5rem; margin: auto;">
+                                        {stage_num}
+                                    </div>
+                                """, unsafe_allow_html=True)
+                            else:
+                                st.markdown(f"""
+                                    <div style="background: #e5e7eb; color: #64748b; padding: 1rem; border-radius: 50%; 
+                                    width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; 
+                                    font-weight: 700; font-size: 1.5rem; margin: auto;">
+                                        {stage_num}
+                                    </div>
+                                """, unsafe_allow_html=True)
+                        
+                        with col2:
+                            st.markdown(f"**Stage {stage_num}: {stage['name'] if stage else 'Not Started'}**")
+                            st.write(stage_descriptions.get(stage_num, ""))
+                            
+                            if stage:
+                                if stage['status'] == 'completed':
+                                    completed_at = datetime.fromisoformat(stage['completed_at'].replace('Z', '+00:00'))
+                                    st.success(f"✅ Completed on {completed_at.strftime('%Y-%m-%d %H:%M')}")
+                                    if stage.get('completed_by'):
+                                        st.caption(f"By: {stage['completed_by']}")
+                                elif stage['status'] == 'in_progress':
+                                    st.info(f"🔄 In Progress")
+                                else:
+                                    st.warning(f"⏳ Pending")
+                        
+                        with col3:
+                            if stage:
+                                if stage.get('deadline'):
+                                    deadline = datetime.fromisoformat(stage['deadline'].replace('Z', '+00:00'))
+                                    st.write(f"**Deadline:**")
+                                    st.write(deadline.strftime('%Y-%m-%d'))
+                                    
+                                    # Days until/overdue
+                                    days_diff = (deadline.date() - datetime.now().date()).days
+                                    if days_diff < 0:
+                                        st.error(f"⚠️ {abs(days_diff)} days overdue")
+                                    elif days_diff == 0:
+                                        st.warning("📅 Due today")
+                                    else:
+                                        st.info(f"⏰ {days_diff} days left")
+                        
+                        st.markdown("---")
+                
+                # Material Tracking Section
+                st.markdown("### 📦 Material Tracking")
+                material_tracking = get_api_data(f"/workflow/store/{store_id}/material-tracking")
+                
+                if material_tracking and 'message' not in material_tracking:
+                    col1, col2, col3 = st.columns(3)
+                    
+                    with col1:
+                        st.markdown("#### 🏭 Warehouse Status")
+                        if material_tracking.get('warehouse_received'):
+                            st.success(f"✅ Received")
+                            st.caption(f"Date: {material_tracking.get('warehouse_received_date', 'N/A')}")
+                        else:
+                            st.warning("⏳ Pending")
+                    
+                    with col2:
+                        st.markdown("#### 🏪 Nearby Store Status")
+                        if material_tracking.get('nearby_store_received'):
+                            st.success(f"✅ Received")
+                            st.caption(f"Date: {material_tracking.get('nearby_store_received_date', 'N/A')}")
+                        else:
+                            st.warning("⏳ Pending")
+                    
+                    with col3:
+                        st.markdown("#### 🎯 Actual Store Status")
+                        if material_tracking.get('store_received'):
+                            st.success(f"✅ Received")
+                            st.caption(f"Date: {material_tracking.get('store_received_date', 'N/A')}")
+                        else:
+                            st.warning("⏳ Pending")
+                else:
+                    st.info("ℹ️ Material tracking not yet available for this store")
+                
+                # Update Opening Date Section
+                st.markdown("---")
+                st.markdown("### 📅 Update Opening Date")
+                st.write("Change the store opening date (this will recalculate all workflow timelines)")
+                
+                with st.form("update_opening_date"):
+                    new_opening_date = st.date_input(
+                        "New Opening Date",
+                        value=opening_date.date(),
+                        min_value=datetime.now().date()
+                    )
+                    
+                    if st.form_submit_button("🔄 Update Opening Date"):
+                        result = put_api_data(
+                            f"/workflow/store/{store_id}/opening-date",
+                            {'opening_date': new_opening_date.isoformat()}
+                        )
+                        if result:
+                            st.success("✅ Opening date updated and timelines recalculated!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to update opening date")
+            else:
+                st.warning("⚠️ Unable to load workflow stages for this store")
+    else:
+        st.info("ℹ️ No stores found. Create a store first to see the workflow.")
+
+elif page == "escalations":
+    st.markdown('<div class="page-title">🚨 Escalations & AI Follow-ups</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Automated AI escalations and manager notifications for delayed tasks</div>', unsafe_allow_html=True)
+    
+    # Store selector
+    stores = get_api_data("/stores")
+    if stores:
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            store_options = {"All Stores": None}
+            store_options.update({s['name']: s['id'] for s in stores})
+            selected_store_name = st.selectbox("🔍 Filter by Store", list(store_options.keys()))
+        
+        # Fetch escalations
+        with st.spinner("Loading escalations..."):
+            if selected_store_name == "All Stores" or store_options[selected_store_name] is None:
+                # Get escalations for all stores
+                all_escalations = []
+                for store in stores:
+                    escalation_data = get_api_data(f"/workflow/store/{store['id']}/escalations")
+                    if escalation_data and 'escalations' in escalation_data:
+                        for esc in escalation_data['escalations']:
+                            esc['store_name'] = store['name']
+                            all_escalations.append(esc)
+                escalations = all_escalations
+            else:
+                store_id = store_options[selected_store_name]
+                escalation_data = get_api_data(f"/workflow/store/{store_id}/escalations")
+                escalations = escalation_data.get('escalations', []) if escalation_data else []
+        
+        if escalations:
+            # Summary metrics
+            st.markdown("### 📊 Escalation Summary")
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                st.metric("🚨 Total Escalations", len(escalations))
+            
+            with col2:
+                whatsapp_count = sum(1 for e in escalations if e['escalation_type'] == 'whatsapp')
+                st.metric("💬 WhatsApp", whatsapp_count)
+            
+            with col3:
+                call_count = sum(1 for e in escalations if e['escalation_type'] == 'call')
+                st.metric("📞 Voice Calls", call_count)
+            
+            with col4:
+                email_count = sum(1 for e in escalations if e['escalation_type'] == 'email')
+                st.metric("📧 Emails", email_count)
+            
+            st.markdown("---")
+            
+            # Escalation Timeline
+            st.markdown("### 📅 Escalation Timeline")
+            
+            # Sort escalations by date (newest first)
+            escalations_sorted = sorted(
+                escalations,
+                key=lambda x: x.get('created_at', ''),
+                reverse=True
+            )
+            
+            # Group by escalation level
+            level_names = {
+                1: "Level 1 - Initial WhatsApp Reminder",
+                2: "Level 2 - SMS/Call Follow-up",
+                3: "Level 3 - Manager Voice Call",
+                4: "Level 4 - Email to Management"
+            }
+            
+            level_colors = {
+                1: "#fbbf24",  # Yellow
+                2: "#f97316",  # Orange
+                3: "#ef4444",  # Red
+                4: "#dc2626"   # Dark Red
+            }
+            
+            # Display escalations grouped by level
+            for level in [4, 3, 2, 1]:  # Show highest level first
+                level_escalations = [e for e in escalations_sorted if e['escalation_level'] == level]
+                
+                if level_escalations:
+                    st.markdown(f"#### {level_names.get(level, f'Level {level}')}")
+                    
+                    for escalation in level_escalations:
+                        with st.expander(
+                            f"🚨 {escalation['escalation_type'].upper()} - "
+                            f"{datetime.fromisoformat(escalation['created_at'].replace('Z', '+00:00')).strftime('%Y-%m-%d %H:%M')} "
+                            f"{'- ' + escalation.get('store_name', '') if 'store_name' in escalation else ''}"
+                        ):
+                            col1, col2 = st.columns([1, 2])
+                            
+                            with col1:
+                                st.write("**Escalation Details:**")
+                                st.write(f"**Level:** {escalation['escalation_level']}")
+                                st.write(f"**Type:** {escalation['escalation_type'].upper()}")
+                                st.write(f"**Status:** {escalation.get('status', 'sent').upper()}")
+                                
+                                if escalation.get('recipient_phone'):
+                                    st.write(f"**Phone:** {escalation['recipient_phone']}")
+                                if escalation.get('recipient_email'):
+                                    st.write(f"**Email:** {escalation['recipient_email']}")
+                                
+                                created_at = datetime.fromisoformat(escalation['created_at'].replace('Z', '+00:00'))
+                                st.write(f"**Date:** {created_at.strftime('%Y-%m-%d %H:%M')}")
+                                
+                                if escalation.get('response_received_at'):
+                                    response_at = datetime.fromisoformat(escalation['response_received_at'].replace('Z', '+00:00'))
+                                    st.write(f"**Response:** {response_at.strftime('%Y-%m-%d %H:%M')}")
+                            
+                            with col2:
+                                st.write("**Message:**")
+                                if escalation.get('message'):
+                                    st.info(escalation['message'])
+                                else:
+                                    st.caption("No message recorded")
+                                
+                                # Show which stage or task this is related to
+                                if escalation.get('workflow_stage_id'):
+                                    st.write(f"**Related to:** Workflow Stage #{escalation['workflow_stage_id']}")
+                                if escalation.get('task_id'):
+                                    st.write(f"**Related to:** Task #{escalation['task_id']}")
+            
+            st.markdown("---")
+            
+            # Escalation by Type Chart
+            st.markdown("### 📈 Escalation Distribution")
+            
+            df_escalations = pd.DataFrame(escalations)
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # By type
+                type_counts = df_escalations['escalation_type'].value_counts()
+                fig_type = px.pie(
+                    values=type_counts.values,
+                    names=type_counts.index,
+                    title='Escalations by Type',
+                    color_discrete_sequence=['#667eea', '#764ba2', '#f97316', '#fbbf24']
+                )
+                fig_type.update_layout(font=dict(family="Inter, sans-serif"))
+                st.plotly_chart(fig_type, use_container_width=True)
+            
+            with col2:
+                # By level
+                level_counts = df_escalations['escalation_level'].value_counts().sort_index()
+                fig_level = px.bar(
+                    x=[level_names.get(l, f'Level {l}') for l in level_counts.index],
+                    y=level_counts.values,
+                    title='Escalations by Level',
+                    color=level_counts.values,
+                    color_continuous_scale=['#fbbf24', '#f97316', '#ef4444', '#dc2626']
+                )
+                fig_level.update_layout(
+                    font=dict(family="Inter, sans-serif"),
+                    showlegend=False,
+                    xaxis_title='Escalation Level',
+                    yaxis_title='Count'
+                )
+                st.plotly_chart(fig_level, use_container_width=True)
+            
+        else:
+            st.success("🎉 Great! No escalations have been triggered. All tasks are on track!")
+            st.info("ℹ️ Escalations are automatically triggered when:\n"
+                   "- Tasks are overdue by 3+ days (Level 1: WhatsApp)\n"
+                   "- Tasks are overdue by 7+ days (Level 2: SMS/Call)\n"
+                   "- Critical delays requiring manager intervention (Level 3-4: Voice Call/Email)")
+    else:
+        st.info("ℹ️ No stores found. Create a store first to see escalations.")
 
 elif page == "team":
     st.markdown('<div class="page-title">👥 Team Management</div>', unsafe_allow_html=True)
