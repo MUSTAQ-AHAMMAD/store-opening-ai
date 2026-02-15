@@ -730,10 +730,19 @@ elif page == "workflow":
                 st.markdown("### 📅 Update Opening Date")
                 st.write("Change the store opening date (this will recalculate all workflow timelines)")
                 
+                # Get default date value
+                opening_date_str = store.get('opening_date', '')
+                default_date = datetime.now().date()
+                if opening_date_str:
+                    try:
+                        default_date = datetime.fromisoformat(opening_date_str.replace('Z', '+00:00')).date()
+                    except (ValueError, AttributeError):
+                        pass
+                
                 with st.form("update_opening_date"):
                     new_opening_date = st.date_input(
                         "New Opening Date",
-                        value=opening_date.date(),
+                        value=default_date,
                         min_value=datetime.now().date()
                     )
                     
@@ -791,15 +800,15 @@ elif page == "escalations":
                 st.metric("🚨 Total Escalations", len(escalations))
             
             with col2:
-                whatsapp_count = sum(1 for e in escalations if e['escalation_type'] == 'whatsapp')
+                whatsapp_count = sum(1 for e in escalations if e.get('escalation_type') == 'whatsapp')
                 st.metric("💬 WhatsApp", whatsapp_count)
             
             with col3:
-                call_count = sum(1 for e in escalations if e['escalation_type'] == 'call')
+                call_count = sum(1 for e in escalations if e.get('escalation_type') == 'call')
                 st.metric("📞 Voice Calls", call_count)
             
             with col4:
-                email_count = sum(1 for e in escalations if e['escalation_type'] == 'email')
+                email_count = sum(1 for e in escalations if e.get('escalation_type') == 'email')
                 st.metric("📧 Emails", email_count)
             
             st.markdown("---")
@@ -831,7 +840,7 @@ elif page == "escalations":
             
             # Display escalations grouped by level
             for level in [4, 3, 2, 1]:  # Show highest level first
-                level_escalations = [e for e in escalations_sorted if e['escalation_level'] == level]
+                level_escalations = [e for e in escalations_sorted if e.get('escalation_level') == level]
                 
                 if level_escalations:
                     st.markdown(f"#### {level_names.get(level, f'Level {level}')}")
