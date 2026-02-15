@@ -604,8 +604,11 @@ elif page == "workflow":
                 with col3:
                     opening_date_str = store.get('opening_date', '')
                     if opening_date_str:
-                        opening_date = datetime.fromisoformat(opening_date_str.replace('Z', '+00:00'))
-                        st.write(f"**Opening Date:** {opening_date.strftime('%Y-%m-%d')}")
+                        try:
+                            opening_date = datetime.fromisoformat(opening_date_str.replace('Z', '+00:00'))
+                            st.write(f"**Opening Date:** {opening_date.strftime('%Y-%m-%d')}")
+                        except (ValueError, AttributeError):
+                            st.write(f"**Opening Date:** {opening_date_str}")
                     else:
                         st.write(f"**Opening Date:** N/A")
                 with col4:
@@ -662,8 +665,11 @@ elif page == "workflow":
                                 if stage_status == 'completed':
                                     completed_at_str = stage.get('completed_at')
                                     if completed_at_str:
-                                        completed_at = datetime.fromisoformat(completed_at_str.replace('Z', '+00:00'))
-                                        st.success(f"✅ Completed on {completed_at.strftime('%Y-%m-%d %H:%M')}")
+                                        try:
+                                            completed_at = datetime.fromisoformat(completed_at_str.replace('Z', '+00:00'))
+                                            st.success(f"✅ Completed on {completed_at.strftime('%Y-%m-%d %H:%M')}")
+                                        except (ValueError, AttributeError):
+                                            st.success(f"✅ Completed")
                                         if stage.get('completed_by'):
                                             st.caption(f"By: {stage['completed_by']}")
                                     else:
@@ -677,18 +683,21 @@ elif page == "workflow":
                             if stage:
                                 deadline_str = stage.get('deadline')
                                 if deadline_str:
-                                    deadline = datetime.fromisoformat(deadline_str.replace('Z', '+00:00'))
-                                    st.write(f"**Deadline:**")
-                                    st.write(deadline.strftime('%Y-%m-%d'))
-                                    
-                                    # Days until/overdue
-                                    days_diff = (deadline.date() - datetime.now().date()).days
-                                    if days_diff < 0:
-                                        st.error(f"⚠️ {abs(days_diff)} days overdue")
-                                    elif days_diff == 0:
-                                        st.warning("📅 Due today")
-                                    else:
-                                        st.info(f"⏰ {days_diff} days left")
+                                    try:
+                                        deadline = datetime.fromisoformat(deadline_str.replace('Z', '+00:00'))
+                                        st.write(f"**Deadline:**")
+                                        st.write(deadline.strftime('%Y-%m-%d'))
+                                        
+                                        # Days until/overdue
+                                        days_diff = (deadline.date() - datetime.now().date()).days
+                                        if days_diff < 0:
+                                            st.error(f"⚠️ {abs(days_diff)} days overdue")
+                                        elif days_diff == 0:
+                                            st.warning("📅 Due today")
+                                        else:
+                                            st.info(f"⏰ {days_diff} days left")
+                                    except (ValueError, AttributeError):
+                                        st.write(f"**Deadline:** {deadline_str}")
                         
                         st.markdown("---")
                 
@@ -804,8 +813,9 @@ elif page == "escalations":
                 st.metric("💬 WhatsApp", whatsapp_count)
             
             with col3:
+                sms_count = sum(1 for e in escalations if e.get('escalation_type') == 'sms')
                 call_count = sum(1 for e in escalations if e.get('escalation_type') == 'call')
-                st.metric("📞 Voice Calls", call_count)
+                st.metric("📞 SMS/Calls", sms_count + call_count)
             
             with col4:
                 email_count = sum(1 for e in escalations if e.get('escalation_type') == 'email')
@@ -850,10 +860,16 @@ elif page == "escalations":
                         if not created_at_str:
                             continue  # Skip escalations without created_at
                         
-                        created_at = datetime.fromisoformat(created_at_str.replace('Z', '+00:00'))
+                        try:
+                            created_at = datetime.fromisoformat(created_at_str.replace('Z', '+00:00'))
+                            created_at_display = created_at.strftime('%Y-%m-%d %H:%M')
+                        except (ValueError, AttributeError):
+                            created_at_display = created_at_str
+                            created_at = None
+                        
                         with st.expander(
                             f"🚨 {escalation.get('escalation_type', 'UNKNOWN').upper()} - "
-                            f"{created_at.strftime('%Y-%m-%d %H:%M')} "
+                            f"{created_at_display} "
                             f"{'- ' + escalation.get('store_name', '') if 'store_name' in escalation else ''}"
                         ):
                             col1, col2 = st.columns([1, 2])
@@ -869,12 +885,15 @@ elif page == "escalations":
                                 if escalation.get('recipient_email'):
                                     st.write(f"**Email:** {escalation['recipient_email']}")
                                 
-                                st.write(f"**Date:** {created_at.strftime('%Y-%m-%d %H:%M')}")
+                                st.write(f"**Date:** {created_at_display}")
                                 
                                 response_at_str = escalation.get('response_received_at')
                                 if response_at_str:
-                                    response_at = datetime.fromisoformat(response_at_str.replace('Z', '+00:00'))
-                                    st.write(f"**Response:** {response_at.strftime('%Y-%m-%d %H:%M')}")
+                                    try:
+                                        response_at = datetime.fromisoformat(response_at_str.replace('Z', '+00:00'))
+                                        st.write(f"**Response:** {response_at.strftime('%Y-%m-%d %H:%M')}")
+                                    except (ValueError, AttributeError):
+                                        st.write(f"**Response:** {response_at_str}")
                             
                             with col2:
                                 st.write("**Message:**")
