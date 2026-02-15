@@ -1,7 +1,7 @@
 """
 Store Opening AI - Enhanced Dashboard with Authentication
-Modern, Rich UI with User Management and AI Features
-OUT-OF-THE-BOX DESIGN - Dark Neon Cyberpunk Theme
+Modern, Professional UI with User Management and AI Features
+PROFESSIONAL ENTERPRISE DESIGN
 """
 
 import streamlit as st
@@ -19,10 +19,10 @@ RISK_THRESHOLD_HIGH = 75
 RISK_STATUS_CRITICAL = 5
 RISK_STATUS_MODERATE = 0
 
-# Configure page with dark neon theme
+# Configure page with professional theme
 st.set_page_config(
-    page_title="⚡ Store Opening AI - Neon Dashboard",
-    page_icon="⚡",
+    page_title="Store Opening AI - Professional Dashboard",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -30,71 +30,84 @@ st.set_page_config(
 # API Configuration
 API_BASE_URL = "http://localhost:5000/api"
 
-# ⚡ OUT-OF-THE-BOX DESIGN - Dark Neon Cyberpunk Theme
+# Professional Enterprise Design System
 st.markdown("""
     <style>
-    /* ⚡ NEON CYBERPUNK DESIGN SYSTEM - Bold & Futuristic */
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    /* Professional Enterprise Design System */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
     
     :root {
-        /* Neon Accent Colors */
-        --neon-cyan: #00f0ff;
-        --neon-magenta: #ff00e5;
-        --neon-lime: #39ff14;
-        --neon-orange: #ff6b00;
-        --neon-violet: #b84dff;
+        /* Professional Primary Colors */
+        --primary-blue: #4F46E5;
+        --primary-blue-dark: #4338CA;
+        --primary-purple: #7C3AED;
+        --primary-purple-dark: #6D28D9;
         
-        /* Gradient System */
-        --primary-gradient: linear-gradient(135deg, #00f0ff 0%, #b84dff 100%);
-        --secondary-gradient: linear-gradient(135deg, #ff00e5 0%, #ff6b00 100%);
-        --success-gradient: linear-gradient(135deg, #39ff14 0%, #00f0ff 100%);
-        --warning-gradient: linear-gradient(135deg, #ff6b00 0%, #ff00e5 100%);
-        --danger-gradient: linear-gradient(135deg, #ff3366 0%, #ff6b00 100%);
-        --info-gradient: linear-gradient(135deg, #00f0ff 0%, #39ff14 100%);
+        /* Professional Secondary Colors */
+        --secondary-gray: #64748B;
+        --secondary-gray-light: #94A3B8;
+        --secondary-silver: #E2E8F0;
+        --secondary-silver-light: #F1F5F9;
         
-        /* Dark Background System */
-        --bg-primary: #0a0e1a;
-        --bg-secondary: #111827;
-        --bg-card: #151c2e;
-        --bg-card-hover: #1a2340;
-        --bg-elevated: #1e2742;
+        /* Professional Accent Colors */
+        --accent-orange: #F59E0B;
+        --accent-orange-light: #FBBF24;
+        --accent-emerald: #10B981;
+        --accent-emerald-light: #34D399;
         
-        /* Text Colors */
-        --text-primary: #e8ecf4;
-        --text-secondary: #8b95a8;
-        --text-muted: #5a6478;
+        /* Professional Light Backgrounds - Modern Dashboard Style */
+        --bg-primary: #F8F9FA;
+        --bg-secondary: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --bg-card-hover: #F8F9FA;
+        --bg-elevated: #FFFFFF;
         
-        /* Borders */
-        --border-light: rgba(0, 240, 255, 0.12);
-        --border-medium: rgba(0, 240, 255, 0.25);
-        --border-glow: rgba(0, 240, 255, 0.4);
+        /* Professional Text Colors - For Light Background */
+        --text-primary: #1E293B;
+        --text-secondary: #64748B;
+        --text-muted: #94A3B8;
         
-        /* Dark Glass Effect */
-        --glass-bg: rgba(21, 28, 46, 0.85);
-        --glass-border: rgba(0, 240, 255, 0.15);
+        /* Professional Borders */
+        --border-light: rgba(226, 232, 240, 0.8);
+        --border-medium: rgba(203, 213, 225, 1);
+        --border-accent: rgba(79, 70, 229, 0.3);
         
-        /* Neon Shadows */
-        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-        --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
-        --shadow-neon-cyan: 0 0 20px rgba(0, 240, 255, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
-        --shadow-neon-magenta: 0 0 20px rgba(255, 0, 229, 0.3), 0 0 40px rgba(255, 0, 229, 0.1);
-        --shadow-neon-lime: 0 0 20px rgba(57, 255, 20, 0.3), 0 0 40px rgba(57, 255, 20, 0.1);
-
-        /* Primary Color Aliases */
-        --primary-color: #00f0ff;
-        --primary-dark: #00c4d4;
+        /* Professional Glass Effect */
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --glass-border: rgba(226, 232, 240, 0.8);
+        
+        /* Professional Shadows - Enhanced for Light BG */
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+        
+        /* Professional Gradient System */
+        --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        --secondary-gradient: linear-gradient(135deg, #64748B 0%, #94A3B8 100%);
+        --success-gradient: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+        --warning-gradient: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+        --danger-gradient: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        
+        /* Sidebar - Professional Dark Contrast */
+        --sidebar-bg: #2C3E50;
+        --sidebar-hover: #34495E;
+        --sidebar-active: #4F46E5;
+        
+        /* Legacy Color Aliases for Compatibility */
+        --primary-color: #4F46E5;
+        --primary-dark: #4338CA;
     }
     
     /* ⚡ GLOBAL STYLES */
     * {
-        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
     
-    /* Main Container - Dark Background */
+    /* Main Container - Professional Light Background */
     .main {
         background: var(--bg-primary);
         color: var(--text-primary);
@@ -105,7 +118,7 @@ st.markdown("""
         max-width: 1600px;
     }
     
-    /* ⚡ HEADER STYLES - Neon Glow */
+    /* Professional Header Styles */
     .main-header {
         font-size: 2.5rem;
         font-weight: 700;
@@ -116,22 +129,11 @@ st.markdown("""
         margin-bottom: 0.5rem;
         letter-spacing: -0.02em;
         animation: slideIn 0.6s ease-out;
-        filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.4));
     }
     
     @keyframes slideIn {
         from { opacity: 0; transform: translateY(-20px); }
         to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes neonPulse {
-        0%, 100% { box-shadow: var(--shadow-neon-cyan); }
-        50% { box-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 60px rgba(0, 240, 255, 0.2); }
-    }
-
-    @keyframes borderGlow {
-        0%, 100% { border-color: rgba(0, 240, 255, 0.3); }
-        50% { border-color: rgba(0, 240, 255, 0.6); }
     }
     
     .page-subtitle {
@@ -141,15 +143,15 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* 💎 METRIC CARDS - Dark Glass with Neon Edges */
+    /* Professional Metric Cards with Clean Glassmorphism - Light Theme */
     .metric-card-modern {
-        background: var(--glass-bg);
+        background: var(--bg-card);
         backdrop-filter: blur(16px);
-        padding: 2rem;
-        border-radius: 20px;
-        border: 1px solid var(--glass-border);
-        box-shadow: var(--shadow-lg);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 1.5rem;
+        border-radius: 16px;
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
     }
@@ -162,26 +164,26 @@ st.markdown("""
         right: 0;
         height: 3px;
         background: var(--primary-gradient);
-        box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
     }
     
     .metric-card-modern:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: var(--shadow-xl), var(--shadow-neon-cyan);
-        border-color: var(--border-glow);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--border-accent);
     }
     
     .metric-icon-gradient {
         width: 56px;
         height: 56px;
-        border-radius: 14px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.75rem;
         margin-bottom: 1rem;
-        background: var(--primary-gradient);
-        box-shadow: var(--shadow-neon-cyan);
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+        border: 1px solid var(--border-accent);
+        color: var(--primary-color);
     }
     
     .metric-value-large {
@@ -207,59 +209,35 @@ st.markdown("""
         align-items: center;
         gap: 0.25rem;
         padding: 0.375rem 0.75rem;
-        border-radius: 12px;
+        border-radius: 8px;
         font-size: 0.875rem;
         font-weight: 600;
         margin-top: 0.75rem;
     }
     
     .metric-change-positive {
-        background: rgba(57, 255, 20, 0.1);
-        color: #39ff14;
-        border: 1px solid rgba(57, 255, 20, 0.2);
+        background: rgba(16, 185, 129, 0.1);
+        color: #34D399;
+        border: 1px solid rgba(16, 185, 129, 0.2);
     }
     
     .metric-change-negative {
-        background: rgba(255, 51, 102, 0.1);
-        color: #ff3366;
-        border: 1px solid rgba(255, 51, 102, 0.2);
+        background: rgba(239, 68, 68, 0.1);
+        color: #F87171;
+        border: 1px solid rgba(239, 68, 68, 0.2);
     }
     
-    /* ⚡ HERO BANNER - Cyberpunk Mesh Gradient */
+    /* Professional Hero Banner - Light Theme */
     .hero-banner {
-        background: linear-gradient(135deg, #0a0e1a 0%, #1a0a2e 30%, #0a1a2e 60%, #0a0e1a 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
         padding: 2.5rem;
-        border-radius: 24px;
-        color: white;
+        border-radius: 16px;
+        color: var(--text-primary);
         margin-bottom: 2rem;
-        box-shadow: var(--shadow-xl), var(--shadow-neon-cyan);
+        box-shadow: var(--shadow-lg);
         position: relative;
         overflow: hidden;
-        border: 1px solid var(--border-medium);
-    }
-    
-    .hero-banner::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, transparent 70%);
-        filter: blur(40px);
-        animation: neonPulse 4s ease-in-out infinite;
-    }
-
-    .hero-banner::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -5%;
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, rgba(184, 77, 255, 0.15) 0%, transparent 70%);
-        filter: blur(40px);
-        animation: neonPulse 4s ease-in-out infinite 2s;
+        border: 1px solid var(--border-light);
     }
     
     .hero-title {
@@ -268,25 +246,25 @@ st.markdown("""
         margin-bottom: 0.5rem;
         position: relative;
         z-index: 1;
-        text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        color: var(--text-primary);
     }
     
     .hero-subtitle {
         font-size: 1rem;
-        opacity: 0.85;
+        opacity: 0.75;
         position: relative;
         z-index: 1;
         color: var(--text-secondary);
     }
     
-    /* 🏪 STORE CARDS - Dark Neon Design */
+    /* Professional Store Cards */
     .store-card-modern {
         background: var(--bg-card);
-        border-radius: 20px;
-        padding: 1.75rem;
+        border-radius: 16px;
+        padding: 1.5rem;
         box-shadow: var(--shadow-md);
         border: 1px solid var(--border-light);
-        transition: all 0.4s ease;
+        transition: all 0.3s ease;
         margin-bottom: 1.5rem;
         position: relative;
         overflow: hidden;
@@ -297,16 +275,15 @@ st.markdown("""
         position: absolute;
         top: 0;
         left: 0;
-        width: 4px;
+        width: 3px;
         height: 100%;
         background: var(--primary-gradient);
-        box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
     }
     
     .store-card-modern:hover {
-        box-shadow: var(--shadow-lg), var(--shadow-neon-cyan);
-        transform: translateX(6px);
-        border-color: var(--border-medium);
+        box-shadow: var(--shadow-lg);
+        transform: translateX(4px);
+        border-color: var(--border-accent);
         background: var(--bg-card-hover);
     }
     
@@ -326,10 +303,10 @@ st.markdown("""
         gap: 0.5rem;
     }
     
-    /* ⚡ STATUS BADGES - Neon Glow */
+    /* Professional Status Badges - Muted Colors */
     .status-badge-modern {
         padding: 0.5rem 1rem;
-        border-radius: 12px;
+        border-radius: 8px;
         font-weight: 600;
         font-size: 0.8rem;
         display: inline-flex;
@@ -341,74 +318,52 @@ st.markdown("""
     
     .status-badge {
         padding: 0.25rem 0.75rem;
-        border-radius: 1rem;
+        border-radius: 0.5rem;
         font-weight: bold;
         font-size: 0.85rem;
     }
     
     .status-planning {
-        background: rgba(0, 240, 255, 0.15);
-        color: var(--neon-cyan);
-        border: 1px solid rgba(0, 240, 255, 0.3);
-        box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+        background: rgba(59, 130, 246, 0.15);
+        color: #60A5FA;
+        border: 1px solid rgba(59, 130, 246, 0.3);
     }
     
     .status-in-progress, .status-in_progress {
-        background: rgba(255, 0, 229, 0.15);
-        color: var(--neon-magenta);
-        border: 1px solid rgba(255, 0, 229, 0.3);
-        box-shadow: 0 0 8px rgba(255, 0, 229, 0.15);
+        background: rgba(139, 92, 246, 0.15);
+        color: #A78BFA;
+        border: 1px solid rgba(139, 92, 246, 0.3);
     }
     
     .status-completed {
-        background: rgba(57, 255, 20, 0.15);
-        color: var(--neon-lime);
-        border: 1px solid rgba(57, 255, 20, 0.3);
-        box-shadow: 0 0 8px rgba(57, 255, 20, 0.15);
+        background: rgba(16, 185, 129, 0.15);
+        color: #34D399;
+        border: 1px solid rgba(16, 185, 129, 0.3);
     }
     
     .status-delayed {
-        background: rgba(255, 51, 102, 0.15);
-        color: #ff3366;
-        border: 1px solid rgba(255, 51, 102, 0.3);
-        box-shadow: 0 0 8px rgba(255, 51, 102, 0.15);
+        background: rgba(239, 68, 68, 0.15);
+        color: #F87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
     }
     
-    /* ⚡ PROGRESS BARS - Neon Animated */
+    /* Professional Progress Bars - No Shimmer */
     .progress-bar-container {
         width: 100%;
-        height: 10px;
-        background: rgba(0, 240, 255, 0.08);
-        border-radius: 12px;
+        height: 8px;
+        background: rgba(75, 85, 99, 0.3);
+        border-radius: 8px;
         overflow: hidden;
         margin: 1rem 0;
-        border: 1px solid rgba(0, 240, 255, 0.1);
+        border: 1px solid var(--border-light);
     }
     
     .progress-bar-fill {
         height: 100%;
         background: var(--primary-gradient);
-        border-radius: 12px;
+        border-radius: 8px;
         transition: width 1s ease-out;
-        animation: progressAnimation 2s ease-out;
-        box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
-        position: relative;
-    }
-
-    .progress-bar-fill::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
+        animation: progressAnimation 1s ease-out;
     }
     
     @keyframes progressAnimation {
@@ -417,12 +372,12 @@ st.markdown("""
     
     /* 🔘 BUTTONS - Commented: see improved buttons below */
     
-    /* 📱 SIDEBAR - Dark Glass Navigation */
+    /* Professional Sidebar - Dark Contrast with Light Main */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0d1117 0%, #0a0e1a 50%, #100a1e 100%);
+        background: var(--sidebar-bg);
         color: white;
         padding: 1rem 0;
-        border-right: 1px solid var(--border-light);
+        border-right: 1px solid var(--border-medium);
     }
     
     [data-testid="stSidebar"] .element-container {
@@ -430,12 +385,12 @@ st.markdown("""
     }
     
     [data-testid="stSidebar"] hr {
-        border-color: var(--border-light);
+        border-color: rgba(255, 255, 255, 0.1);
         margin: 1.25rem 0;
     }
     
     [data-testid="stSidebar"] h3 {
-        color: var(--neon-cyan);
+        color: #FFFFFF;
         font-weight: 600;
         font-size: 0.8rem;
         text-transform: uppercase;
@@ -443,12 +398,11 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
-    
-    /* 🎴 CARDS - Dark Glass Styles */
+    /* Professional Cards */
     .info-card {
         background: var(--bg-card);
         padding: 1.5rem;
-        border-radius: 16px;
+        border-radius: 12px;
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--border-light);
         margin-bottom: 1rem;
@@ -458,22 +412,22 @@ st.markdown("""
         background: var(--bg-elevated);
         color: var(--text-primary);
         padding: 1.5rem;
-        border-radius: 16px;
+        border-radius: 12px;
         box-shadow: var(--shadow-md);
         margin-bottom: 1rem;
         border: 1px solid var(--border-light);
     }
     
-    /* 📈 CHARTS - Dark Styling */
+    /* Professional Charts */
     .stPlotlyChart {
         background: var(--bg-card);
-        border-radius: 16px;
+        border-radius: 12px;
         padding: 1rem;
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--border-light);
     }
     
-    /* 🎯 WORKFLOW STAGES - Neon Timeline */
+    /* Professional Workflow Stages */
     .stage-container {
         display: flex;
         align-items: center;
@@ -488,9 +442,9 @@ st.markdown("""
     }
     
     .stage-container:hover {
-        box-shadow: var(--shadow-md), var(--shadow-neon-cyan);
-        transform: translateX(6px);
-        border-color: var(--border-medium);
+        box-shadow: var(--shadow-md);
+        transform: translateX(4px);
+        border-color: var(--border-accent);
     }
     
     .stage-number {
@@ -498,24 +452,21 @@ st.markdown("""
         height: 44px;
         border-radius: 50%;
         background: var(--primary-gradient);
-        color: #0a0e1a;
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
         font-size: 1.125rem;
         flex-shrink: 0;
-        box-shadow: var(--shadow-neon-cyan);
     }
     
     .stage-completed .stage-number {
         background: var(--success-gradient);
-        box-shadow: var(--shadow-neon-lime);
     }
     
     .stage-delayed .stage-number {
         background: var(--danger-gradient);
-        box-shadow: var(--shadow-neon-magenta);
     }
     
     /* ✨ ANIMATIONS */
@@ -534,10 +485,10 @@ st.markdown("""
         animation: fadeInUp 0.6s ease-out;
     }
     
-    /* 🎨 EXPANDER - Dark Neon Design */
+    /* Professional Expander */
     .streamlit-expanderHeader {
         background: var(--bg-card);
-        border-radius: 12px;
+        border-radius: 8px;
         border: 1px solid var(--border-light);
         padding: 1rem 1.5rem;
         font-weight: 600;
@@ -546,15 +497,14 @@ st.markdown("""
     
     .streamlit-expanderHeader:hover {
         background: var(--bg-card-hover);
-        border-color: var(--neon-cyan);
-        box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+        border-color: var(--border-accent);
     }
     
-    /* 📝 INPUT FIELDS - Dark Neon */
+    /* Professional Input Fields */
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select,
     .stTextArea > div > div > textarea {
-        border-radius: 12px;
+        border-radius: 8px;
         border: 2px solid var(--border-light);
         padding: 0.75rem 1rem;
         transition: all 0.3s ease;
@@ -565,16 +515,16 @@ st.markdown("""
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus,
     .stTextArea > div > div > textarea:focus {
-        border-color: var(--neon-cyan);
-        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1), 0 0 16px rgba(0, 240, 255, 0.15);
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
     
-    /* 🎯 TABS - Neon Design */
+    /* Professional Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 0.5rem;
         background: var(--bg-card);
         padding: 0.5rem;
-        border-radius: 12px;
+        border-radius: 8px;
         border: 1px solid var(--border-light);
     }
     
@@ -587,20 +537,19 @@ st.markdown("""
     
     .stTabs [aria-selected="true"] {
         background: var(--primary-gradient);
-        color: #0a0e1a;
-        box-shadow: var(--shadow-neon-cyan);
+        color: white;
     }
     
     /* 💡 ALERTS & NOTIFICATIONS */
     .stAlert {
-        border-radius: 12px;
+        border-radius: 8px;
         border: 1px solid var(--border-light);
         box-shadow: var(--shadow-sm);
     }
     
-    /* 🎨 DATAFRAME - Dark Look */
+    /* Professional DataFrames */
     .stDataFrame {
-        border-radius: 12px;
+        border-radius: 8px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--border-light);
@@ -610,14 +559,14 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* 🔐 LOGIN PAGE - Dark Neon Design */
+    /* Professional Login Page - Light Theme */
     .login-container {
         background: var(--bg-card);
         padding: 3rem 2.5rem;
-        border-radius: 24px;
-        box-shadow: var(--shadow-xl), var(--shadow-neon-cyan);
-        border: 1px solid var(--border-medium);
-        animation: fadeInUp 0.6s ease-out, borderGlow 3s ease-in-out infinite;
+        border-radius: 16px;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border-light);
+        animation: fadeInUp 0.6s ease-out;
     }
     
     .login-header {
@@ -629,7 +578,6 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.3));
     }
     
     .login-subtitle {
@@ -640,29 +588,29 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* 👤 USER PROFILE CARD - Neon Glass */
+    /* Professional User Profile Card - Light Theme */
     .user-profile-card {
-        background: rgba(0, 240, 255, 0.06);
+        background: rgba(79, 70, 229, 0.08);
         backdrop-filter: blur(16px);
-        border-radius: 16px;
+        border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        border: 1px solid rgba(0, 240, 255, 0.15);
+        border: 1px solid rgba(79, 70, 229, 0.2);
         text-align: center;
-        transition: all 0.4s ease;
+        transition: all 0.3s ease;
     }
     
     .user-profile-card:hover {
-        background: rgba(0, 240, 255, 0.1);
+        background: rgba(79, 70, 229, 0.12);
         transform: translateY(-2px);
-        box-shadow: var(--shadow-neon-cyan);
-        border-color: rgba(0, 240, 255, 0.3);
+        box-shadow: var(--shadow-md);
+        border-color: rgba(79, 70, 229, 0.3);
     }
     
     .user-profile-icon {
         font-size: 3rem;
         margin-bottom: 1rem;
-        filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.5));
+        color: var(--primary-color);
     }
     
     .user-profile-name {
@@ -670,23 +618,22 @@ st.markdown("""
         font-weight: 700;
         color: var(--text-primary);
         margin-bottom: 0.5rem;
-        text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
     }
     
     .user-profile-role {
         font-size: 0.8rem;
-        color: var(--neon-cyan);
+        color: var(--primary-color);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        background: rgba(0, 240, 255, 0.1);
+        background: rgba(79, 70, 229, 0.1);
         padding: 0.375rem 0.75rem;
-        border-radius: 8px;
+        border-radius: 6px;
         display: inline-block;
-        border: 1px solid rgba(0, 240, 255, 0.2);
+        border: 1px solid rgba(79, 70, 229, 0.3);
     }
     
-    /* 📌 SUB-HEADER - Neon Section Headers */
+    /* Professional Section Headers */
     .sub-header {
         font-size: 1.5rem;
         font-weight: 700;
@@ -698,39 +645,38 @@ st.markdown("""
         border-image-slice: 1;
     }
     
-    /* 📱 SIDEBAR RADIO BUTTONS - Neon Hover */
+    /* Professional Sidebar Radio Buttons */
     [data-testid="stSidebar"] .stRadio > label {
-        background: rgba(0, 240, 255, 0.04);
+        background: rgba(255, 255, 255, 0.05);
         padding: 0.875rem 1.25rem;
-        border-radius: 12px;
+        border-radius: 8px;
         margin: 0.375rem 0;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 240, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         cursor: pointer;
         font-weight: 500;
         font-size: 0.95rem;
     }
     
     [data-testid="stSidebar"] .stRadio > label:hover {
-        background: rgba(0, 240, 255, 0.12);
-        transform: translateX(6px);
-        border-color: rgba(0, 240, 255, 0.25);
-        box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+        background: var(--sidebar-hover);
+        transform: translateX(4px);
+        border-color: rgba(255, 255, 255, 0.15);
     }
     
     [data-testid="stSidebar"] .stRadio > label[data-checked="true"] {
-        background: rgba(0, 240, 255, 0.15);
+        background: var(--sidebar-active);
         font-weight: 600;
-        border-color: rgba(0, 240, 255, 0.35);
-        box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+        border-color: rgba(79, 70, 229, 0.5);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
     }
     
-    /* 🎨 FORM INPUTS - Dark Neon */
+    /* Professional Form Inputs - Light Theme */
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select,
     .stTextArea > div > div > textarea {
-        border-radius: 12px;
+        border-radius: 8px;
         border: 2px solid var(--border-light);
         padding: 0.875rem 1.25rem;
         transition: all 0.3s ease;
@@ -743,34 +689,34 @@ st.markdown("""
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus,
     .stTextArea > div > div > textarea:focus {
-        border-color: var(--neon-cyan);
-        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1), 0 0 16px rgba(0, 240, 255, 0.15);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         outline: none;
     }
     
-    /* 🔘 BUTTONS - Neon Glow */
+    /* Professional Buttons */
     .stButton > button {
         background: var(--primary-gradient) !important;
-        color: #0a0e1a !important;
+        color: white !important;
         border: none !important;
-        border-radius: 12px !important;
+        border-radius: 8px !important;
         padding: 0.875rem 2rem !important;
         font-weight: 700 !important;
         font-size: 0.95rem !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: var(--shadow-neon-cyan) !important;
+        transition: all 0.3s ease !important;
+        box-shadow: var(--shadow-sm) !important;
         text-transform: none;
         letter-spacing: 0.02em;
     }
     
     .stButton > button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 60px rgba(0, 240, 255, 0.2) !important;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md) !important;
     }
     
     .stButton > button:active {
-        transform: translateY(-1px);
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.3) !important;
+        transform: translateY(0);
+        box-shadow: var(--shadow-sm) !important;
     }
     
     /* ✨ FADE-IN ANIMATION */
@@ -780,6 +726,32 @@ st.markdown("""
     
     /* 🌐 GRID / LAYOUT HELPERS */
     .stMarkdown, .stWrite {
+        color: var(--text-primary);
+    }
+    
+    /* Streamlit Native Element Overrides for Light Theme */
+    .stApp {
+        background: var(--bg-primary);
+    }
+    
+    [data-testid="stAppViewContainer"] {
+        background: var(--bg-primary);
+    }
+    
+    [data-testid="stHeader"] {
+        background: transparent;
+    }
+    
+    [data-testid="stToolbar"] {
+        background: transparent;
+    }
+    
+    /* Override Streamlit's default dark colors - targeted selectors */
+    .main .element-container {
+        color: var(--text-primary);
+    }
+    
+    .main .stMarkdown p, .main .stMarkdown span {
         color: var(--text-primary);
     }
     
@@ -869,8 +841,8 @@ def logout():
 
 # Login Page
 if not st.session_state.authenticated:
-    st.markdown('<div class="main-header">⚡ Store Opening AI</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Next-Gen Store Management Platform</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">📊 Store Opening AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Professional Store Management Platform</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     
