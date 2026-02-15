@@ -22,7 +22,7 @@ RISK_STATUS_MODERATE = 0
 # Configure page with professional theme
 st.set_page_config(
     page_title="Store Opening AI - Professional Dashboard",
-    page_icon="",
+    page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -467,7 +467,7 @@ st.markdown("""
         background: var(--danger-gradient);
     }
     
-    /*  ANIMATIONS */
+    /* ✨ ANIMATIONS */
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -538,7 +538,7 @@ st.markdown("""
         color: white;
     }
     
-    /*  ALERTS & NOTIFICATIONS */
+    /* 💡 ALERTS & NOTIFICATIONS */
     .stAlert {
         border-radius: 8px;
         border: 1px solid var(--border-light);
@@ -716,7 +716,7 @@ st.markdown("""
         box-shadow: var(--shadow-sm) !important;
     }
     
-    /*  FADE-IN ANIMATION */
+    /* ✨ FADE-IN ANIMATION */
     .fade-in {
         animation: fadeInUp 0.6s ease-out;
     }
@@ -905,16 +905,16 @@ if not st.session_state.authenticated:
                         result = api_request('/auth/register', method='POST', data=reg_data, auth_required=False, handle_session_expiry=False)
                         
                         if result and 'error' not in result:
-                            st.success(" Account created successfully! Please login with your credentials.")
+                            st.success("✅ Account created successfully! Please login with your credentials.")
                             st.session_state.show_register = False
                             st.rerun()
                         elif result and 'error' in result:
                             # Show specific error message from API
-                            st.error(f" Registration failed: {result['error']}")
+                            st.error(f"❌ Registration failed: {result['error']}")
                         else:
-                            st.error(" Registration failed. Please try again.")
+                            st.error("❌ Registration failed. Please try again.")
                     else:
-                        st.warning("️ Please fill in all required fields (Username, Email, and Password)")
+                        st.warning("⚠️ Please fill in all required fields (Username, Email, and Password)")
                 
                 if cancel_register:
                     st.session_state.show_register = False
@@ -977,7 +977,7 @@ else:
     
     # Main Content Area
     if page == "dashboard":
-        #  NEW MODERN DASHBOARD HEADER
+        # ✨ NEW MODERN DASHBOARD HEADER
         current_date = datetime.now().strftime("%B %d, %Y • %I:%M %p")
         st.markdown(f'''
             <div class="animate-fade-in">
@@ -995,7 +995,7 @@ else:
         if dashboard_data:
             summary = dashboard_data.get('summary', {})
             
-            #  MODERN METRIC CARDS WITH GLASSMORPHISM
+            # 💎 MODERN METRIC CARDS WITH GLASSMORPHISM
             col1, col2, col3, col4 = st.columns(4)
             
             total_stores = summary.get('total_stores', 0)
@@ -1057,7 +1057,7 @@ else:
             if ai_insights_data and ai_insights_data.get('insights'):
                 st.markdown('''
                     <div class="sub-header">
-                        <span style="margin-right: 0.5rem;"></span>
+                        <span style="margin-right: 0.5rem;">🎯</span>
                         Strategic Insights & Risk Assessment
                     </div>
                 ''', unsafe_allow_html=True)
@@ -1078,7 +1078,7 @@ else:
                         </div>
                     """, unsafe_allow_html=True)
             
-            #  MODERN STORES SECTION
+            # 🏪 MODERN STORES SECTION
             st.markdown('''
                 <div style="margin-top: 2rem;">
                     <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary); text-shadow: 0 0 12px rgba(0, 240, 255, 0.2);">
@@ -1107,7 +1107,7 @@ else:
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                                 <div style="flex: 1;">
                                     <div class="store-title">{store.get('name', 'Unknown Store')}</div>
-                                    <div class="store-location"> {store.get('location', 'Location not set')}</div>
+                                    <div class="store-location">📍 {store.get('location', 'Location not set')}</div>
                                 </div>
                                 <div class="status-badge-modern status-{store.get('status', 'planning')}">
                                     {store.get('status', 'planning').replace('_', ' ')}
@@ -1145,15 +1145,15 @@ else:
                 if len(stores) > 6:
                     col_btn = st.columns([1, 2, 1])[1]
                     with col_btn:
-                        st.button(f" View All {len(stores)} Stores", use_container_width=True)
+                        st.button(f"📋 View All {len(stores)} Stores", use_container_width=True)
             else:
                 st.info("No stores found. Create your first store to get started!")
             
-            #  MODERN CHART SECTION
+            # 📊 MODERN CHART SECTION
             st.markdown('''
                 <div style="margin-top: 3rem; margin-bottom: 1.5rem;">
                     <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary);">
-                         Performance Analytics
+                        📊 Performance Analytics
                     </h2>
                 </div>
             ''', unsafe_allow_html=True)
@@ -1225,9 +1225,9 @@ else:
     
     
     elif page == "ai_insights":
-        st.markdown('<div class="main-header fade-in">AI-Powered Insights</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">🤖 AI-Powered Insights</div>', unsafe_allow_html=True)
         
-        st.info(" This section provides intelligent insights powered by AI to help you make better decisions.")
+        st.info("💡 This section provides intelligent insights powered by AI to help you make better decisions.")
         
         # Store selector
         stores_data = api_request("/stores")
@@ -1269,10 +1269,10 @@ else:
                     tasks = prioritization_data['tasks']
                     for idx, task in enumerate(tasks[:5], 1):
                         priority_icon = {
-                            'critical': 'CRITICAL',
+                            'critical': '🔴',
                             'high': '🟠',
-                            'medium': 'MEDIUM',
-                            'low': 'LOW'
+                            'medium': '🟡',
+                            'low': '🟢'
                         }.get(task.get('priority'), '⚪')
                         
                         st.markdown(f"**{idx}. {priority_icon} {task.get('title')}**", unsafe_allow_html=True)
@@ -1290,16 +1290,16 @@ else:
             st.warning("Unable to load stores. Please check if the backend is running.")
     
     elif page == "stores":
-        st.markdown('<div class="main-header fade-in"> Store Management</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">🏪 Store Management</div>', unsafe_allow_html=True)
         
         # Tab layout for stores
-        tab1, tab2 = st.tabs([" All Stores", " Add New Store"])
+        tab1, tab2 = st.tabs(["📋 All Stores", "➕ Add New Store"])
         
         with tab1:
             stores_data = api_request("/stores")
             
             if stores_data and isinstance(stores_data, list):
-                st.success(f" Total Stores: {len(stores_data)}")
+                st.success(f"📊 Total Stores: {len(stores_data)}")
                 
                 # Filters
                 col1, col2 = st.columns([2, 1])
@@ -1319,7 +1319,7 @@ else:
                 
                 # Display stores in grid
                 for store in filtered_stores:
-                    with st.expander(f" {store['name']} - {store.get('location', 'N/A')}", expanded=False):
+                    with st.expander(f"🏪 {store['name']} - {store.get('location', 'N/A')}", expanded=False):
                         col1, col2, col3 = st.columns(3)
                         
                         with col1:
@@ -1340,7 +1340,7 @@ else:
                         col_a1, col_a2, col_a3 = st.columns(3)
                         
                         with col_a1:
-                            if st.button(f" Edit", key=f"edit_{store['id']}"):
+                            if st.button(f"📝 Edit", key=f"edit_{store['id']}"):
                                 st.session_state.edit_store_id = store['id']
                                 st.rerun()
                         
@@ -1359,7 +1359,7 @@ else:
                 # Edit Store Modal
                 if st.session_state.get('edit_store_id'):
                     st.markdown("---")
-                    st.markdown("###  Edit Store")
+                    st.markdown("### 📝 Edit Store")
                     
                     store_to_edit = next((s for s in stores_data if s['id'] == st.session_state.edit_store_id), None)
                     
@@ -1375,9 +1375,9 @@ else:
                             
                             col_edit1, col_edit2 = st.columns(2)
                             with col_edit1:
-                                save_edit = st.form_submit_button(" Save Changes", use_container_width=True)
+                                save_edit = st.form_submit_button("💾 Save Changes", use_container_width=True)
                             with col_edit2:
-                                cancel_edit = st.form_submit_button(" Cancel", use_container_width=True)
+                                cancel_edit = st.form_submit_button("❌ Cancel", use_container_width=True)
                             
                             if save_edit:
                                 update_data = {
@@ -1390,11 +1390,11 @@ else:
                                 }
                                 result = api_request(f"/stores/{st.session_state.edit_store_id}", method='PUT', data=update_data)
                                 if result and 'error' not in result:
-                                    st.success(" Store updated successfully!")
+                                    st.success("✅ Store updated successfully!")
                                     del st.session_state.edit_store_id
                                     st.rerun()
                                 else:
-                                    st.error(" Failed to update store")
+                                    st.error("❌ Failed to update store")
                             
                             if cancel_edit:
                                 del st.session_state.edit_store_id
@@ -1402,10 +1402,10 @@ else:
             elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
                 st.error(f"Error loading stores: {stores_data['error']}")
             else:
-                st.info(" No stores found. Add a new store to get started!")
+                st.info("📭 No stores found. Add a new store to get started!")
         
         with tab2:
-            st.markdown("###  Create New Store")
+            st.markdown("### ➕ Create New Store")
             
             with st.form("add_store_form"):
                 new_name = st.text_input("Store Name*", placeholder="e.g., Downtown Seattle Store")
@@ -1422,7 +1422,7 @@ else:
                 
                 new_description = st.text_area("Description", placeholder="Additional notes about the store...")
                 
-                submit_new = st.form_submit_button(" Create Store", use_container_width=True)
+                submit_new = st.form_submit_button("✅ Create Store", use_container_width=True)
                 
                 if submit_new:
                     if new_name and new_location and new_size:
@@ -1437,20 +1437,20 @@ else:
                         }
                         result = api_request("/stores", method='POST', data=store_data)
                         if result and 'error' not in result:
-                            st.success(" Store created successfully!")
+                            st.success("✅ Store created successfully!")
                             st.rerun()
                         else:
-                            st.error(f" Failed to create store: {result.get('error', 'Unknown error')}")
+                            st.error(f"❌ Failed to create store: {result.get('error', 'Unknown error')}")
                     else:
-                        st.warning("️ Please fill in all required fields (Name, Location, Size)")
+                        st.warning("⚠️ Please fill in all required fields (Name, Location, Size)")
     
     elif page == "team":
-        st.markdown('<div class="main-header fade-in"> Team Management</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">👥 Team Management</div>', unsafe_allow_html=True)
         
         team_data = api_request("/team")
         
         if team_data and isinstance(team_data, list):
-            st.success(f" Total Team Members: {len(team_data)}")
+            st.success(f"👥 Total Team Members: {len(team_data)}")
             
             # Filters
             col1, col2 = st.columns([2, 1])
@@ -1483,32 +1483,32 @@ else:
                     col1, col2, col3, col4 = st.columns([2, 2, 1, 1])
                     
                     with col1:
-                        st.markdown(f"###  {member.get('name', 'N/A')}")
+                        st.markdown(f"### 👤 {member.get('name', 'N/A')}")
                         st.write(f"**Role:** {member.get('role', 'N/A')}")
                     
                     with col2:
-                        st.write(f" {member.get('email', 'N/A')}")
-                        st.write(f" {member.get('phone', 'N/A')}")
+                        st.write(f"📧 {member.get('email', 'N/A')}")
+                        st.write(f"📱 {member.get('phone', 'N/A')}")
                     
                     with col3:
                         store_name = next((s['name'] for s in stores_data if s['id'] == member.get('store_id')), 'N/A') if stores_data and isinstance(stores_data, list) else 'N/A'
-                        st.write(f" **Store:**")
+                        st.write(f"🏪 **Store:**")
                         st.write(store_name)
                     
                     with col4:
-                        if st.button(" Edit", key=f"edit_member_{member['id']}"):
+                        if st.button("📝 Edit", key=f"edit_member_{member['id']}"):
                             st.session_state.edit_member_id = member['id']
                             st.rerun()
                         if st.button("🗑️ Delete", key=f"delete_member_{member['id']}"):
                             result = api_request(f"/team/{member['id']}", method='DELETE')
                             if result:
-                                st.success(" Member removed!")
+                                st.success("✅ Member removed!")
                                 st.rerun()
                     
                     st.markdown("---")
             
             # Add new team member
-            with st.expander(" Add New Team Member"):
+            with st.expander("➕ Add New Team Member"):
                 with st.form("add_member_form"):
                     new_member_name = st.text_input("Name*")
                     new_member_email = st.text_input("Email*")
@@ -1522,7 +1522,7 @@ else:
                     else:
                         new_member_store_id = None
                     
-                    submit_member = st.form_submit_button(" Add Member", use_container_width=True)
+                    submit_member = st.form_submit_button("✅ Add Member", use_container_width=True)
                     
                     if submit_member:
                         if new_member_name and new_member_email and new_member_phone:
@@ -1535,17 +1535,17 @@ else:
                             }
                             result = api_request("/team", method='POST', data=member_data)
                             if result and 'error' not in result:
-                                st.success(" Team member added!")
+                                st.success("✅ Team member added!")
                                 st.rerun()
                             else:
-                                st.error(f" Failed to add member: {result.get('error', 'Unknown error')}")
+                                st.error(f"❌ Failed to add member: {result.get('error', 'Unknown error')}")
                         else:
-                            st.warning("️ Please fill in required fields")
+                            st.warning("⚠️ Please fill in required fields")
         else:
-            st.warning("️ No team members found")
+            st.warning("⚠️ No team members found")
     
     elif page == "tasks":
-        st.markdown('<div class="main-header fade-in">Tasks & Checklists</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">☑ Tasks & Checklists</div>', unsafe_allow_html=True)
         
         # Store selector
         stores_data = api_request("/stores")
@@ -1564,7 +1564,7 @@ else:
             
             if checklists_data and isinstance(checklists_data, list):
                 for checklist in checklists_data:
-                    with st.expander(f" {checklist.get('name', 'Checklist')} - {checklist.get('category', 'General')}", expanded=True):
+                    with st.expander(f"📋 {checklist.get('name', 'Checklist')} - {checklist.get('category', 'General')}", expanded=True):
                         st.write(f"**Description:** {checklist.get('description', 'N/A')}")
                         
                         # Get tasks for this checklist
@@ -1581,14 +1581,14 @@ else:
                                     status_icon = {
                                         "pending": '⏳',
                                         "in_progress": '🔄',
-                                        "completed": '',
-                                        "blocked": ''
+                                        "completed": '✅',
+                                        "blocked": '🚫'
                                     }.get(task.get('status'), '⚪')
                                     priority_icon = {
-                                        "low": 'LOW',
-                                        "medium": 'MEDIUM',
+                                        "low": '🟢',
+                                        "medium": '🟡',
                                         "high": '🟠',
-                                        "critical": 'CRITICAL'
+                                        "critical": '🔴'
                                     }.get(task.get('priority'), '⚪')
                                     
                                     st.markdown(f"{status_icon} {priority_icon} **{task.get('title', 'Task')}**", unsafe_allow_html=True)
@@ -1603,11 +1603,11 @@ else:
                                         if days_until < 0:
                                             st.error(f"High Risk: Overdue by {abs(days_until)} days")
                                         elif days_until == 0:
-                                            st.warning("️ Due Today")
+                                            st.warning("⚠️ Due Today")
                                         elif days_until <= 3:
-                                            st.warning(f" Due in {days_until} days")
+                                            st.warning(f"📅 Due in {days_until} days")
                                         else:
-                                            st.info(f" Due: {task['due_date'][:10]}")
+                                            st.info(f"📅 Due: {task['due_date'][:10]}")
                                 
                                 with col_t3:
                                     new_status = st.selectbox("Status", ["pending", "in_progress", "completed", "blocked"], 
@@ -1619,7 +1619,7 @@ else:
                                                                    method='PUT', 
                                                                    data={'status': new_status})
                                         if update_result:
-                                            st.success(" Status updated!")
+                                            st.success("✅ Status updated!")
                                             st.rerun()
                                 
                                 st.markdown("---")
@@ -1629,7 +1629,7 @@ else:
                 st.info("No checklists found for this store")
                 
                 # Option to create checklist
-                with st.expander(" Create New Checklist"):
+                with st.expander("➕ Create New Checklist"):
                     with st.form("new_checklist_form"):
                         checklist_name = st.text_input("Checklist Name*")
                         checklist_category = st.selectbox("Category", ["Construction", "Permits", "Equipment", "Staffing", "Marketing", "Other"])
@@ -1647,26 +1647,26 @@ else:
                                 }
                                 result = api_request("/checklists", method='POST', data=checklist_data)
                                 if result and 'error' not in result:
-                                    st.success(" Checklist created!")
+                                    st.success("✅ Checklist created!")
                                     st.rerun()
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
             st.error(f"Error loading stores: {stores_data['error']}")
         else:
-            st.warning("️ No stores found")
+            st.warning("⚠️ No stores found")
     
     elif page == "whatsapp":
-        st.markdown('<div class="main-header fade-in"> WhatsApp Management</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">💬 WhatsApp Management</div>', unsafe_allow_html=True)
         
-        tab1, tab2 = st.tabs([" Groups", " Send Message"])
+        tab1, tab2 = st.tabs(["📱 Groups", "💬 Send Message"])
         
         with tab1:
             groups_data = api_request("/whatsapp/groups")
             
             if groups_data and isinstance(groups_data, list):
-                st.success(f" Total WhatsApp Groups: {len(groups_data)}")
+                st.success(f"📱 Total WhatsApp Groups: {len(groups_data)}")
                 
                 for group in groups_data:
-                    with st.expander(f" {group.get('name', 'Group')} - {group.get('store_name', 'N/A')}", expanded=False):
+                    with st.expander(f"💬 {group.get('name', 'Group')} - {group.get('store_name', 'N/A')}", expanded=False):
                         col1, col2, col3 = st.columns(3)
                         
                         with col1:
@@ -1675,10 +1675,10 @@ else:
                         
                         with col2:
                             st.write(f"**Created:** {group.get('created_at', 'N/A')[:10] if group.get('created_at') else 'N/A'}")
-                            st.write(f"**Active:** {' Yes' if group.get('is_active') else ' No'}")
+                            st.write(f"**Active:** {'✅ Yes' if group.get('is_active') else '❌ No'}")
                         
                         with col3:
-                            if st.button(f" Send Message", key=f"send_msg_{group['id']}"):
+                            if st.button(f"📤 Send Message", key=f"send_msg_{group['id']}"):
                                 st.session_state.selected_group_id = group['id']
                                 st.session_state.show_send_message = True
                                 st.rerun()
@@ -1688,14 +1688,14 @@ else:
                         if archive_data and archive_data.get('messages'):
                             st.markdown("**Recent Messages:**")
                             for msg in archive_data['messages'][:5]:
-                                st.caption(f" {msg.get('sent_at', 'N/A')[:16] if msg.get('sent_at') else 'N/A'}")
+                                st.caption(f"📅 {msg.get('sent_at', 'N/A')[:16] if msg.get('sent_at') else 'N/A'}")
                                 st.text(msg.get('message', 'N/A'))
                                 st.markdown("---")
             else:
                 st.info("No WhatsApp groups found")
             
             # Create new group
-            with st.expander(" Create New WhatsApp Group"):
+            with st.expander("➕ Create New WhatsApp Group"):
                 stores_data = api_request("/stores")
                 if stores_data and isinstance(stores_data, list):
                     with st.form("create_whatsapp_group"):
@@ -1715,17 +1715,17 @@ else:
                                 }
                                 result = api_request("/whatsapp/groups", method='POST', data=group_data)
                                 if result and 'error' not in result:
-                                    st.success(" WhatsApp group created!")
+                                    st.success("✅ WhatsApp group created!")
                                     st.rerun()
                                 else:
-                                    st.error(" Failed to create group")
+                                    st.error("❌ Failed to create group")
                 elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
                     st.error(f"Error loading stores: {stores_data['error']}")
                 else:
-                    st.warning("️ No stores found")
+                    st.warning("⚠️ No stores found")
         
         with tab2:
-            st.markdown("###  Send WhatsApp Message")
+            st.markdown("### 💬 Send WhatsApp Message")
             
             groups_data = api_request("/whatsapp/groups")
             if groups_data and isinstance(groups_data, list):
@@ -1737,27 +1737,27 @@ else:
                 if message_type == "Custom Message":
                     message_content = st.text_area("Message", height=150, placeholder="Type your message here...")
                     
-                    if st.button(" Send Message", use_container_width=True):
+                    if st.button("📤 Send Message", use_container_width=True):
                         if message_content:
                             group_id = group_options[selected_group]
                             result = api_request(f"/whatsapp/groups/{group_id}/send", 
                                                method='POST', 
                                                data={'message': message_content})
                             if result and 'error' not in result:
-                                st.success(" Message sent successfully!")
+                                st.success("✅ Message sent successfully!")
                             else:
-                                st.error(" Failed to send message")
+                                st.error("❌ Failed to send message")
                         else:
-                            st.warning("️ Please enter a message")
+                            st.warning("⚠️ Please enter a message")
                 
                 else:
                     st.info("Select a task to send automated follow-up")
                     # This would integrate with tasks
             else:
-                st.warning("️ No WhatsApp groups available")
+                st.warning("⚠️ No WhatsApp groups available")
     
     elif page == "analytics":
-        st.markdown('<div class="main-header fade-in"> Analytics Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">📈 Analytics Dashboard</div>', unsafe_allow_html=True)
         
         # Store selector
         stores_data = api_request("/stores")
@@ -1788,7 +1788,7 @@ else:
                     
                     # Progress by category
                     if progress_data.get('progress_by_category'):
-                        st.subheader(" Progress by Category")
+                        st.subheader("📊 Progress by Category")
                         
                         categories = progress_data['progress_by_category']
                         df_cat = pd.DataFrame([
@@ -1805,7 +1805,7 @@ else:
                     
                     # Task status distribution
                     if progress_data.get('task_status_distribution'):
-                        st.subheader(" Task Status Distribution")
+                        st.subheader("📈 Task Status Distribution")
                         
                         status_dist = progress_data['task_status_distribution']
                         df_status = pd.DataFrame(list(status_dist.items()), columns=['Status', 'Count'])
@@ -1817,7 +1817,7 @@ else:
                     
                     # Timeline
                     if progress_data.get('timeline'):
-                        st.subheader(" Progress Timeline")
+                        st.subheader("📅 Progress Timeline")
                         
                         timeline = progress_data['timeline']
                         df_timeline = pd.DataFrame([
@@ -1842,7 +1842,7 @@ else:
                     summary = dashboard_data.get('summary', {})
                     
                     # Overall metrics
-                    st.subheader("Overall Performance")
+                    st.subheader("🎯 Overall Performance")
                     col1, col2, col3, col4 = st.columns(4)
                     
                     with col1:
@@ -1860,7 +1860,7 @@ else:
                     # Store comparison
                     stores = dashboard_data.get('stores', [])
                     if stores:
-                        st.subheader(" Store Comparison")
+                        st.subheader("🏪 Store Comparison")
                         
                         df_stores = pd.DataFrame(stores)
                         
@@ -1878,12 +1878,12 @@ else:
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
             st.error(f"Error loading stores: {stores_data['error']}")
         else:
-            st.warning("️ No stores found")
+            st.warning("⚠️ No stores found")
     
     elif page == "voice":
-        st.markdown('<div class="main-header fade-in"> Voice Escalation System</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header fade-in">📞 Voice Escalation System</div>', unsafe_allow_html=True)
         
-        st.success("AI-powered voice calling for critical task escalations")
+        st.success("🎯 AI-powered voice calling for critical task escalations")
         
         st.markdown("### How It Works")
         st.write("""
@@ -1907,14 +1907,14 @@ else:
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
             st.error(f"Error loading stores: {stores_data['error']}")
         else:
-            st.warning("️ No stores found")
+            st.warning("⚠️ No stores found")
     
     # Footer
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("---")
     st.markdown("""
         <div style='text-align: center; color: var(--text-muted); font-size: 0.85rem;'>
-            <p><strong style="color: var(--neon-cyan);"> Store Opening AI Management System</strong> | Powered by Advanced AI & Voice Technology</p>
+            <p><strong style="color: var(--neon-cyan);">⚡ Store Opening AI Management System</strong> | Powered by Advanced AI & Voice Technology</p>
             <p style="color: var(--text-muted);">Secure • Intelligent • Efficient</p>
         </div>
     """, unsafe_allow_html=True)
