@@ -22,7 +22,7 @@ RISK_STATUS_MODERATE = 0
 # Configure page with professional theme
 st.set_page_config(
     page_title="Store Opening AI - Professional Dashboard",
-    page_icon="📊",
+    page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -34,8 +34,7 @@ API_BASE_URL = "http://localhost:5000/api"
 st.markdown("""
     <style>
     /* Professional Enterprise Design System */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
     
     :root {
         /* Professional Primary Colors */
@@ -100,9 +99,9 @@ st.markdown("""
         --primary-dark: #4338CA;
     }
     
-    /* ⚡ GLOBAL STYLES */
+    /* GLOBAL STYLES */
     * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        font-family: 'Roboto', 'Open Sans', 'Lato', 'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
@@ -193,7 +192,6 @@ st.markdown("""
         line-height: 1;
         margin: 1rem 0 0.5rem 0;
         letter-spacing: -0.02em;
-        font-family: 'JetBrains Mono', monospace;
     }
     
     .metric-label-modern {
@@ -590,47 +588,38 @@ st.markdown("""
     
     /* Professional User Profile Card - Light Theme */
     .user-profile-card {
-        background: rgba(79, 70, 229, 0.08);
+        background: rgba(79, 70, 229, 0.15);
         backdrop-filter: blur(16px);
         border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        border: 1px solid rgba(79, 70, 229, 0.2);
+        border: 1px solid rgba(79, 70, 229, 0.25);
         text-align: center;
         transition: all 0.3s ease;
     }
     
     .user-profile-card:hover {
-        background: rgba(79, 70, 229, 0.12);
+        background: rgba(79, 70, 229, 0.2);
         transform: translateY(-2px);
         box-shadow: var(--shadow-md);
-        border-color: rgba(79, 70, 229, 0.3);
-    }
-    
-    .user-profile-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        color: var(--primary-color);
+        border-color: rgba(79, 70, 229, 0.35);
     }
     
     .user-profile-name {
         font-size: 1.125rem;
         font-weight: 700;
-        color: var(--text-primary);
+        color: white;
         margin-bottom: 0.5rem;
     }
     
     .user-profile-role {
-        font-size: 0.8rem;
-        color: var(--primary-color);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        background: rgba(79, 70, 229, 0.1);
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8);
         padding: 0.375rem 0.75rem;
+        background: rgba(79, 70, 229, 0.3);
         border-radius: 6px;
         display: inline-block;
-        border: 1px solid rgba(79, 70, 229, 0.3);
     }
     
     /* Professional Section Headers */
@@ -657,12 +646,14 @@ st.markdown("""
         cursor: pointer;
         font-weight: 500;
         font-size: 0.95rem;
+        color: white !important;
     }
     
     [data-testid="stSidebar"] .stRadio > label:hover {
         background: var(--sidebar-hover);
         transform: translateX(4px);
         border-color: rgba(255, 255, 255, 0.15);
+        color: white !important;
     }
     
     [data-testid="stSidebar"] .stRadio > label[data-checked="true"] {
@@ -670,6 +661,12 @@ st.markdown("""
         font-weight: 600;
         border-color: rgba(79, 70, 229, 0.5);
         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        color: white !important;
+    }
+    
+    /* Ensure radio button text is always visible */
+    [data-testid="stSidebar"] .stRadio p {
+        color: white !important;
     }
     
     /* Professional Form Inputs - Light Theme */
@@ -817,7 +814,7 @@ def api_request(endpoint, method='GET', data=None, auth_required=True, handle_se
     except Exception as e:
         # Log the actual error for debugging
         print(f"API Request Error: {str(e)}")
-        st.error(f"⚠️ An unexpected error occurred. Please try again.")
+        st.error(f"An unexpected error occurred. Please try again.")
         return None
 
 def login(username, password):
@@ -841,7 +838,7 @@ def logout():
 
 # Login Page
 if not st.session_state.authenticated:
-    st.markdown('<div class="main-header">📊 Store Opening AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">Store Opening AI</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Professional Store Management Platform</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -866,12 +863,12 @@ if not st.session_state.authenticated:
             if login_button:
                 if username and password:
                     if login(username, password):
-                        st.success("✅ Login successful! Welcome back.")
+                        st.success("Login successful! Welcome back.")
                         st.rerun()
                     else:
                         st.error("🔐 Invalid username or password. Please try again.")
                 else:
-                    st.warning("⚠️ Please enter both username and password")
+                    st.warning("Please enter both username and password")
             
             if register_button:
                 st.session_state.show_register = True
@@ -936,7 +933,6 @@ else:
         # User Profile Card
         st.markdown(f"""
             <div class="user-profile-card fade-in">
-                <div class="user-profile-icon">👤</div>
                 <div class="user-profile-name">
                     {st.session_state.user.get('full_name', st.session_state.user.get('username'))}
                 </div>
@@ -950,14 +946,14 @@ else:
         st.markdown("### Navigation")
         
         pages = {
-            "🏠 Dashboard": "dashboard",
-            "🏪 Stores": "stores",
-            "👥 Team Members": "team",
-            "☑ Tasks & Checklists": "tasks",
-            "💬 WhatsApp": "whatsapp",
-            "📊 Analytics": "analytics",
-            "🤖 AI Insights": "ai_insights",
-            "📞 Voice Escalations": "voice"
+            "Dashboard": "dashboard",
+            "Stores": "stores",
+            "Team Members": "team",
+            "Tasks & Checklists": "tasks",
+            "WhatsApp": "whatsapp",
+            "Analytics": "analytics",
+            "AI Insights": "ai_insights",
+            "Voice Escalations": "voice"
         }
         
         selected_page = st.radio("", list(pages.keys()))
@@ -965,7 +961,7 @@ else:
         
         st.markdown("---")
         
-        if st.button("🚪 Logout", use_container_width=True):
+        if st.button("Logout", use_container_width=True):
             logout()
         
         st.markdown("---")
@@ -973,7 +969,7 @@ else:
         # Footer
         st.markdown("""
             <div style='color: var(--text-secondary); font-size: 0.75rem; text-align: center;'>
-                <p style='margin: 5px 0;'><strong style="color: var(--neon-cyan);">⚡ Store Opening AI</strong></p>
+                <p style='margin: 5px 0;'><strong>Store Opening AI</strong></p>
                 <p style='margin: 5px 0;'>Version 2.0.0</p>
                 <p style='margin: 5px 0;'>© 2024</p>
             </div>
@@ -986,9 +982,9 @@ else:
         st.markdown(f'''
             <div class="animate-fade-in">
                 <div class="hero-banner">
-                    <div class="hero-title">⚡ Store Opening AI Dashboard</div>
+                    <div class="hero-title">Store Opening AI Dashboard</div>
                     <div class="hero-subtitle">Welcome back! Here's what's happening with your stores today.</div>
-                    <div style="margin-top: 1rem; opacity: 0.7; font-size: 0.875rem; color: var(--neon-cyan); font-family: JetBrains Mono, monospace; letter-spacing: 0.05em;">📅 {current_date}</div>
+                    <div style="margin-top: 1rem; opacity: 0.7; font-size: 0.875rem;">Current Date: {current_date}</div>
                 </div>
             </div>
         ''', unsafe_allow_html=True)
@@ -1011,11 +1007,10 @@ else:
             with col1:
                 st.markdown(f"""
                     <div class="metric-card-modern animate-fade-in">
-                        <div class="metric-icon-gradient">🏪</div>
                         <div class="metric-label-modern">Total Stores</div>
                         <div class="metric-value-large">{total_stores}</div>
                         <div class="metric-change metric-change-positive">
-                            ↗ +2 this month
+                            +2 this month
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
@@ -1023,7 +1018,6 @@ else:
             with col2:
                 st.markdown(f"""
                     <div class="metric-card-modern animate-fade-in" style="animation-delay: 0.1s;">
-                        <div class="metric-icon-gradient" style="background: var(--success-gradient);">✅</div>
                         <div class="metric-label-modern">Completion Rate</div>
                         <div class="metric-value-large">{completion_pct:.0f}%</div>
                         <div class="progress-bar-container">
@@ -1035,7 +1029,6 @@ else:
             with col3:
                 st.markdown(f"""
                     <div class="metric-card-modern animate-fade-in" style="animation-delay: 0.2s;">
-                        <div class="metric-icon-gradient" style="background: var(--warning-gradient);">📋</div>
                         <div class="metric-label-modern">Active Tasks</div>
                         <div class="metric-value-large">{total_tasks}</div>
                         <div class="metric-change metric-change-positive">
@@ -1048,11 +1041,10 @@ else:
                 overdue_status = "metric-change-negative" if overdue_tasks > 5 else "metric-change-positive"
                 st.markdown(f"""
                     <div class="metric-card-modern animate-fade-in" style="animation-delay: 0.3s;">
-                        <div class="metric-icon-gradient" style="background: var(--danger-gradient);">⚠️</div>
                         <div class="metric-label-modern">Overdue Tasks</div>
                         <div class="metric-value-large">{overdue_tasks}</div>
                         <div class="metric-change {overdue_status}">
-                            {("✓ Under control" if overdue_tasks <= 5 else "⚠ Needs attention")}
+                            {("Under control" if overdue_tasks <= 5 else "Needs attention")}
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
@@ -1080,9 +1072,9 @@ else:
                 if risk_counts['high'] > 0 or risk_counts['medium'] > 0:
                     st.markdown(f"""
                         <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                            {f'<div style="background: #fee2e2; color: #991b1b; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🔴 {risk_counts["high"]} High Risk</div>' if risk_counts['high'] > 0 else ''}
-                            {f'<div style="background: #fef3c7; color: #92400e; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🟡 {risk_counts["medium"]} Medium Risk</div>' if risk_counts['medium'] > 0 else ''}
-                            {f'<div style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">🟢 {risk_counts["low"]} Low Risk</div>' if risk_counts['low'] > 0 else ''}
+                            {f'<div style="background: #fee2e2; color: #991b1b; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">High Risk: {risk_counts["high"]} High Risk</div>' if risk_counts['high'] > 0 else ''}
+                            {f'<div style="background: #fef3c7; color: #92400e; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">Medium Risk: {risk_counts["medium"]} Medium Risk</div>' if risk_counts['medium'] > 0 else ''}
+                            {f'<div style="background: #d1fae5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">Low Risk: {risk_counts["low"]} Low Risk</div>' if risk_counts['low'] > 0 else ''}
                         </div>
                     """, unsafe_allow_html=True)
             
@@ -1090,7 +1082,7 @@ else:
             st.markdown('''
                 <div style="margin-top: 2rem;">
                     <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary); text-shadow: 0 0 12px rgba(0, 240, 255, 0.2);">
-                        🏪 Active Store Overview
+                        Active Store Overview
                     </h2>
                 </div>
             ''', unsafe_allow_html=True)
@@ -1155,7 +1147,7 @@ else:
                     with col_btn:
                         st.button(f"📋 View All {len(stores)} Stores", use_container_width=True)
             else:
-                st.info("📊 No stores found. Create your first store to get started!")
+                st.info("No stores found. Create your first store to get started!")
             
             # 📊 MODERN CHART SECTION
             st.markdown('''
@@ -1244,7 +1236,7 @@ else:
             selected_store_name = st.selectbox("Select Store for Analysis", list(store_options.keys()))
             store_id = store_options[selected_store_name]
             
-            tabs = st.tabs(["📈 Completion Prediction", "🎯 Task Prioritization", "⚠️ Risk Assessment"])
+            tabs = st.tabs(["Completion Prediction", "Task Prioritization", "Risk Assessment"])
             
             with tabs[0]:
                 st.subheader("Completion Date Prediction")
@@ -1259,7 +1251,7 @@ else:
                         st.metric("Predicted Completion", prediction_data.get('predicted_completion', 'N/A')[:10] if prediction_data.get('predicted_completion') else 'N/A')
                     with col3:
                         on_track = prediction_data.get('on_track', False)
-                        st.metric("Status", "✅ On Track" if on_track else "⚠️ At Risk")
+                        st.metric("Status", "On Track" if on_track else "At Risk")
                     
                     metrics = prediction_data.get('metrics', {})
                     st.write("**Performance Metrics:**")
@@ -1272,7 +1264,7 @@ else:
                 prioritization_data = api_request(f"/ai/store/{store_id}/task-prioritization")
                 
                 if prioritization_data and prioritization_data.get('tasks'):
-                    st.success(f"🎯 AI Analysis Complete - {len(prioritization_data['tasks'])} tasks analyzed")
+                    st.success(f"AI Analysis Complete - {len(prioritization_data['tasks'])} tasks analyzed")
                     
                     tasks = prioritization_data['tasks']
                     for idx, task in enumerate(tasks[:5], 1):
@@ -1295,7 +1287,7 @@ else:
         elif stores_data and isinstance(stores_data, dict) and 'error' in stores_data:
             st.error(f"⚠️ Error loading stores: {stores_data['error']}")
         else:
-            st.warning("⚠️ Unable to load stores. Please check if the backend is running.")
+            st.warning("Unable to load stores. Please check if the backend is running.")
     
     elif page == "stores":
         st.markdown('<div class="main-header fade-in">🏪 Store Management</div>', unsafe_allow_html=True)
@@ -1353,7 +1345,7 @@ else:
                                 st.rerun()
                         
                         with col_a2:
-                            if st.button(f"📊 View Details", key=f"view_{store['id']}"):
+                            if st.button(f"View Details", key=f"view_{store['id']}"):
                                 st.session_state.view_store_id = store['id']
                                 st.rerun()
                         
@@ -1361,7 +1353,7 @@ else:
                             if st.button(f"🗑️ Delete", key=f"delete_{store['id']}", type="secondary"):
                                 result = api_request(f"/stores/{store['id']}", method='DELETE')
                                 if result:
-                                    st.success("✅ Store deleted successfully!")
+                                    st.success("Store deleted successfully!")
                                     st.rerun()
                 
                 # Edit Store Modal
@@ -1609,7 +1601,7 @@ else:
                                         days_until = (due_date - datetime.now()).days
                                         
                                         if days_until < 0:
-                                            st.error(f"🔴 Overdue by {abs(days_until)} days")
+                                            st.error(f"High Risk: Overdue by {abs(days_until)} days")
                                         elif days_until == 0:
                                             st.warning("⚠️ Due Today")
                                         elif days_until <= 3:
