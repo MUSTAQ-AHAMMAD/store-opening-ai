@@ -23,16 +23,36 @@ class EmailService:
         self.smtp_user = os.getenv('SMTP_USER')
         self.smtp_password = os.getenv('SMTP_PASSWORD')
         self.from_email = os.getenv('FROM_EMAIL', self.smtp_user)
-        self.enabled = bool(self.smtp_user and self.smtp_password)
+        self.test_mode = os.getenv('TEST_MODE', 'false').lower() == 'true'
+        self.enabled = bool(self.smtp_user and self.smtp_password) and not self.test_mode
         
-        if not self.enabled:
+        if self.test_mode:
+            logger.info("Email service in TEST MODE - emails will be logged only")
+        elif not self.enabled:
             logger.warning("Email service not configured. Email notifications will be simulated.")
     
     def send_email(self, to_emails: List[str], subject: str, body: str, html_body: Optional[str] = None) -> Dict:
         """Send an email"""
         if not self.enabled:
-            logger.info(f"[SIMULATED] Email to {to_emails}: {subject}")
-            return {'success': True, 'simulated': True}
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            logger.info(f"[TEST MODE] Email to {to_emails} at {timestamp}: {subject}")
+            
+            print(f"\n{'='*60}")
+            print(f"📧 Email (Test Mode)")
+            print(f"{'='*60}")
+            print(f"To: {', '.join(to_emails)}")
+            print(f"From: {self.from_email}")
+            print(f"Time: {timestamp}")
+            print(f"Subject: {subject}")
+            print(f"\nBody:\n{body[:500]}..." if len(body) > 500 else f"\nBody:\n{body}")
+            print(f"{'='*60}\n")
+            
+            return {
+                'success': True,
+                'simulated': True,
+                'test_mode': self.test_mode,
+                'timestamp': timestamp
+            }
         
         try:
             msg = MIMEMultipart('alternative')

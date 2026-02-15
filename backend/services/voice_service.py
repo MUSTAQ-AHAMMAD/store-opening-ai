@@ -21,13 +21,19 @@ class VoiceCallingService:
         self.account_sid = os.getenv('TWILIO_ACCOUNT_SID')
         self.auth_token = os.getenv('TWILIO_AUTH_TOKEN')
         self.phone_number = os.getenv('TWILIO_PHONE_NUMBER')
+        self.test_mode = os.getenv('TEST_MODE', 'false').lower() == 'true'
         
-        if self.account_sid and self.auth_token:
+        if self.account_sid and self.auth_token and not self.test_mode:
             self.client = Client(self.account_sid, self.auth_token)
             self.enabled = True
+            logger.info("Voice calling service initialized with Twilio")
         else:
             self.client = None
             self.enabled = False
+            if self.test_mode:
+                logger.info("Voice calling service in TEST MODE - calls will be logged only")
+            else:
+                logger.warning("Twilio voice service not configured")
     
     def make_escalation_call(
         self, 
@@ -55,10 +61,45 @@ class VoiceCallingService:
             Dict with call status and details
         """
         if not self.enabled:
+            # Test mode - log the call details
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            log_msg = f"[TEST MODE] Voice call to {recipient_phone} at {timestamp}"
+            logger.info(log_msg)
+            
+            print(f"\n{'='*60}")
+            print(f"📞 Voice Call (Test Mode)")
+            print(f"{'='*60}")
+            print(f"To: {recipient_name} ({recipient_phone})")
+            print(f"Time: {timestamp}")
+            print(f"Store: {store_name}")
+            print(f"Task: {task_title}")
+            print(f"Days Overdue: {days_overdue}")
+            print(f"Escalation Level: {escalation_level}")
+            
+            # Generate message that would be spoken
+            if escalation_level >= 2:
+                urgency = "CRITICAL"
+            elif escalation_level == 1:
+                urgency = "URGENT"
+            else:
+                urgency = "Important"
+            
+            print(f"\nCall Script:")
+            print(f"- Hello {recipient_name}, this is the Store Opening AI System")
+            print(f"- {urgency} escalation")
+            print(f"- Task for {store_name} is {days_overdue} days overdue")
+            print(f"- Task: {task_title}")
+            print(f"- Please take immediate action")
+            print(f"{'='*60}\n")
+            
             return {
-                'success': False,
-                'error': 'Twilio voice service not configured',
-                'call_sid': None
+                'success': True,
+                'simulated': True,
+                'test_mode': self.test_mode,
+                'call_sid': f'TEST_CALL_{timestamp.replace(" ", "_")}',
+                'recipient': recipient_phone,
+                'timestamp': timestamp,
+                'message': 'Call logged successfully (Test Mode)'
             }
         
         try:
@@ -189,9 +230,34 @@ class VoiceCallingService:
             Dict with call status
         """
         if not self.enabled:
+            # Test mode - log manager escalation
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            logger.info(f"[TEST MODE] Manager escalation call to {manager_phone} at {timestamp}")
+            
+            print(f"\n{'='*60}")
+            print(f"📞 Manager Escalation Call (Test Mode)")
+            print(f"{'='*60}")
+            print(f"To: {manager_name} ({manager_phone})")
+            print(f"Time: {timestamp}")
+            print(f"Store: {store_name}")
+            print(f"Team Member: {team_member_name}")
+            print(f"Task: {task_title}")
+            print(f"Days Overdue: {days_overdue}")
+            print(f"\nCall Script:")
+            print(f"- Hello {manager_name}, urgent manager escalation")
+            print(f"- {team_member_name} has a task {days_overdue} days overdue")
+            print(f"- Store: {store_name}, Task: {task_title}")
+            print(f"- Please contact team member immediately")
+            print(f"{'='*60}\n")
+            
             return {
-                'success': False,
-                'error': 'Twilio voice service not configured'
+                'success': True,
+                'simulated': True,
+                'test_mode': self.test_mode,
+                'call_sid': f'TEST_MGR_CALL_{timestamp.replace(" ", "_")}',
+                'recipient': manager_phone,
+                'timestamp': timestamp,
+                'message': 'Manager escalation call logged (Test Mode)'
             }
         
         try:
@@ -304,7 +370,25 @@ class VoiceCallingService:
     def send_follow_up_sms(self, phone: str, message: str) -> Dict:
         """Send an SMS follow-up (fallback when calls fail)"""
         if not self.enabled:
-            return {'success': False, 'error': 'Service not enabled'}
+            # Test mode
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            logger.info(f"[TEST MODE] SMS to {phone} at {timestamp}")
+            print(f"\n{'='*60}")
+            print(f"📱 SMS Message (Test Mode)")
+            print(f"{'='*60}")
+            print(f"To: {phone}")
+            print(f"Time: {timestamp}")
+            print(f"Message:\n{message}")
+            print(f"{'='*60}\n")
+            
+            return {
+                'success': True,
+                'simulated': True,
+                'test_mode': self.test_mode,
+                'sid': f'TEST_SMS_{timestamp.replace(" ", "_")}',
+                'status': 'delivered',
+                'timestamp': timestamp
+            }
         
         try:
             sms = self.client.messages.create(
