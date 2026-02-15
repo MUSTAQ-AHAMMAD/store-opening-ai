@@ -12,10 +12,6 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-# Set test mode to avoid sending real messages
-os.environ['TEST_MODE'] = 'true'
-os.environ['ENABLE_SCHEDULER'] = 'false'  # Disable scheduler during tests
-
 from flask import Flask
 from backend.database import db
 from backend.models.models import (
@@ -29,6 +25,13 @@ from backend.services.email_service import EmailService
 from backend.services.voice_service import get_voice_service
 from backend.services.ai_service import get_ai_service
 from backend.services.ml_learning_service import MLLearningService
+
+
+@pytest.fixture(autouse=True)
+def set_test_environment(monkeypatch):
+    """Set test environment variables for all tests"""
+    monkeypatch.setenv('TEST_MODE', 'true')
+    monkeypatch.setenv('ENABLE_SCHEDULER', 'false')
 
 
 @pytest.fixture
@@ -477,8 +480,8 @@ class TestNotificationAutomation:
         # Should work in test mode
         assert voice_service is not None
     
-    def test_notification_in_test_mode(self, app, sample_store, sample_team_member):
-        """Test that notifications work in test mode without sending"""
+    def test_notification_mock_behavior(self, app, sample_store, sample_team_member):
+        """Test that notifications return mock success in test mode"""
         with app.app_context():
             whatsapp_service = WhatsAppService()
             member = TeamMember.query.get(sample_team_member)

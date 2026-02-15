@@ -152,9 +152,9 @@ FROM_EMAIL=your_email@gmail.com
 
 2. For Gmail, create App Password:
    - Go to Google Account > Security
-   - Enable 2-factor authentication
-   - Generate App Password
-   - Use this as SMTP_PASSWORD
+   - **First, enable 2-factor authentication** (required before you can create app passwords)
+   - Then, go to "2-Step Verification" section and generate App Password
+   - Use this generated app password as SMTP_PASSWORD (not your regular Gmail password)
 
 3. Test email manually:
 ```bash
