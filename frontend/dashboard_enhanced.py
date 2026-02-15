@@ -729,6 +729,33 @@ st.markdown("""
         color: var(--text-primary);
     }
     
+    /* Streamlit Native Element Overrides for Light Theme */
+    .stApp {
+        background: var(--bg-primary);
+    }
+    
+    [data-testid="stAppViewContainer"] {
+        background: var(--bg-primary);
+    }
+    
+    [data-testid="stHeader"] {
+        background: transparent;
+    }
+    
+    [data-testid="stToolbar"] {
+        background: transparent;
+    }
+    
+    /* Override Streamlit's default dark colors */
+    .element-container, .stMarkdown, p, span, div {
+        color: var(--text-primary) !important;
+    }
+    
+    /* Ensure headers are visible */
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-primary) !important;
+    }
+    
     </style>
 """, unsafe_allow_html=True)
 
