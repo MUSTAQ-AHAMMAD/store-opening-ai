@@ -26,10 +26,10 @@ API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:5000/api")
 # Enhanced Custom CSS
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;700&display=swap');
     
     * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
     /* Sidebar styling */
@@ -41,6 +41,26 @@ st.markdown("""
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
         color: white;
         font-weight: 500;
+    }
+    
+    /* Sidebar button styling - ensure text is visible */
+    [data-testid="stSidebar"] button {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        font-weight: 500 !important;
+        transition: all 0.2s !important;
+    }
+    
+    [data-testid="stSidebar"] button:hover {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        transform: translateX(3px);
+    }
+    
+    [data-testid="stSidebar"] button p {
+        color: white !important;
+        font-size: 0.95rem !important;
     }
     
     /* Main header */
@@ -285,7 +305,7 @@ with st.sidebar:
     st.markdown("""
         <div style="text-align: center; padding: 1rem 0 2rem 0;">
             <h1 style="color: white; font-size: 1.75rem; font-weight: 700; margin: 0;">
-                🏢 Store Opening AI
+                Store Opening AI
             </h1>
             <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin: 0.5rem 0 0 0;">
                 Management System
@@ -295,21 +315,23 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Navigation menu with icons
+    # Navigation menu without icons
     pages = [
-        {"icon": "🏠", "name": "Dashboard", "key": "dashboard"},
-        {"icon": "🏪", "name": "Stores", "key": "stores"},
-        {"icon": "👥", "name": "Team Members", "key": "team"},
-        {"icon": "✅", "name": "Tasks & Checklists", "key": "tasks"},
-        {"icon": "💬", "name": "Communications", "key": "whatsapp"},
-        {"icon": "📊", "name": "Analytics & Reports", "key": "analytics"},
+        {"name": "Dashboard", "key": "dashboard"},
+        {"name": "Stores", "key": "stores"},
+        {"name": "Workflow Stages", "key": "workflow"},
+        {"name": "Team Members", "key": "team"},
+        {"name": "Tasks & Checklists", "key": "tasks"},
+        {"name": "Communications", "key": "whatsapp"},
+        {"name": "Escalations", "key": "escalations"},
+        {"name": "Analytics & Reports", "key": "analytics"},
     ]
     
     st.markdown('<p style="color: rgba(255,255,255,0.9); font-weight: 600; margin-bottom: 0.5rem;">NAVIGATION</p>', unsafe_allow_html=True)
     
     for page_info in pages:
         if st.button(
-            f"{page_info['icon']}  {page_info['name']}", 
+            page_info['name'], 
             key=f"nav_{page_info['key']}",
             use_container_width=True
         ):
@@ -323,7 +345,7 @@ with st.sidebar:
         st.markdown("""
             <div style="background: rgba(251, 191, 36, 0.2); padding: 0.75rem; border-radius: 0.5rem; border-left: 4px solid #fbbf24;">
                 <p style="color: #fbbf24; font-weight: 600; margin: 0; font-size: 0.85rem;">
-                    🧪 TEST MODE ACTIVE
+                    TEST MODE ACTIVE
                 </p>
                 <p style="color: rgba(255,255,255,0.8); font-size: 0.75rem; margin: 0.25rem 0 0 0;">
                     Messages are logged, not sent
@@ -357,7 +379,7 @@ if check_test_mode():
 
 # Main content based on selected page
 if page == "dashboard":
-    st.markdown('<div class="page-title">🏠 Dashboard Overview</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Dashboard Overview</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Welcome to your Store Opening Management System</div>', unsafe_allow_html=True)
     
     # Fetch dashboard data
@@ -373,36 +395,36 @@ if page == "dashboard":
         
         with col1:
             st.metric(
-                label="📦 Total Stores",
+                label="Total Stores",
                 value=summary.get('total_stores', 0),
                 delta=None
             )
             st.metric(
-                label="🚀 Active Stores",
+                label="Active Stores",
                 value=summary.get('active_stores', 0),
                 delta=None
             )
         
         with col2:
             st.metric(
-                label="📝 Total Tasks",
+                label="Total Tasks",
                 value=summary.get('total_tasks', 0),
                 delta=None
             )
             st.metric(
-                label="✅ Completed Tasks",
+                label="Completed Tasks",
                 value=summary.get('completed_tasks', 0),
                 delta=f"{summary.get('completed_tasks', 0)} completed"
             )
         
         with col3:
             st.metric(
-                label="⏳ Pending Tasks",
+                label="Pending Tasks",
                 value=summary.get('pending_tasks', 0),
                 delta=None
             )
             st.metric(
-                label="⚠️ Overdue Tasks",
+                label="Overdue Tasks",
                 value=summary.get('overdue_tasks', 0),
                 delta=f"{summary.get('overdue_tasks', 0)} overdue",
                 delta_color="inverse"
@@ -410,12 +432,12 @@ if page == "dashboard":
         
         with col4:
             st.metric(
-                label="🔴 High Priority",
+                label="High Priority",
                 value=summary.get('high_priority_tasks', 0),
                 delta=None
             )
             st.metric(
-                label="🚨 Critical Priority",
+                label="Critical Priority",
                 value=summary.get('critical_priority_tasks', 0),
                 delta=f"{summary.get('critical_priority_tasks', 0)} critical",
                 delta_color="inverse"
@@ -424,7 +446,7 @@ if page == "dashboard":
         st.markdown("---")
         
         # Upcoming openings
-        st.markdown("### 📅 Upcoming Store Openings (Next 30 Days)")
+        st.markdown("### Upcoming Store Openings (Next 30 Days)")
         upcoming = dashboard_data.get('upcoming_openings', [])
         
         if upcoming:
@@ -485,7 +507,7 @@ if page == "dashboard":
         st.warning("⚠️ Unable to load dashboard data. Please ensure the API server is running.")
 
 elif page == "stores":
-    st.markdown('<div class="page-title">🏪 Store Management</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Store Management</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Manage your store openings and track progress</div>', unsafe_allow_html=True)
     
     # Add new store button
@@ -569,8 +591,402 @@ elif page == "stores":
     else:
         st.info("ℹ️ No stores found. Create your first store to get started!")
 
+elif page == "workflow":
+    st.markdown('<div class="page-title">Workflow Stages</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Track the 7-stage store opening workflow process</div>', unsafe_allow_html=True)
+    
+    # Store selector
+    stores = get_api_data("/stores")
+    if stores:
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            store_options = {s['name']: s['id'] for s in stores}
+            selected_store_name = st.selectbox("🔍 Select Store", list(store_options.keys()))
+        
+        if selected_store_name:
+            store_id = store_options[selected_store_name]
+            
+            # Fetch workflow stages for the selected store
+            with st.spinner("Loading workflow stages..."):
+                workflow_data = get_api_data(f"/workflow/store/{store_id}/stages")
+            
+            if workflow_data:
+                store = workflow_data.get('store', {})
+                stages = workflow_data.get('stages', [])
+                
+                # Store information
+                st.markdown("### 🏪 Store Information")
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.write(f"**Name:** {store.get('name', 'N/A')}")
+                with col2:
+                    st.write(f"**Location:** {store.get('location', 'N/A')}")
+                with col3:
+                    opening_date_str = store.get('opening_date', '')
+                    if opening_date_str:
+                        try:
+                            opening_date = datetime.fromisoformat(opening_date_str.replace('Z', '+00:00'))
+                            st.write(f"**Opening Date:** {opening_date.strftime('%Y-%m-%d')}")
+                        except (ValueError, AttributeError):
+                            st.write(f"**Opening Date:** {opening_date_str}")
+                    else:
+                        st.write(f"**Opening Date:** N/A")
+                with col4:
+                    st.write(f"**Status:** {store.get('status', 'N/A').upper()}")
+                
+                st.markdown("---")
+                
+                # The 7-Stage Workflow Process
+                st.markdown("### 📋 Workflow Process Stages")
+                
+                stage_descriptions = {
+                    1: "Sales team shares nearby store/warehouse details with contact person info",
+                    2: "IT team sends materials (POS, Cash Drawer, Printer, etc.) to warehouse",
+                    3: "Warehouse team confirms receipt of materials",
+                    4: "Warehouse ships materials to store; Store team confirms receipt",
+                    5: "Installation begins; Team provides TeamViewer ID for remote support",
+                    6: "Final checks and verification before opening",
+                    7: "Store opening completed successfully"
+                }
+                
+                # Display each stage
+                for stage_num in range(1, 8):
+                    stage = next((s for s in stages if s['stage_number'] == stage_num), None)
+                    
+                    with st.container():
+                        col1, col2, col3 = st.columns([1, 4, 2])
+                        
+                        with col1:
+                            # Stage number badge
+                            if stage:
+                                status_color = "#10b981" if stage['status'] == 'completed' else "#fbbf24" if stage['status'] == 'in_progress' else "#64748b"
+                                st.markdown(f"""
+                                    <div style="background: {status_color}; color: white; padding: 1rem; border-radius: 50%; 
+                                    width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; 
+                                    font-weight: 700; font-size: 1.5rem; margin: auto;">
+                                        {stage_num}
+                                    </div>
+                                """, unsafe_allow_html=True)
+                            else:
+                                st.markdown(f"""
+                                    <div style="background: #e5e7eb; color: #64748b; padding: 1rem; border-radius: 50%; 
+                                    width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; 
+                                    font-weight: 700; font-size: 1.5rem; margin: auto;">
+                                        {stage_num}
+                                    </div>
+                                """, unsafe_allow_html=True)
+                        
+                        with col2:
+                            st.markdown(f"**Stage {stage_num}: {stage.get('name', 'Not Started') if stage else 'Not Started'}**")
+                            st.write(stage_descriptions.get(stage_num, ""))
+                            
+                            if stage:
+                                stage_status = stage.get('status', 'pending')
+                                if stage_status == 'completed':
+                                    completed_at_str = stage.get('completed_at')
+                                    if completed_at_str:
+                                        try:
+                                            completed_at = datetime.fromisoformat(completed_at_str.replace('Z', '+00:00'))
+                                            st.success(f"✅ Completed on {completed_at.strftime('%Y-%m-%d %H:%M')}")
+                                        except (ValueError, AttributeError):
+                                            st.success(f"✅ Completed")
+                                        if stage.get('completed_by'):
+                                            st.caption(f"By: {stage['completed_by']}")
+                                    else:
+                                        st.success(f"✅ Completed")
+                                elif stage_status == 'in_progress':
+                                    st.info(f"🔄 In Progress")
+                                else:
+                                    st.warning(f"⏳ Pending")
+                        
+                        with col3:
+                            if stage:
+                                deadline_str = stage.get('deadline')
+                                if deadline_str:
+                                    try:
+                                        deadline = datetime.fromisoformat(deadline_str.replace('Z', '+00:00'))
+                                        st.write(f"**Deadline:**")
+                                        st.write(deadline.strftime('%Y-%m-%d'))
+                                        
+                                        # Days until/overdue
+                                        days_diff = (deadline.date() - datetime.now().date()).days
+                                        if days_diff < 0:
+                                            st.error(f"⚠️ {abs(days_diff)} days overdue")
+                                        elif days_diff == 0:
+                                            st.warning("📅 Due today")
+                                        else:
+                                            st.info(f"⏰ {days_diff} days left")
+                                    except (ValueError, AttributeError):
+                                        st.write(f"**Deadline:** {deadline_str}")
+                        
+                        st.markdown("---")
+                
+                # Material Tracking Section
+                st.markdown("### 📦 Material Tracking")
+                material_tracking = get_api_data(f"/workflow/store/{store_id}/material-tracking")
+                
+                if material_tracking and 'message' not in material_tracking:
+                    col1, col2, col3 = st.columns(3)
+                    
+                    with col1:
+                        st.markdown("#### 🏭 Warehouse Status")
+                        if material_tracking.get('warehouse_received'):
+                            st.success(f"✅ Received")
+                            st.caption(f"Date: {material_tracking.get('warehouse_received_date', 'N/A')}")
+                        else:
+                            st.warning("⏳ Pending")
+                    
+                    with col2:
+                        st.markdown("#### 🏪 Nearby Store Status")
+                        if material_tracking.get('nearby_store_received'):
+                            st.success(f"✅ Received")
+                            st.caption(f"Date: {material_tracking.get('nearby_store_received_date', 'N/A')}")
+                        else:
+                            st.warning("⏳ Pending")
+                    
+                    with col3:
+                        st.markdown("#### 🎯 Actual Store Status")
+                        if material_tracking.get('store_received'):
+                            st.success(f"✅ Received")
+                            st.caption(f"Date: {material_tracking.get('store_received_date', 'N/A')}")
+                        else:
+                            st.warning("⏳ Pending")
+                else:
+                    st.info("ℹ️ Material tracking not yet available for this store")
+                
+                # Update Opening Date Section
+                st.markdown("---")
+                st.markdown("### 📅 Update Opening Date")
+                st.write("Change the store opening date (this will recalculate all workflow timelines)")
+                
+                # Get default date value
+                opening_date_str = store.get('opening_date', '')
+                default_date = datetime.now().date()
+                if opening_date_str:
+                    try:
+                        default_date = datetime.fromisoformat(opening_date_str.replace('Z', '+00:00')).date()
+                    except (ValueError, AttributeError):
+                        pass
+                
+                with st.form("update_opening_date"):
+                    new_opening_date = st.date_input(
+                        "New Opening Date",
+                        value=default_date,
+                        min_value=datetime.now().date()
+                    )
+                    
+                    if st.form_submit_button("🔄 Update Opening Date"):
+                        result = put_api_data(
+                            f"/workflow/store/{store_id}/opening-date",
+                            {'opening_date': new_opening_date.isoformat()}
+                        )
+                        if result:
+                            st.success("✅ Opening date updated and timelines recalculated!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to update opening date")
+            else:
+                st.warning("⚠️ Unable to load workflow stages for this store")
+    else:
+        st.info("ℹ️ No stores found. Create a store first to see the workflow.")
+
+elif page == "escalations":
+    st.markdown('<div class="page-title">Escalations & AI Follow-ups</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Automated AI escalations and manager notifications for delayed tasks</div>', unsafe_allow_html=True)
+    
+    # Store selector
+    stores = get_api_data("/stores")
+    if stores:
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            store_options = {"All Stores": None}
+            store_options.update({s['name']: s['id'] for s in stores})
+            selected_store_name = st.selectbox("🔍 Filter by Store", list(store_options.keys()))
+        
+        # Fetch escalations
+        with st.spinner("Loading escalations..."):
+            if selected_store_name == "All Stores" or store_options[selected_store_name] is None:
+                # Get escalations for all stores
+                all_escalations = []
+                for store in stores:
+                    escalation_data = get_api_data(f"/workflow/store/{store['id']}/escalations")
+                    if escalation_data and 'escalations' in escalation_data:
+                        for esc in escalation_data['escalations']:
+                            esc['store_name'] = store['name']
+                            all_escalations.append(esc)
+                escalations = all_escalations
+            else:
+                store_id = store_options[selected_store_name]
+                escalation_data = get_api_data(f"/workflow/store/{store_id}/escalations")
+                escalations = escalation_data.get('escalations', []) if escalation_data else []
+        
+        if escalations:
+            # Summary metrics
+            st.markdown("### 📊 Escalation Summary")
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                st.metric("🚨 Total Escalations", len(escalations))
+            
+            with col2:
+                whatsapp_count = sum(1 for e in escalations if e.get('escalation_type') == 'whatsapp')
+                st.metric("💬 WhatsApp", whatsapp_count)
+            
+            with col3:
+                sms_count = sum(1 for e in escalations if e.get('escalation_type') == 'sms')
+                call_count = sum(1 for e in escalations if e.get('escalation_type') == 'call')
+                st.metric("📞 SMS/Calls", sms_count + call_count)
+            
+            with col4:
+                email_count = sum(1 for e in escalations if e.get('escalation_type') == 'email')
+                st.metric("📧 Emails", email_count)
+            
+            st.markdown("---")
+            
+            # Escalation Timeline
+            st.markdown("### 📅 Escalation Timeline")
+            
+            # Sort escalations by date (newest first)
+            escalations_sorted = sorted(
+                [e for e in escalations if e.get('created_at')],  # Filter out entries without created_at
+                key=lambda x: x.get('created_at', ''),
+                reverse=True
+            )
+            
+            # Group by escalation level
+            level_names = {
+                1: "Level 1 - Initial WhatsApp Reminder",
+                2: "Level 2 - SMS/Call Follow-up",
+                3: "Level 3 - Manager Voice Call",
+                4: "Level 4 - Email to Management"
+            }
+            
+            level_colors = {
+                1: "#fbbf24",  # Yellow
+                2: "#f97316",  # Orange
+                3: "#ef4444",  # Red
+                4: "#dc2626"   # Dark Red
+            }
+            
+            # Display escalations grouped by level
+            for level in [4, 3, 2, 1]:  # Show highest level first
+                level_escalations = [e for e in escalations_sorted if e.get('escalation_level') == level]
+                
+                if level_escalations:
+                    st.markdown(f"#### {level_names.get(level, f'Level {level}')}")
+                    
+                    for escalation in level_escalations:
+                        created_at_str = escalation.get('created_at', '')
+                        if not created_at_str:
+                            continue  # Skip escalations without created_at
+                        
+                        try:
+                            created_at = datetime.fromisoformat(created_at_str.replace('Z', '+00:00'))
+                            created_at_display = created_at.strftime('%Y-%m-%d %H:%M')
+                        except (ValueError, AttributeError):
+                            created_at_display = created_at_str
+                            created_at = None
+                        
+                        with st.expander(
+                            f"🚨 {escalation.get('escalation_type', 'UNKNOWN').upper()} - "
+                            f"{created_at_display} "
+                            f"{'- ' + escalation.get('store_name', '') if 'store_name' in escalation else ''}"
+                        ):
+                            col1, col2 = st.columns([1, 2])
+                            
+                            with col1:
+                                st.write("**Escalation Details:**")
+                                st.write(f"**Level:** {escalation.get('escalation_level', 'N/A')}")
+                                st.write(f"**Type:** {escalation.get('escalation_type', 'N/A').upper()}")
+                                st.write(f"**Status:** {escalation.get('status', 'sent').upper()}")
+                                
+                                if escalation.get('recipient_phone'):
+                                    st.write(f"**Phone:** {escalation['recipient_phone']}")
+                                if escalation.get('recipient_email'):
+                                    st.write(f"**Email:** {escalation['recipient_email']}")
+                                
+                                st.write(f"**Date:** {created_at_display}")
+                                
+                                response_at_str = escalation.get('response_received_at')
+                                if response_at_str:
+                                    try:
+                                        response_at = datetime.fromisoformat(response_at_str.replace('Z', '+00:00'))
+                                        st.write(f"**Response:** {response_at.strftime('%Y-%m-%d %H:%M')}")
+                                    except (ValueError, AttributeError):
+                                        st.write(f"**Response:** {response_at_str}")
+                            
+                            with col2:
+                                st.write("**Message:**")
+                                if escalation.get('message'):
+                                    st.info(escalation['message'])
+                                else:
+                                    st.caption("No message recorded")
+                                
+                                # Show which stage or task this is related to
+                                workflow_stage_id = escalation.get('workflow_stage_id')
+                                if workflow_stage_id:
+                                    st.write(f"**Related to:** Workflow Stage #{workflow_stage_id}")
+                                task_id = escalation.get('task_id')
+                                if task_id:
+                                    st.write(f"**Related to:** Task #{task_id}")
+            
+            st.markdown("---")
+            
+            # Escalation by Type Chart
+            st.markdown("### 📈 Escalation Distribution")
+            
+            if escalations:
+                df_escalations = pd.DataFrame(escalations)
+                
+                # Verify required columns exist
+                if 'escalation_type' in df_escalations.columns and 'escalation_level' in df_escalations.columns:
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        # By type
+                        type_counts = df_escalations['escalation_type'].value_counts()
+                        fig_type = px.pie(
+                            values=type_counts.values,
+                            names=type_counts.index,
+                            title='Escalations by Type',
+                            color_discrete_sequence=['#667eea', '#764ba2', '#f97316', '#fbbf24']
+                        )
+                        fig_type.update_layout(font=dict(family="Inter, sans-serif"))
+                        st.plotly_chart(fig_type, use_container_width=True)
+                    
+                    with col2:
+                        # By level
+                        level_counts = df_escalations['escalation_level'].value_counts().sort_index()
+                        fig_level = px.bar(
+                            x=[level_names.get(l, f'Level {l}') for l in level_counts.index],
+                            y=level_counts.values,
+                            title='Escalations by Level',
+                            color=level_counts.values,
+                            color_continuous_scale=['#fbbf24', '#f97316', '#ef4444', '#dc2626']
+                        )
+                        fig_level.update_layout(
+                            font=dict(family="Inter, sans-serif"),
+                            showlegend=False,
+                            xaxis_title='Escalation Level',
+                            yaxis_title='Count'
+                        )
+                        st.plotly_chart(fig_level, use_container_width=True)
+                else:
+                    st.warning("⚠️ Unable to display charts: Required data columns are missing")
+            else:
+                st.info("ℹ️ No escalations to display in charts")
+            
+        else:
+            st.success("🎉 Great! No escalations have been triggered. All tasks are on track!")
+            st.info("ℹ️ Escalations are automatically triggered when:\n"
+                   "- Tasks are overdue by 3+ days (Level 1: WhatsApp)\n"
+                   "- Tasks are overdue by 7+ days (Level 2: SMS/Call)\n"
+                   "- Critical delays requiring manager intervention (Level 3-4: Voice Call/Email)")
+    else:
+        st.info("ℹ️ No stores found. Create a store first to see escalations.")
+
 elif page == "team":
-    st.markdown('<div class="page-title">👥 Team Management</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Team Management</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Manage team members across all stores</div>', unsafe_allow_html=True)
     
     # Store selector
@@ -603,7 +1019,7 @@ elif page == "team":
             st.info("ℹ️ No team members found")
 
 elif page == "tasks":
-    st.markdown('<div class="page-title">✅ Tasks & Checklists</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Tasks & Checklists</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Track and manage all tasks across stores</div>', unsafe_allow_html=True)
     
     # Store selector
@@ -666,7 +1082,7 @@ elif page == "tasks":
             st.info("ℹ️ No checklists found for this store")
 
 elif page == "whatsapp":
-    st.markdown('<div class="page-title">💬 Communications</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Communications</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Manage WhatsApp groups and team communications</div>', unsafe_allow_html=True)
     
     with st.spinner("Loading communication groups..."):
@@ -720,7 +1136,7 @@ elif page == "whatsapp":
         st.info("ℹ️ No WhatsApp groups found")
 
 elif page == "analytics":
-    st.markdown('<div class="page-title">📊 Analytics & Reports</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Analytics & Reports</div>', unsafe_allow_html=True)
     st.markdown('<div class="page-subtitle">Comprehensive analytics and reporting</div>', unsafe_allow_html=True)
     
     # Report type selector
