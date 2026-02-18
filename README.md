@@ -206,18 +206,19 @@ A comprehensive Python-based AI system for managing store opening logistics with
 
 ### Technology Stack
 - **Backend**: Flask (Python web framework)
-- **Frontend**: Streamlit (Interactive dashboard)
+- **Frontend**: React.js with TypeScript (Modern, responsive dashboard)
 - **Database**: SQLite (development) with PostgreSQL migration support
 - **WhatsApp**: Twilio WhatsApp Business API
 - **Email**: SMTP (Gmail, Outlook, etc.)
 - **SMS & Voice**: Twilio API
 - **AI**: OpenAI GPT for intelligent messaging
 - **Scheduling**: APScheduler for automated tasks
-- **Visualization**: Plotly for charts and analytics
+- **Visualization**: Recharts for charts and analytics
 
 ## 📋 Prerequisites
 
 - Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
+- Node.js 14+ and npm (for React frontend)
 - pip (Python package manager)
 - Twilio account (for WhatsApp, SMS, and Voice integration) - **Optional for testing**
 - Email account with SMTP access (for email notifications) - **Optional for testing**
@@ -447,12 +448,16 @@ python app.py
 
 The API server will start on `http://localhost:5000`
 
-### Start the Dashboard (in a separate terminal)
+### Start the React Dashboard (in a separate terminal)
 ```bash
-streamlit run frontend/dashboard.py
+# Mac/Linux:
+./start_dashboard.sh
+
+# Windows:
+start_dashboard.bat
 ```
 
-The dashboard will open in your browser at `http://localhost:8501`
+The React dashboard will open in your browser at `http://localhost:3000`
 
 ## 📱 WhatsApp Integration Setup
 
@@ -617,8 +622,10 @@ store-opening-ai/
 │   └── services/
 │       ├── whatsapp_service.py # WhatsApp integration
 │       └── scheduler.py        # Automated follow-up scheduler
-├── frontend/
-│   └── dashboard.py           # Streamlit dashboard
+├── react-frontend/
+│   ├── src/                   # React source code
+│   ├── public/                # Static assets
+│   └── package.json           # React dependencies
 ├── data/
 │   └── seed_beta_data.py      # Beta testing data seed script
 └── README.md                  # This file

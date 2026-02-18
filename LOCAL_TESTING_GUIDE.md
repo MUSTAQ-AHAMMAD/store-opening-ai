@@ -118,14 +118,15 @@ Database: sqlite:///store_opening.db
 ==================================================
 ```
 
-**Terminal 2 - Dashboard UI:**
+**Terminal 2 - React Dashboard:**
 ```bash
 cd store-opening-ai
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-streamlit run frontend/dashboard.py
+./start_dashboard.sh  # Mac/Linux
+# or
+start_dashboard.bat   # Windows
 ```
 
-The dashboard will automatically open in your browser at `http://localhost:8501`
+The React dashboard will automatically open in your browser at `http://localhost:3000`
 
 ---
 
@@ -157,8 +158,8 @@ The system uses AI to:
 
 #### 1. Login to Dashboard
 
-1. Open `http://localhost:8501` in your browser
-2. You'll see a **🧪 TEST MODE** banner (this is good!)
+1. Open `http://localhost:3000` in your browser
+2. You'll see a modern React dashboard with purple gradient theme
 3. Login with: `admin` / `admin123`
 
 #### 2. View Active Stores
@@ -604,8 +605,16 @@ PORT=5001
 # Make sure backend is running first
 # Check Terminal 1 shows "Server running on: http://localhost:5000"
 
-# Try running dashboard with explicit port
-streamlit run frontend/dashboard.py --server.port 8501
+# Check if Node.js is installed
+node --version
+
+# Make sure React dependencies are installed
+cd react-frontend
+npm install
+cd ..
+
+# Try starting dashboard again
+./start_dashboard.sh  # or start_dashboard.bat on Windows
 ```
 
 ### Issue 6: AI features not working
@@ -628,18 +637,23 @@ OPENAI_API_KEY=sk-your-actual-key-here
 - **Restart the backend** after changing .env
 - **Try triggering an action** (send follow-up, create task, etc.)
 
-### Issue 8: Streamlit shows errors
+### Issue 8: React dashboard shows errors
 
 **Solution:**
 ```bash
-# Clear Streamlit cache
-streamlit cache clear
+# Clear npm cache and reinstall
+cd react-frontend
+rm -rf node_modules package-lock.json  # Mac/Linux
+# or
+rmdir /s /q node_modules & del package-lock.json  # Windows
+npm install
 
-# Check Streamlit version
-pip show streamlit
+# Check if there are any dependency issues
+npm audit
 
-# Reinstall if needed
-pip install --upgrade streamlit>=1.39.0
+# Restart the dashboard
+cd ..
+./start_dashboard.sh  # or start_dashboard.bat on Windows
 ```
 
 ---

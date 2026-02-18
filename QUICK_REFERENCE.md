@@ -33,13 +33,13 @@ python data/seed_beta_data.py
 # 6. Start Backend (Terminal 1)
 python main.py
 
-# 7. Start Dashboard (Terminal 2)
-streamlit run frontend/dashboard.py
+# 7. Start React Dashboard (Terminal 2)
+./start_dashboard.sh  # or start_dashboard.bat on Windows
 ```
 
 ### Access
 - **Backend API:** http://localhost:5000
-- **Dashboard:** http://localhost:8501
+- **React Dashboard:** http://localhost:3000
 - **Login:** admin / admin123
 
 ---
@@ -263,11 +263,13 @@ When backend runs, these schedulers activate:
 # Restart Backend
 Ctrl+C in Terminal 1, then: python main.py
 
-# Restart Dashboard
-Ctrl+C in Terminal 2, then: streamlit run frontend/dashboard.py
+# Restart React Dashboard
+Ctrl+C in Terminal 2, then: ./start_dashboard.sh  # or start_dashboard.bat
 
-# Clear Streamlit Cache
-streamlit cache clear
+# Clear React build cache
+cd react-frontend
+rm -rf build node_modules/.cache
+cd ..
 
 # Check Logs
 tail -f backend.log  # if logging to file
