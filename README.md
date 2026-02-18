@@ -1,20 +1,33 @@
 # Store Opening AI Management System
 
-## 🧪 NEW: Local Testing Guide - Test AI Communication on Your Machine!
+## 🚀 **START HERE: Run Locally in 8 Simple Steps!**
 
-**Want to run this on your local machine and test the AI?** 
+**Never used this before? Start here!**
 
-👉 **[LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md)** - Complete step-by-step guide!
+### 👉 **[STEP_BY_STEP.md](./STEP_BY_STEP.md)** - Ultra-Simple Guide (10 minutes)
 
-This comprehensive guide shows you how to:
-- ✅ **Install and run locally** in 5 minutes (no external services needed!)
-- ✅ **Test AI communication** and see how messages are generated
-- ✅ **Understand the console output** for WhatsApp, SMS, voice calls, and emails
-- ✅ **Explore all features** through the dashboard and API
-- ✅ **Troubleshoot common issues** with detailed solutions
-- ✅ **Deploy to production** when you're ready
+**Follow these 8 numbered steps to get running:**
+1. ✅ Check Python is installed
+2. ✅ Download the project
+3. ✅ Run setup script (automatic!)
+4. ✅ Start backend server
+5. ✅ Start dashboard
+6. ✅ Login (admin/admin123)
+7. ✅ Test AI communication
+8. ✅ Explore features
 
-**Perfect for testing without Twilio, OpenAI, or email accounts!**
+**No Twilio, OpenAI, or email accounts needed for testing!**
+
+---
+
+## 📚 More Documentation
+
+**Choose your learning style:**
+
+- **🎯 Simple & Quick:** [STEP_BY_STEP.md](./STEP_BY_STEP.md) - 8 numbered steps (START HERE!)
+- **📋 One-Page Cheat Sheet:** [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - All commands in one place
+- **📖 Complete Guide:** [LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md) - Every detail explained
+- **🗺️ Visual Flowchart:** [GETTING_STARTED_FLOWCHART.md](./GETTING_STARTED_FLOWCHART.md) - Decision tree
 
 ### 🚀 Super Quick Start
 
@@ -35,8 +48,6 @@ setup.bat
 Then start the application:
 - **Linux/Mac:** `./start_backend.sh` and `./start_dashboard.sh`
 - **Windows:** `start_backend.bat` and `start_dashboard.bat`
-
-**Quick Reference:** See [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) for a one-page cheat sheet!
 
 ---
 
