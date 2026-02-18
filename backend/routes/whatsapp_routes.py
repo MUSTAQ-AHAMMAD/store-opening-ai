@@ -142,3 +142,32 @@ def send_follow_up():
         }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+@bp.route('/send-template', methods=['POST'])
+def send_template():
+    """Send a WhatsApp template message using ContentSid"""
+    data = request.get_json()
+    
+    try:
+        phone = data.get('phone')
+        content_sid = data.get('content_sid')
+        content_variables = data.get('content_variables', {})
+        
+        if not phone:
+            return jsonify({'error': 'Phone number is required'}), 400
+        
+        if not content_sid:
+            return jsonify({'error': 'Content SID is required'}), 400
+        
+        result = whatsapp_service.send_message(
+            to_phone=phone,
+            content_sid=content_sid,
+            content_variables=content_variables
+        )
+        
+        return jsonify({
+            'message': 'Template message sent successfully',
+            'result': result
+        }), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400

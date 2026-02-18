@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 from datetime import datetime
 from twilio.rest import Client
@@ -29,24 +30,56 @@ class WhatsAppService:
             else:
                 logger.warning("Twilio credentials not configured. WhatsApp messaging will be simulated.")
     
-    def send_message(self, to_phone, message):
-        """Send a WhatsApp message to a phone number"""
+    def send_message(self, to_phone, message=None, content_sid=None, content_variables=None):
+        """
+        Send a WhatsApp message to a phone number
+        
+        Args:
+            to_phone: Phone number to send to (E.164 format)
+            message: Message body for freeform text messages
+            content_sid: Content SID for template messages
+            content_variables: Variables for template messages (dict or JSON string)
+        
+        Returns:
+            dict: Result of the message send operation
+        """
         if not to_phone.startswith('whatsapp:'):
             to_phone = f'whatsapp:{to_phone}'
         
+        # Validate that either message or content_sid is provided
+        if not message and not content_sid:
+            return {
+                'success': False,
+                'error': 'Either message body or content_sid must be provided'
+            }
+        
         if self.client:
             try:
-                message = self.client.messages.create(
-                    from_=self.whatsapp_number,
-                    body=message,
-                    to=to_phone
-                )
+                # Prepare message parameters
+                msg_params = {
+                    'from_': self.whatsapp_number,
+                    'to': to_phone
+                }
+                
+                # Use template message if content_sid is provided
+                if content_sid:
+                    msg_params['content_sid'] = content_sid
+                    if content_variables:
+                        # Ensure content_variables is a dict
+                        if isinstance(content_variables, str):
+                            content_variables = json.loads(content_variables)
+                        msg_params['content_variables'] = json.dumps(content_variables)
+                else:
+                    msg_params['body'] = message
+                
+                message_obj = self.client.messages.create(**msg_params)
                 return {
                     'success': True,
-                    'message_sid': message.sid,
-                    'status': message.status
+                    'message_sid': message_obj.sid,
+                    'status': message_obj.status
                 }
             except Exception as e:
+                logger.error(f"Error sending WhatsApp message: {str(e)}")
                 return {
                     'success': False,
                     'error': str(e)
@@ -56,13 +89,24 @@ class WhatsAppService:
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             log_msg = f"[TEST MODE] WhatsApp to {to_phone} at {timestamp}"
             logger.info(log_msg)
-            logger.info(f"Message: {message[:100]}..." if len(message) > 100 else f"Message: {message}")
+            
             print(f"\n{'='*60}")
             print(f"📱 WhatsApp Message (Test Mode)")
             print(f"{'='*60}")
             print(f"To: {to_phone}")
             print(f"Time: {timestamp}")
-            print(f"Message:\n{message}")
+            
+            if content_sid:
+                print(f"Template Message:")
+                print(f"  Content SID: {content_sid}")
+                if content_variables:
+                    print(f"  Variables: {content_variables}")
+                logger.info(f"Template - ContentSid: {content_sid}, Variables: {content_variables}")
+            else:
+                print(f"Text Message:")
+                print(f"  {message[:100]}..." if len(message) > 100 else f"  {message}")
+                logger.info(f"Message: {message[:100]}..." if len(message) > 100 else f"Message: {message}")
+            
             print(f"{'='*60}\n")
             return {
                 'success': True,
