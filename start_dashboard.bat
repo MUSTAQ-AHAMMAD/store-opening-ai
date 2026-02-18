@@ -1,22 +1,30 @@
 @echo off
-REM Store Opening AI - Start Dashboard Script (Windows)
-REM Activates virtual environment and starts the Streamlit dashboard
+REM Store Opening AI - Start React Dashboard Script (Windows)
+REM Starts the React.js frontend dashboard
+REM 
+REM USAGE: start_dashboard.bat (NOT ./start_dashboard.bat)
 
 echo ============================================================
-echo Starting Store Opening AI Dashboard...
+echo Starting Store Opening AI React Dashboard...
 echo ============================================================
 echo.
 
-REM Check if virtual environment exists
-if not exist "venv" (
-    echo Error: Virtual environment not found.
-    echo Please run setup.bat first to set up the project.
+REM Check if react-frontend directory exists
+if not exist "react-frontend" (
+    echo Error: react-frontend directory not found.
     pause
     exit /b 1
 )
 
-REM Activate virtual environment
-call venv\Scripts\activate.bat
+REM Navigate to react-frontend directory
+cd react-frontend
+
+REM Check if node_modules exists
+if not exist "node_modules" (
+    echo Installing React dependencies...
+    call npm install
+    echo.
+)
 
 REM Check if backend is running (simple check)
 echo Checking if backend is running...
@@ -30,8 +38,9 @@ if errorlevel 1 (
     echo.
 )
 
-REM Start dashboard
-echo Starting dashboard (will open in browser^)...
+REM Start React dashboard
+echo Starting React dashboard...
+echo Dashboard will open at http://localhost:3000
 echo Press Ctrl+C to stop
 echo.
-streamlit run frontend\dashboard.py
+call npm start

@@ -4,7 +4,17 @@
 
 **Never used this before? Start here!**
 
-### 👉 **[STEP_BY_STEP.md](./STEP_BY_STEP.md)** - Ultra-Simple Guide (10 minutes)
+### 👉 **[RUNNING_REACT_APP.md](./RUNNING_REACT_APP.md)** - Complete React.js Setup Guide (Recommended!)
+
+**The most comprehensive guide for running the application with React.js:**
+- ✅ Prerequisites checklist
+- ✅ Backend setup (Flask API)
+- ✅ React frontend setup
+- ✅ Starting both servers
+- ✅ Login and navigation
+- ✅ Troubleshooting common issues
+
+### Alternative: **[STEP_BY_STEP.md](./STEP_BY_STEP.md)** - Ultra-Simple Guide (10 minutes)
 
 **Follow these 8 numbered steps to get running:**
 1. ✅ Check Python is installed
@@ -24,7 +34,8 @@
 
 **Choose your learning style:**
 
-- **🎯 Simple & Quick:** [STEP_BY_STEP.md](./STEP_BY_STEP.md) - 8 numbered steps (START HERE!)
+- **🎯 React.js Guide:** [RUNNING_REACT_APP.md](./RUNNING_REACT_APP.md) - Complete guide for React setup (RECOMMENDED!)
+- **🚀 Quick Start:** [STEP_BY_STEP.md](./STEP_BY_STEP.md) - 8 numbered steps
 - **📋 One-Page Cheat Sheet:** [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - All commands in one place
 - **📖 Complete Guide:** [LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md) - Every detail explained
 - **🗺️ Visual Flowchart:** [GETTING_STARTED_FLOWCHART.md](./GETTING_STARTED_FLOWCHART.md) - Decision tree
@@ -206,18 +217,19 @@ A comprehensive Python-based AI system for managing store opening logistics with
 
 ### Technology Stack
 - **Backend**: Flask (Python web framework)
-- **Frontend**: Streamlit (Interactive dashboard)
+- **Frontend**: React.js with TypeScript (Modern, responsive dashboard)
 - **Database**: SQLite (development) with PostgreSQL migration support
 - **WhatsApp**: Twilio WhatsApp Business API
 - **Email**: SMTP (Gmail, Outlook, etc.)
 - **SMS & Voice**: Twilio API
 - **AI**: OpenAI GPT for intelligent messaging
 - **Scheduling**: APScheduler for automated tasks
-- **Visualization**: Plotly for charts and analytics
+- **Visualization**: Recharts for charts and analytics
 
 ## 📋 Prerequisites
 
 - Python 3.9 or higher (Python 3.12+ recommended for best compatibility)
+- Node.js 14+ and npm (for React frontend)
 - pip (Python package manager)
 - Twilio account (for WhatsApp, SMS, and Voice integration) - **Optional for testing**
 - Email account with SMTP access (for email notifications) - **Optional for testing**
@@ -447,12 +459,16 @@ python app.py
 
 The API server will start on `http://localhost:5000`
 
-### Start the Dashboard (in a separate terminal)
+### Start the React Dashboard (in a separate terminal)
 ```bash
-streamlit run frontend/dashboard.py
+# Mac/Linux:
+./start_dashboard.sh
+
+# Windows:
+start_dashboard.bat
 ```
 
-The dashboard will open in your browser at `http://localhost:8501`
+The React dashboard will open in your browser at `http://localhost:3000`
 
 ## 📱 WhatsApp Integration Setup
 
@@ -617,8 +633,10 @@ store-opening-ai/
 │   └── services/
 │       ├── whatsapp_service.py # WhatsApp integration
 │       └── scheduler.py        # Automated follow-up scheduler
-├── frontend/
-│   └── dashboard.py           # Streamlit dashboard
+├── react-frontend/
+│   ├── src/                   # React source code
+│   ├── public/                # Static assets
+│   └── package.json           # React dependencies
 ├── data/
 │   └── seed_beta_data.py      # Beta testing data seed script
 └── README.md                  # This file
@@ -686,6 +704,17 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
    - See [Typing Best Practices](./docs/TYPING_BEST_PRACTICES.md) for correct NamedTuple syntax
    - Common issue: Using dict syntax `{'field': type}` instead of list syntax `[('field', type)]`
    - **Python 3.13+ compatibility**: Always use class-based `NamedTuple` syntax (recommended)
+
+8. **Windows: `'.' is not recognized as an internal or external command`**
+   - **Problem**: Trying to run `./setup.bat` or `./start_backend.bat` on Windows
+   - **Solution**: On Windows, run batch files WITHOUT the `./` prefix:
+     ```cmd
+     setup.bat                    (NOT ./setup.bat)
+     start_backend.bat            (NOT ./start_backend.bat)
+     start_dashboard.bat          (NOT ./start_dashboard.bat)
+     ```
+   - **Alternative**: Use backslash instead: `.\setup.bat`
+   - **Explanation**: The `./` syntax is for Unix/Linux/Mac. Windows uses different path separators.
 
 ## 📝 License
 

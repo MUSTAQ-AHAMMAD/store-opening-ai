@@ -1,6 +1,14 @@
 @echo off
 REM Store Opening AI - Quick Setup Script (Windows)
 REM This script automates the initial setup process
+REM 
+REM USAGE: 
+REM   Run this script from the project directory:
+REM     setup.bat             (preferred)
+REM   or
+REM     .\setup.bat
+REM   
+REM   DO NOT use: ./setup.bat (Unix syntax - will not work on Windows)
 
 echo ============================================================
 echo Store Opening AI - Quick Setup Script (Windows)
@@ -22,6 +30,21 @@ for /f "tokens=2" %%i in ('python --version 2^>^&1') do set PYTHON_VERSION=%%i
 echo Found Python %PYTHON_VERSION%
 echo OK Python version
 echo.
+
+REM Check Node.js installation
+echo Checking Node.js version...
+node --version >nul 2>&1
+if errorlevel 1 (
+    echo Warning: Node.js is not installed or not in PATH
+    echo Node.js is required for the React frontend.
+    echo Please install Node.js 14+ from https://nodejs.org/
+    echo.
+) else (
+    for /f "tokens=*" %%i in ('node --version 2^>^&1') do set NODE_VERSION=%%i
+    echo Found Node.js %NODE_VERSION%
+    echo OK Node.js version
+    echo.
+)
 
 REM Create virtual environment
 echo Creating virtual environment...
@@ -46,11 +69,25 @@ echo OK pip upgraded
 echo.
 
 REM Install dependencies
-echo Installing dependencies...
+echo Installing Python dependencies...
 echo This may take a few minutes...
 pip install -r requirements.txt --quiet
-echo OK Dependencies installed
+echo OK Python dependencies installed
 echo.
+
+REM Install React frontend dependencies
+node --version >nul 2>&1
+if not errorlevel 1 (
+    echo Installing React frontend dependencies...
+    cd react-frontend
+    call npm install
+    cd ..
+    echo OK React frontend dependencies installed
+    echo.
+) else (
+    echo Skipping React frontend setup (Node.js not found)
+    echo.
+)
 
 REM Setup .env file
 echo Setting up environment configuration...
@@ -82,19 +119,18 @@ echo   Terminal 1 - Backend API:
 echo     venv\Scripts\activate
 echo     python main.py
 echo.
-echo   Terminal 2 - Dashboard:
-echo     venv\Scripts\activate
-echo     streamlit run frontend\dashboard.py
+echo   Terminal 2 - React Dashboard:
+echo     start_dashboard.bat
 echo.
 echo Then open your browser to:
 echo   - Backend: http://localhost:5000
-echo   - Dashboard: http://localhost:8501
+echo   - React Dashboard: http://localhost:3000
 echo.
 echo Login with:
 echo   - Username: admin
 echo   - Password: admin123
 echo.
-echo For more details, see LOCAL_TESTING_GUIDE.md
+echo For more details, see REACT_QUICKSTART.md
 echo ============================================================
 echo.
 pause

@@ -1,6 +1,8 @@
 @echo off
 REM Store Opening AI - Start Backend Script (Windows)
 REM Activates virtual environment and starts the backend API
+REM 
+REM USAGE: start_backend.bat (NOT ./start_backend.bat)
 
 echo ============================================================
 echo Starting Store Opening AI Backend...

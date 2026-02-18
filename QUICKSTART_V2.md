@@ -37,13 +37,15 @@ python data/seed_beta_data.py
 python main.py
 # or: python app.py
 
-# Terminal 2: Start Enhanced Dashboard
-streamlit run frontend/dashboard_enhanced.py
+# Terminal 2: Start React Dashboard
+./start_dashboard.sh  # Mac/Linux
+# or
+start_dashboard.bat   # Windows
 ```
 
 **Access the app:**
 - Backend API: http://localhost:5000
-- Dashboard: http://localhost:8501
+- React Dashboard: http://localhost:3000
 
 ---
 

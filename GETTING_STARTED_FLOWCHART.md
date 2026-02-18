@@ -65,9 +65,9 @@
                     ▼
     Step 4: Test AI Communication
     ┌──────────────────────────────────────┐
-    │ 1. Open http://localhost:8501        │
+    │ 1. Open http://localhost:3000        │
     │ 2. Login: admin / admin123           │
-    │ 3. Go to Tasks & Checklists          │
+    │ 3. Navigate to Tasks section         │
     │ 4. Click "Send Follow-up"            │
     │ 5. Check Terminal 1 for AI output    │
     └──────────────────────────────────────┘
@@ -246,10 +246,15 @@ Answer:  SQLite is included and auto-created. No setup needed!
          For production, you can upgrade to PostgreSQL.
 
 Question: How do I run on Windows?
-Answer:  Use .bat files instead of .sh files:
-         • setup.bat (instead of ./setup.sh)
-         • start_backend.bat
-         • start_dashboard.bat
+Answer:  Use .bat files WITHOUT the ./ prefix:
+         • setup.bat (NOT ./setup.bat)
+         • start_backend.bat (NOT ./start_backend.bat)
+         • start_dashboard.bat (NOT ./start_dashboard.bat)
+         
+         If you see "'.' is not recognized as an internal or external command",
+         you tried to use ./filename which is Unix syntax.
+         
+         Alternative: Use backslash: .\setup.bat
 
 Question: What are the default login credentials?
 Answer:  admin / admin123
@@ -258,7 +263,7 @@ Answer:  admin / admin123
 
 Question: Where can I see console output?
 Answer:  Terminal 1 (backend) shows all messages, API calls, and logs
-         Terminal 2 (dashboard) shows Streamlit interface logs
+         Terminal 2 (React dashboard) shows React build and runtime logs
 
 Question: How do I troubleshoot issues?
 Answer:  See LOCAL_TESTING_GUIDE.md section "Troubleshooting"

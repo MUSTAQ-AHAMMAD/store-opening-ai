@@ -1,46 +1,73 @@
-# Getting Started with Create React App
+# Store Opening AI - React Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🎨 Modern React.js Dashboard
 
-## Available Scripts
+This is the **React.js frontend** for the Store Opening AI Management System.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 Quick Start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Prerequisites:** Node.js 14+ and Backend API running on http://localhost:5000
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+npm install  # Install dependencies
+npm start    # Start dev server (opens http://localhost:3000)
+```
 
-### `npm test`
+**Login:** admin / admin123
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 📖 Complete Documentation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**For detailed setup instructions:**
+- **[../RUNNING_REACT_APP.md](../RUNNING_REACT_APP.md)** - Complete step-by-step guide ⭐
+- **[../REACT_QUICKSTART.md](../REACT_QUICKSTART.md)** - Quick start
+- **[../REACT_FRONTEND_GUIDE.md](../REACT_FRONTEND_GUIDE.md)** - Technical docs
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Scripts
 
-### `npm run eject`
+- `npm start` - Development server (port 3000)
+- `npm run build` - Production build
+- `npm test` - Run tests
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🎯 Features
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- 🔐 Login/Register with JWT
+- 📊 Dashboard with KPIs
+- 🏪 Store management
+- 👥 Team management
+- ✅ Task tracking
+- 📈 Analytics
+- 🧠 AI Insights
+- 💬 WhatsApp integration
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**Tech:** React, TypeScript, Material-UI, Recharts
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🐛 Troubleshooting
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Backend connection error?**
+- Ensure backend runs on port 5000
+- Check http://localhost:5000 works
+
+**Port 3000 in use?**
+- Press 'Y' to use different port
+
+**Module errors?**
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+---
+
+**Need help?** See [RUNNING_REACT_APP.md](../RUNNING_REACT_APP.md)
+
+**Version 4.0** - Built with ❤️ using React, TypeScript, and Material-UI

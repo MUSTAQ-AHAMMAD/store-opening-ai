@@ -3,8 +3,13 @@
 ## Installation
 
 ```bash
-# Install dependencies
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Install React frontend dependencies
+cd react-frontend
+npm install
+cd ..
 
 # Seed beta testing data
 python data/seed_beta_data.py
@@ -25,15 +30,17 @@ python main.py
 # or: python app.py
 ```
 
-**Terminal 2 - Dashboard:**
+**Terminal 2 - React Dashboard:**
 ```bash
-streamlit run frontend/dashboard.py
+./start_dashboard.sh  # Mac/Linux
+# or
+start_dashboard.bat   # Windows
 ```
 
 ## Access
 
 - **API**: http://localhost:5000/api
-- **Dashboard**: http://localhost:8501
+- **React Dashboard**: http://localhost:3000
 
 ## Quick API Tests
 

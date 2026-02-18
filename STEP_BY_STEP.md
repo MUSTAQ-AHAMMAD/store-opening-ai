@@ -148,21 +148,25 @@ start_dashboard.bat
 **What you should see:**
 ```
 ============================================================
-Starting Store Opening AI Dashboard...
+Starting Store Opening AI React Dashboard...
 ============================================================
 
-Starting dashboard (will open in browser)...
+Installing React dependencies (if needed)...
+Starting React dashboard...
+Dashboard will open at http://localhost:3000
 Press Ctrl+C to stop
 
-You can now view your Streamlit app in your browser.
+Compiled successfully!
 
-  Local URL: http://localhost:8501
-  Network URL: http://192.168.x.x:8501
+You can now view react-frontend in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.x.x:3000
 ```
 
 **✅ SUCCESS!** Your browser should automatically open to the dashboard.
 
-**If browser doesn't open automatically:** Go to http://localhost:8501
+**If browser doesn't open automatically:** Go to http://localhost:3000
 
 ---
 
@@ -404,6 +408,24 @@ chmod +x setup.sh start_backend.sh start_dashboard.sh
 ./setup.sh
 ```
 
+### Problem: "'.' is not recognized as an internal or external command" (Windows)
+**Solution:**
+On Windows, you cannot use the `./` prefix. Use one of these methods instead:
+
+```cmd
+# Correct way (without ./)
+setup.bat
+start_backend.bat
+start_dashboard.bat
+
+# Alternative (with backslash)
+.\setup.bat
+.\start_backend.bat
+.\start_dashboard.bat
+```
+
+**Explanation:** The `./` syntax is Unix/Linux/Mac specific. Windows Command Prompt doesn't recognize it.
+
 ### Problem: "Port 5000 already in use"
 **Solution:**
 ```bash
@@ -430,8 +452,8 @@ pip install -r requirements.txt
 ### Problem: Dashboard shows errors
 **Solution:**
 1. Make sure Backend (Terminal 1) is running first
-2. Clear browser cache
-3. Try: `streamlit cache clear`
+2. Clear browser cache and restart the React app
+3. Check the console for any error messages
 4. Restart both terminals
 
 ### Problem: Can't see AI messages in console
