@@ -76,10 +76,10 @@
 
 | Component | Status | Value |
 |-----------|--------|-------|
-| Account SID | ✅ Configured | AC4539ac9d...994f |
+| Account SID | ✅ Configured | AC*************** |
 | Auth Token | ✅ Configured | ************* |
 | WhatsApp Number | ✅ Configured | +1 415 523 8886 |
-| Sandbox Join Code | ✅ Ready | valuable-connected |
+| Sandbox Join Code | ✅ Ready | (from your Twilio console) |
 | Test Mode | ✅ Disabled | false (Real integration) |
 | .env File | ✅ Created | In project root |
 | .gitignore | ✅ Protected | .env excluded |
@@ -91,7 +91,8 @@ Step 1: Join Sandbox
 ┌────────────────────────────────┐
 │ Send WhatsApp message:         │
 │ To: +1 415 523 8886           │
-│ Message: join valuable-connected│
+│ Message: join [your-code-here] │
+│ (Get code from Twilio Console) │
 └────────────────────────────────┘
               ↓
 Step 2: Start Application

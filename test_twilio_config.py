@@ -62,10 +62,11 @@ def test_twilio_config():
         # Show WhatsApp sandbox info
         print(f"\n📱 WhatsApp Sandbox Configuration:")
         print(f"   • Sandbox Number: {whatsapp_number}")
-        print(f"   • Join Code: valuable-connected")
-        print(f"   • Sandbox URL: https://timberwolf-mastiff-9776.twil.io/demo-reply")
-        print(f"\n   To test, send a WhatsApp message to {whatsapp_number}")
-        print(f"   with the message: join valuable-connected")
+        print(f"\n   To test WhatsApp messaging:")
+        print(f"   1. Check your Twilio Console for the sandbox join code")
+        print(f"   2. Send a WhatsApp message to {whatsapp_number}")
+        print(f"   3. Message format: join your-code-here")
+        print(f"   4. Get your join code from: https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn")
         
         print("\n✅ Configuration Test PASSED!")
         print("   Your Twilio WhatsApp integration is ready to use!")

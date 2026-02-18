@@ -10,7 +10,7 @@ Before testing, join the WhatsApp sandbox:
 
 1. **Open WhatsApp** on your device
 2. **Send a message to**: `+1 415 523 8886`
-3. **Message text**: `join valuable-connected`
+3. **Message text**: Get your join code from the [Twilio Console](https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn) (it will look like `join your-code-here`)
 4. **Wait for confirmation** message from Twilio
 
 > ⚠️ **Important**: You must do this step first, or messages won't be delivered!
@@ -77,7 +77,7 @@ TEST_MODE=false  # Set to 'true' to test without sending real messages
 
 ### Messages not received?
 
-✅ **Verify you joined the sandbox** (send `join valuable-connected` to `+1 415 523 8886`)  
+✅ **Verify you joined the sandbox** (Check your [Twilio Console](https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn) for your join code)  
 ✅ **Check phone format** - Use E.164 format (e.g., `+14155238886`)  
 ✅ **View Twilio Console** - https://console.twilio.com/us1/monitor/logs/sms  
 ✅ **Check application logs** - Look for "WhatsApp service initialized with Twilio"  

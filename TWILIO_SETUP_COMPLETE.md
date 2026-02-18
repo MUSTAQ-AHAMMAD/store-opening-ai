@@ -8,19 +8,19 @@ Your Twilio WhatsApp integration has been configured with the following details:
 
 Your Twilio credentials have been configured in the `.env` file. The details include:
 
-- **Account SID**: Configured (AC4539ac9d...994f)
+- **Account SID**: Configured (AC***************)
 - **Auth Token**: Configured (securely stored)
 - **WhatsApp Sandbox Number**: `+1 415 523 8886`
-- **Join Code**: `valuable-connected`
-- **Sandbox URL**: `https://timberwolf-mastiff-9776.twil.io/demo-reply`
+- **Join Code**: Check your Twilio console for the sandbox join code
+- **Sandbox URL**: Check your Twilio console for the webhook URL
 
 ### 🔧 Configuration Location
 
 All Twilio credentials have been configured in the `.env` file at the root of the project.
 
 ```bash
-TWILIO_ACCOUNT_SID=AC4539ac9d...994f  # Your actual Account SID
-TWILIO_AUTH_TOKEN=**************3f74   # Your actual Auth Token (securely stored)
+TWILIO_ACCOUNT_SID=AC***************  # Your actual Account SID (from Twilio console)
+TWILIO_AUTH_TOKEN=******************  # Your actual Auth Token (securely stored)
 TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
 TWILIO_PHONE_NUMBER=+14155238886
 TEST_MODE=false
@@ -35,9 +35,10 @@ TEST_MODE=false
 Before the application can send you WhatsApp messages, you need to join the Twilio sandbox:
 
 1. Open WhatsApp on your device
-2. Send a message to: **+1 415 523 8886**
-3. Message content: `join valuable-connected`
-4. You should receive a confirmation that you've joined the sandbox
+2. Visit your [Twilio WhatsApp Sandbox](https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn) to get your join code
+3. Send a message to: **+1 415 523 8886**
+4. Message format: `join your-code-here` (use the code from your Twilio console)
+5. You should receive a confirmation that you've joined the sandbox
 
 #### Step 2: Start the Application
 
@@ -89,7 +90,7 @@ The application will log all WhatsApp message attempts. Check the console output
 ```
 
 If you see errors like "Unverified number" or "Permission denied", it means:
-- The recipient hasn't joined the sandbox yet (they need to send `join valuable-connected`)
+- The recipient hasn't joined the sandbox yet (check your [Twilio Console](https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn) for join instructions)
 - OR the number needs to be verified in your Twilio console
 
 ### 🎨 React Frontend
@@ -119,7 +120,7 @@ The React frontend will be available at `http://localhost:3000`
 
 #### Messages not being received?
 
-1. **Verify sandbox join**: Make sure you sent `join valuable-connected` to `+1 415 523 8886`
+1. **Verify sandbox join**: Check your [Twilio Console](https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn) for join instructions
 2. **Check phone number format**: Phone numbers should be in E.164 format (e.g., `+14155238886`)
 3. **Review Twilio logs**: Check your [Twilio Console](https://console.twilio.com) for message delivery status
 4. **Check application logs**: Look for errors in the console output
@@ -155,7 +156,7 @@ Your application is now **TEST READY** with the following configured:
 ✅ Configuration secured in .gitignore  
 
 **Next Steps**: 
-1. Join the WhatsApp sandbox by sending `join valuable-connected` to `+1 415 523 8886`
+1. Join the WhatsApp sandbox (check your [Twilio Console](https://console.twilio.com/us1/develop/sms/try-it-out/whatsapp-learn) for join code)
 2. Start the application with `python app.py`
 3. Test sending WhatsApp messages through the dashboard or API
 4. Check your WhatsApp for the messages!
