@@ -65,9 +65,9 @@
                     ▼
     Step 4: Test AI Communication
     ┌──────────────────────────────────────┐
-    │ 1. Open http://localhost:8501        │
+    │ 1. Open http://localhost:3000        │
     │ 2. Login: admin / admin123           │
-    │ 3. Go to Tasks & Checklists          │
+    │ 3. Navigate to Tasks section         │
     │ 4. Click "Send Follow-up"            │
     │ 5. Check Terminal 1 for AI output    │
     └──────────────────────────────────────┘
@@ -263,7 +263,7 @@ Answer:  admin / admin123
 
 Question: Where can I see console output?
 Answer:  Terminal 1 (backend) shows all messages, API calls, and logs
-         Terminal 2 (dashboard) shows Streamlit interface logs
+         Terminal 2 (React dashboard) shows React build and runtime logs
 
 Question: How do I troubleshoot issues?
 Answer:  See LOCAL_TESTING_GUIDE.md section "Troubleshooting"
