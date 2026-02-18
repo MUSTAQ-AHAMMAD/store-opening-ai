@@ -4,7 +4,17 @@
 
 **Never used this before? Start here!**
 
-### 👉 **[STEP_BY_STEP.md](./STEP_BY_STEP.md)** - Ultra-Simple Guide (10 minutes)
+### 👉 **[RUNNING_REACT_APP.md](./RUNNING_REACT_APP.md)** - Complete React.js Setup Guide (Recommended!)
+
+**The most comprehensive guide for running the application with React.js:**
+- ✅ Prerequisites checklist
+- ✅ Backend setup (Flask API)
+- ✅ React frontend setup
+- ✅ Starting both servers
+- ✅ Login and navigation
+- ✅ Troubleshooting common issues
+
+### Alternative: **[STEP_BY_STEP.md](./STEP_BY_STEP.md)** - Ultra-Simple Guide (10 minutes)
 
 **Follow these 8 numbered steps to get running:**
 1. ✅ Check Python is installed
@@ -24,7 +34,8 @@
 
 **Choose your learning style:**
 
-- **🎯 Simple & Quick:** [STEP_BY_STEP.md](./STEP_BY_STEP.md) - 8 numbered steps (START HERE!)
+- **🎯 React.js Guide:** [RUNNING_REACT_APP.md](./RUNNING_REACT_APP.md) - Complete guide for React setup (RECOMMENDED!)
+- **🚀 Quick Start:** [STEP_BY_STEP.md](./STEP_BY_STEP.md) - 8 numbered steps
 - **📋 One-Page Cheat Sheet:** [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - All commands in one place
 - **📖 Complete Guide:** [LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md) - Every detail explained
 - **🗺️ Visual Flowchart:** [GETTING_STARTED_FLOWCHART.md](./GETTING_STARTED_FLOWCHART.md) - Decision tree
