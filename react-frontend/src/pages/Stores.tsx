@@ -73,6 +73,7 @@ const Stores: React.FC = () => {
 
   useEffect(() => {
     filterStores();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stores, searchQuery, statusFilter]);
 
   const fetchStores = async () => {

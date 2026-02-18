@@ -18,7 +18,7 @@ import {
   CheckCircle,
   HourglassEmpty,
 } from '@mui/icons-material';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config';
 
@@ -34,9 +34,6 @@ interface DashboardStats {
     low: number;
   };
 }
-
-const COLORS = ['#667eea', '#764ba2', '#f093fb', '#4facfe'];
-const RISK_COLORS = { high: '#f44336', medium: '#ff9800', low: '#4caf50' };
 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
