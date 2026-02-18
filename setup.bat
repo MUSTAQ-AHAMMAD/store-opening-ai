@@ -73,7 +73,7 @@ echo OK Database initialized
 echo.
 
 echo ============================================================
-echo Setup Complete! 🎉
+echo Setup Complete! Success!
 echo ============================================================
 echo.
 echo You can now start the application:

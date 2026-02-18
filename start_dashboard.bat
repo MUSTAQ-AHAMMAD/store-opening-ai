@@ -35,4 +35,3 @@ echo Starting dashboard (will open in browser^)...
 echo Press Ctrl+C to stop
 echo.
 streamlit run frontend\dashboard.py
-pause

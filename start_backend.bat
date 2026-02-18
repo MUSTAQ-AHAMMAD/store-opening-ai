@@ -30,4 +30,3 @@ echo Starting backend on http://localhost:5000
 echo Press Ctrl+C to stop
 echo.
 python main.py
-pause
