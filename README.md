@@ -1,5 +1,23 @@
 # Store Opening AI Management System
 
+## 🧪 NEW: Local Testing Guide - Test AI Communication on Your Machine!
+
+**Want to run this on your local machine and test the AI?** 
+
+👉 **[LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md)** - Complete step-by-step guide!
+
+This comprehensive guide shows you how to:
+- ✅ **Install and run locally** in 5 minutes (no external services needed!)
+- ✅ **Test AI communication** and see how messages are generated
+- ✅ **Understand the console output** for WhatsApp, SMS, voice calls, and emails
+- ✅ **Explore all features** through the dashboard and API
+- ✅ **Troubleshoot common issues** with detailed solutions
+- ✅ **Deploy to production** when you're ready
+
+**Perfect for testing without Twilio, OpenAI, or email accounts!**
+
+---
+
 ## 🎉 NEW: Twilio WhatsApp Integration - Test Ready!
 
 **The application is now configured and ready to test with Twilio WhatsApp!**
@@ -181,9 +199,11 @@ You can test the entire system **without** any external accounts using **TEST MO
 - ✅ No email configuration needed
 - ✅ Perfect for development and testing
 
-See the **Test Mode** section below for setup instructions.
+**👉 See [LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md) for complete local testing instructions!**
 
 ## 🚀 Installation
+
+**Quick Start:** For detailed setup and testing instructions, see **[LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md)**
 
 ### 1. Clone the repository
 ```bash
