@@ -1,5 +1,56 @@
 # Store Opening AI Management System
 
+## 🚀 **START HERE: Run Locally in 8 Simple Steps!**
+
+**Never used this before? Start here!**
+
+### 👉 **[STEP_BY_STEP.md](./STEP_BY_STEP.md)** - Ultra-Simple Guide (10 minutes)
+
+**Follow these 8 numbered steps to get running:**
+1. ✅ Check Python is installed
+2. ✅ Download the project
+3. ✅ Run setup script (automatic!)
+4. ✅ Start backend server
+5. ✅ Start dashboard
+6. ✅ Login (admin/admin123)
+7. ✅ Test AI communication
+8. ✅ Explore features
+
+**No Twilio, OpenAI, or email accounts needed for testing!**
+
+---
+
+## 📚 More Documentation
+
+**Choose your learning style:**
+
+- **🎯 Simple & Quick:** [STEP_BY_STEP.md](./STEP_BY_STEP.md) - 8 numbered steps (START HERE!)
+- **📋 One-Page Cheat Sheet:** [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - All commands in one place
+- **📖 Complete Guide:** [LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md) - Every detail explained
+- **🗺️ Visual Flowchart:** [GETTING_STARTED_FLOWCHART.md](./GETTING_STARTED_FLOWCHART.md) - Decision tree
+
+### 🚀 Super Quick Start
+
+**One-Command Setup (Linux/Mac):**
+```bash
+git clone https://github.com/MUSTAQ-AHAMMAD/store-opening-ai.git
+cd store-opening-ai
+./setup.sh
+```
+
+**One-Command Setup (Windows):**
+```cmd
+git clone https://github.com/MUSTAQ-AHAMMAD/store-opening-ai.git
+cd store-opening-ai
+setup.bat
+```
+
+Then start the application:
+- **Linux/Mac:** `./start_backend.sh` and `./start_dashboard.sh`
+- **Windows:** `start_backend.bat` and `start_dashboard.bat`
+
+---
+
 ## 🎉 NEW: Twilio WhatsApp Integration - Test Ready!
 
 **The application is now configured and ready to test with Twilio WhatsApp!**
@@ -181,9 +232,11 @@ You can test the entire system **without** any external accounts using **TEST MO
 - ✅ No email configuration needed
 - ✅ Perfect for development and testing
 
-See the **Test Mode** section below for setup instructions.
+**👉 See [LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md) for complete local testing instructions!**
 
 ## 🚀 Installation
+
+**Quick Start:** For detailed setup and testing instructions, see **[LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md)**
 
 ### 1. Clone the repository
 ```bash
