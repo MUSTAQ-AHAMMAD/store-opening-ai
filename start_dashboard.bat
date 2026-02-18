@@ -1,6 +1,8 @@
 @echo off
 REM Store Opening AI - Start Dashboard Script (Windows)
 REM Activates virtual environment and starts the Streamlit dashboard
+REM 
+REM USAGE: start_dashboard.bat (NOT ./start_dashboard.bat)
 
 echo ============================================================
 echo Starting Store Opening AI Dashboard...

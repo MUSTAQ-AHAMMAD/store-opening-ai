@@ -1,6 +1,14 @@
 @echo off
 REM Store Opening AI - Quick Setup Script (Windows)
 REM This script automates the initial setup process
+REM 
+REM USAGE: 
+REM   Run this script from the project directory:
+REM     setup.bat             (preferred)
+REM   or
+REM     .\setup.bat
+REM   
+REM   DO NOT use: ./setup.bat (Unix syntax - will not work on Windows)
 
 echo ============================================================
 echo Store Opening AI - Quick Setup Script (Windows)
