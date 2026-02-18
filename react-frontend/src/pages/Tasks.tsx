@@ -244,7 +244,7 @@ const Tasks: React.FC = () => {
 
   const isOverdue = (dueDate?: string) => {
     if (!dueDate) return false;
-    return new Date(dueDate) < new Date() && true;
+    return new Date(dueDate) < new Date();
   };
 
   const getStats = () => {

@@ -175,7 +175,7 @@ const WhatsApp: React.FC = () => {
     try {
       const response = await api.get(API_ENDPOINTS.WHATSAPP.ARCHIVE(groupId));
       setArchivedMessages(response.data.conversations || []);
-      setError('Archived conversations loaded (showing sample data for demo)');
+      setSuccess('Archived conversations loaded successfully');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to load archived conversations');
     }
