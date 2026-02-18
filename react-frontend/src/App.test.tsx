@@ -2,8 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders Store Opening AI application', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  // The app should render the login page initially when not authenticated
+  const appElement = screen.getByText(/Store Opening AI/i);
+  expect(appElement).toBeInTheDocument();
 });
