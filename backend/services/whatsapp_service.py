@@ -67,7 +67,14 @@ class WhatsAppService:
                     if content_variables:
                         # Ensure content_variables is a dict
                         if isinstance(content_variables, str):
-                            content_variables = json.loads(content_variables)
+                            try:
+                                content_variables = json.loads(content_variables)
+                            except json.JSONDecodeError as e:
+                                logger.error(f"Invalid JSON format for content_variables: {str(e)}")
+                                return {
+                                    'success': False,
+                                    'error': f'Invalid JSON format for content_variables: {str(e)}'
+                                }
                         msg_params['content_variables'] = json.dumps(content_variables)
                 else:
                     msg_params['body'] = message

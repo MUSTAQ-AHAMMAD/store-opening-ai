@@ -1,5 +1,6 @@
 #!/bin/bash
 # Example script to test WhatsApp template message API endpoint
+# Make sure to set this file as executable: chmod +x test_template_api.sh
 
 # Configuration
 API_URL="http://localhost:5000"

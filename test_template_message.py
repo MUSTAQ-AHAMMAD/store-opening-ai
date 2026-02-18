@@ -42,7 +42,7 @@ def test_template_message():
     print(f"\n📱 Test Template Message:")
     print(f"   • To: {test_phone}")
     print(f"   • Content SID: {test_content_sid}")
-    print(f"   • Variables: {json.dumps(test_variables, indent=6)}")
+    print(f"   • Variables: {json.dumps(test_variables, indent=2)}")
     
     # Send template message
     print(f"\n🚀 Sending template message...")
