@@ -386,8 +386,7 @@ const AIInsights: React.FC = () => {
       <Typography variant="h6" fontWeight="bold" gutterBottom mb={2} mt={4}>
         AI Task Prioritization & Communicator
       </Typography>
-      <Card elevation={0} sx={{ borderRadius: 3, border: '1px solid', borderColor: 'divider', mb={3 }}>
-        <CardContent>
+      <Card elevation={0} sx={{ borderRadius: 3, border: '1px solid', borderColor: 'divider', mb: 3 }}>        <CardContent>
           <Box display="flex" alignItems="center" gap={2} mb={3}>
             <SmartToy sx={{ fontSize: 32, color: 'primary.main' }} />
             <Box flex={1}>
@@ -516,7 +515,7 @@ const AIInsights: React.FC = () => {
               </Typography>
               {selectedTask && (
                 <Typography variant="caption" color="text.secondary">
-                  Task: {selectedTask.title}
+                  Task: {selectedTask?.title}
                 </Typography>
               )}
             </Box>
@@ -547,7 +546,7 @@ const AIInsights: React.FC = () => {
                 />
                 {selectedTask?.assigned_to && (
                   <Typography variant="caption" color="text.secondary">
-                    Will be sent to: {selectedTask.assigned_to.name} ({selectedTask.assigned_to.phone})
+                    Will be sent to: {selectedTask?.assigned_to?.name} ({selectedTask?.assigned_to?.phone})
                   </Typography>
                 )}
               </>
