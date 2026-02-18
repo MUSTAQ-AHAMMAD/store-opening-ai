@@ -31,7 +31,7 @@ npm start    # Start dev server (opens http://localhost:3000)
 ## 🛠️ Scripts
 
 - `npm start` - Development server (port 3000)
-- `npm build` - Production build
+- `npm run build` - Production build
 - `npm test` - Run tests
 
 ---
@@ -51,7 +51,7 @@ npm start    # Start dev server (opens http://localhost:3000)
 
 ---
 
-## �� Troubleshooting
+## 🐛 Troubleshooting
 
 **Backend connection error?**
 - Ensure backend runs on port 5000
