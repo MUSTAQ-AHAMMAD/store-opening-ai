@@ -687,6 +687,17 @@ DATABASE_URL=postgresql://user:password@localhost/store_opening
    - Common issue: Using dict syntax `{'field': type}` instead of list syntax `[('field', type)]`
    - **Python 3.13+ compatibility**: Always use class-based `NamedTuple` syntax (recommended)
 
+8. **Windows: `'.' is not recognized as an internal or external command`**
+   - **Problem**: Trying to run `./setup.bat` or `./start_backend.bat` on Windows
+   - **Solution**: On Windows, run batch files WITHOUT the `./` prefix:
+     ```cmd
+     setup.bat                    (NOT ./setup.bat)
+     start_backend.bat            (NOT ./start_backend.bat)
+     start_dashboard.bat          (NOT ./start_dashboard.bat)
+     ```
+   - **Alternative**: Use backslash instead: `.\setup.bat`
+   - **Explanation**: The `./` syntax is for Unix/Linux/Mac. Windows uses different path separators.
+
 ## 📝 License
 
 This project is for educational and internal use.

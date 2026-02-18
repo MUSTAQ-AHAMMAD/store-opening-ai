@@ -539,7 +539,28 @@ curl -X POST http://localhost:5000/api/ml/train \
 
 ## 🐛 Troubleshooting
 
-### Issue 1: "Module not found" errors
+### Issue 1: Windows - "'.' is not recognized as an internal or external command"
+
+**Problem:** Trying to run `./setup.bat` or `./start_backend.bat` on Windows
+
+**Solution:**
+On Windows Command Prompt, you cannot use the `./` prefix. Use these commands instead:
+
+```cmd
+# Correct way (without ./)
+setup.bat
+start_backend.bat
+start_dashboard.bat
+
+# Alternative (with backslash)
+.\setup.bat
+.\start_backend.bat
+.\start_dashboard.bat
+```
+
+**Why?** The `./` syntax is specific to Unix/Linux/Mac shells. Windows Command Prompt uses different path conventions.
+
+### Issue 2: "Module not found" errors
 
 **Solution:**
 ```bash
@@ -551,7 +572,7 @@ pip install --upgrade pip setuptools wheel
 pip install -r requirements.txt
 ```
 
-### Issue 2: "Database not found" error
+### Issue 3: "Database not found" error
 
 **Solution:**
 ```bash
@@ -559,7 +580,7 @@ pip install -r requirements.txt
 python data/seed_beta_data.py
 ```
 
-### Issue 3: Port 5000 already in use
+### Issue 4: Port 5000 already in use
 
 **Solution:**
 ```bash
@@ -576,7 +597,7 @@ PORT=5001
 # Then use: python main.py
 ```
 
-### Issue 4: Dashboard won't open
+### Issue 5: Dashboard won't open
 
 **Solution:**
 ```bash
@@ -587,7 +608,7 @@ PORT=5001
 streamlit run frontend/dashboard.py --server.port 8501
 ```
 
-### Issue 5: AI features not working
+### Issue 6: AI features not working
 
 **Solution:**
 ```bash
@@ -599,7 +620,7 @@ OPENAI_API_KEY=sk-your-actual-key-here
 # 3. Set TEST_MODE=false for production
 ```
 
-### Issue 6: Messages not showing in console
+### Issue 7: Messages not showing in console
 
 **Solution:**
 - **Verify `TEST_MODE=true` in .env**
@@ -607,7 +628,7 @@ OPENAI_API_KEY=sk-your-actual-key-here
 - **Restart the backend** after changing .env
 - **Try triggering an action** (send follow-up, create task, etc.)
 
-### Issue 7: Streamlit shows errors
+### Issue 8: Streamlit shows errors
 
 **Solution:**
 ```bash

@@ -404,6 +404,24 @@ chmod +x setup.sh start_backend.sh start_dashboard.sh
 ./setup.sh
 ```
 
+### Problem: "'.' is not recognized as an internal or external command" (Windows)
+**Solution:**
+On Windows, you cannot use the `./` prefix. Use one of these methods instead:
+
+```cmd
+# Correct way (without ./)
+setup.bat
+start_backend.bat
+start_dashboard.bat
+
+# Alternative (with backslash)
+.\setup.bat
+.\start_backend.bat
+.\start_dashboard.bat
+```
+
+**Explanation:** The `./` syntax is Unix/Linux/Mac specific. Windows Command Prompt doesn't recognize it.
+
 ### Problem: "Port 5000 already in use"
 **Solution:**
 ```bash
