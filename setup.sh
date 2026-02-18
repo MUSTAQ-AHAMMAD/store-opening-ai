@@ -29,6 +29,20 @@ fi
 echo "✅ Python version OK"
 echo ""
 
+# Check Node.js version
+echo "Checking Node.js version..."
+if ! command -v node &> /dev/null; then
+    echo "⚠️  Warning: Node.js not found."
+    echo "   Node.js is required for the React frontend."
+    echo "   Please install Node.js 14+ from https://nodejs.org/"
+    echo ""
+else
+    NODE_VERSION=$(node --version)
+    echo "Found Node.js $NODE_VERSION"
+    echo "✅ Node.js version OK"
+    echo ""
+fi
+
 # Create virtual environment
 echo "Creating virtual environment..."
 if [ ! -d "venv" ]; then
@@ -52,11 +66,24 @@ echo "✅ pip upgraded"
 echo ""
 
 # Install dependencies
-echo "Installing dependencies..."
+echo "Installing Python dependencies..."
 echo "This may take a few minutes..."
 pip install -r requirements.txt --quiet
-echo "✅ Dependencies installed"
+echo "✅ Python dependencies installed"
 echo ""
+
+# Install React frontend dependencies
+if command -v npm &> /dev/null; then
+    echo "Installing React frontend dependencies..."
+    cd react-frontend
+    npm install
+    cd ..
+    echo "✅ React frontend dependencies installed"
+    echo ""
+else
+    echo "⚠️  Skipping React frontend setup (Node.js not found)"
+    echo ""
+fi
 
 # Setup .env file
 echo "Setting up environment configuration..."
@@ -88,17 +115,16 @@ echo "  Terminal 1 - Backend API:"
 echo "    source venv/bin/activate"
 echo "    python main.py"
 echo ""
-echo "  Terminal 2 - Dashboard:"
-echo "    source venv/bin/activate"
-echo "    streamlit run frontend/dashboard.py"
+echo "  Terminal 2 - React Dashboard:"
+echo "    ./start_dashboard.sh"
 echo ""
 echo "Then open your browser to:"
 echo "  - Backend: http://localhost:5000"
-echo "  - Dashboard: http://localhost:8501"
+echo "  - React Dashboard: http://localhost:3000"
 echo ""
 echo "Login with:"
 echo "  - Username: admin"
 echo "  - Password: admin123"
 echo ""
-echo "For more details, see LOCAL_TESTING_GUIDE.md"
+echo "For more details, see REACT_QUICKSTART.md"
 echo "============================================================"
