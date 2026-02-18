@@ -16,6 +16,28 @@ This comprehensive guide shows you how to:
 
 **Perfect for testing without Twilio, OpenAI, or email accounts!**
 
+### 🚀 Super Quick Start
+
+**One-Command Setup (Linux/Mac):**
+```bash
+git clone https://github.com/MUSTAQ-AHAMMAD/store-opening-ai.git
+cd store-opening-ai
+./setup.sh
+```
+
+**One-Command Setup (Windows):**
+```cmd
+git clone https://github.com/MUSTAQ-AHAMMAD/store-opening-ai.git
+cd store-opening-ai
+setup.bat
+```
+
+Then start the application:
+- **Linux/Mac:** `./start_backend.sh` and `./start_dashboard.sh`
+- **Windows:** `start_backend.bat` and `start_dashboard.bat`
+
+**Quick Reference:** See [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) for a one-page cheat sheet!
+
 ---
 
 ## 🎉 NEW: Twilio WhatsApp Integration - Test Ready!
