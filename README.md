@@ -246,6 +246,23 @@ You can test the entire system **without** any external accounts using **TEST MO
 
 **👉 See [LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md) for complete local testing instructions!**
 
+## Environment Setup
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and add your credentials:
+   - **SECRET_KEY**: Generate using `python -c "import secrets; print(secrets.token_hex(32))"`
+   - **TWILIO_ACCOUNT_SID**: From your [Twilio Console](https://console.twilio.com/)
+   - **TWILIO_AUTH_TOKEN**: From your [Twilio Console](https://console.twilio.com/)
+   - **TWILIO_WHATSAPP_NUMBER**: Your Twilio WhatsApp sandbox number
+
+3. Never commit the `.env` file to version control
+
+For more security information, see [SECURITY.md](SECURITY.md)
+
 ## 🚀 Installation
 
 **Quick Start:** For detailed setup and testing instructions, see **[LOCAL_TESTING_GUIDE.md](./LOCAL_TESTING_GUIDE.md)**
