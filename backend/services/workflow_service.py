@@ -74,7 +74,7 @@ class WorkflowService:
         self.whatsapp_service = WhatsAppService()
         self.ai_service = get_ai_service()
     
-    def initialize_workflow(self, store: Store) -> List[WorkflowStage]:
+    def initialize_workflow(self, store: Store, responsible_user_id: Optional[int] = None) -> List[WorkflowStage]:
         """Initialize workflow stages for a new store"""
         stages = []
         opening_date = store.opening_date
@@ -87,7 +87,8 @@ class WorkflowService:
                 stage_number=stage_num,
                 stage_name=stage_info['name'],
                 status='pending',
-                due_date=due_date
+                due_date=due_date,
+                assigned_to_id=responsible_user_id
             )
             db.session.add(stage)
             stages.append(stage)

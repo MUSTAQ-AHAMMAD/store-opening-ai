@@ -121,7 +121,7 @@ const WhatsApp: React.FC = () => {
       };
       
       await api.post(API_ENDPOINTS.WHATSAPP.CREATE_GROUP, payload);
-      setSuccess('WhatsApp group created successfully!');
+      setSuccess('Communication channel record created successfully!');
       handleCloseCreateDialog();
       fetchData();
     } catch (err: any) {
@@ -220,7 +220,7 @@ const WhatsApp: React.FC = () => {
             py: 1.5,
           }}
         >
-          Create Group
+          Add Communication Record
         </Button>
       </Box>
 
@@ -401,8 +401,8 @@ const WhatsApp: React.FC = () => {
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {stores.length === 0
-              ? 'Please create a store first to set up WhatsApp groups'
-              : 'Get started by creating your first WhatsApp group'}
+              ? 'Please create a store first to set up a communication channel'
+              : 'Get started by adding your first communication channel record'}
           </Typography>
         </Box>
       )}
@@ -411,11 +411,16 @@ const WhatsApp: React.FC = () => {
       <Dialog open={createDialogOpen} onClose={handleCloseCreateDialog} maxWidth="sm" fullWidth>
         <DialogTitle>
           <Typography variant="h6" fontWeight="bold">
-            Create WhatsApp Group
+            Add Communication Record
           </Typography>
         </DialogTitle>
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={2} mt={2}>
+            <Alert severity="info">
+              This creates an internal communication channel record for the store team.
+              Messages are sent individually to each team member via Twilio WhatsApp.
+              Recipients must join the Twilio sandbox first by sending the sandbox keyword.
+            </Alert>
             <TextField
               fullWidth
               select
@@ -459,7 +464,7 @@ const WhatsApp: React.FC = () => {
               fontWeight: 600,
             }}
           >
-            Create Group
+            Add Record
           </Button>
         </DialogActions>
       </Dialog>

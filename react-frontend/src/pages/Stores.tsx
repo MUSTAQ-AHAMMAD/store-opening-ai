@@ -18,6 +18,7 @@ import {
   CircularProgress,
   MenuItem,
   InputAdornment,
+  Divider,
 } from '@mui/material';
 import {
   Add,
@@ -27,6 +28,8 @@ import {
   LocationOn,
   CalendarToday,
   TrendingUp,
+  PersonAdd,
+  Remove,
 } from '@mui/icons-material';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config';
@@ -42,6 +45,13 @@ interface Store {
   completion_percentage?: number;
   total_tasks?: number;
   completed_tasks?: number;
+}
+
+interface TeamMemberInput {
+  name: string;
+  role: string;
+  phone: string;
+  email: string;
 }
 
 const statusColors: Record<string, string> = {
@@ -66,6 +76,7 @@ const Stores: React.FC = () => {
     opening_date: '',
     status: 'planning',
   });
+  const [teamMembers, setTeamMembers] = useState<TeamMemberInput[]>([]);
 
   useEffect(() => {
     fetchStores();
@@ -122,6 +133,7 @@ const Stores: React.FC = () => {
         opening_date: '',
         status: 'planning',
       });
+      setTeamMembers([]);
     }
     setDialogOpen(true);
   };
@@ -136,13 +148,31 @@ const Stores: React.FC = () => {
       if (editingStore) {
         await api.put(API_ENDPOINTS.STORES.UPDATE(editingStore.id), formData);
       } else {
-        await api.post(API_ENDPOINTS.STORES.CREATE, formData);
+        const payload: any = { ...formData };
+        const validMembers = teamMembers.filter((m) => m.name.trim() && m.phone.trim());
+        if (validMembers.length > 0) {
+          payload.team_members = validMembers;
+        }
+        await api.post(API_ENDPOINTS.STORES.CREATE, payload);
       }
       handleCloseDialog();
       fetchStores();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to save store');
+      setError(err.response?.data?.message || err.response?.data?.error || 'Failed to save store');
     }
+  };
+
+  const addTeamMember = () => {
+    setTeamMembers([...teamMembers, { name: '', role: 'team_member', phone: '', email: '' }]);
+  };
+
+  const removeTeamMember = (index: number) => {
+    setTeamMembers(teamMembers.filter((_, i) => i !== index));
+  };
+
+  const updateTeamMember = (index: number, field: keyof TeamMemberInput, value: string) => {
+    const updated = teamMembers.map((m, i) => (i === index ? { ...m, [field]: value } : m));
+    setTeamMembers(updated);
   };
 
   const handleDelete = async (id: number) => {
@@ -427,6 +457,85 @@ const Stores: React.FC = () => {
               <MenuItem value="completed">Completed</MenuItem>
               <MenuItem value="delayed">Delayed</MenuItem>
             </TextField>
+
+            {!editingStore && (
+              <>
+                <Divider />
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Typography variant="subtitle1" fontWeight="600">
+                    Responsible Team Members (optional)
+                  </Typography>
+                  <Button
+                    size="small"
+                    startIcon={<PersonAdd />}
+                    onClick={addTeamMember}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Add Member
+                  </Button>
+                </Box>
+                {teamMembers.length > 0 && (
+                  <Alert severity="info" sx={{ py: 0.5 }}>
+                    The first member will be set as the primary responsible person for all workflow stages.
+                  </Alert>
+                )}
+                {teamMembers.map((member, index) => (
+                  <Box
+                    key={index}
+                    sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+                  >
+                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                      <Typography variant="body2" fontWeight="600">
+                        Member {index + 1}
+                      </Typography>
+                      <IconButton size="small" onClick={() => removeTeamMember(index)}>
+                        <Remove fontSize="small" />
+                      </IconButton>
+                    </Box>
+                    <Grid container spacing={1}>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          label="Name"
+                          value={member.name}
+                          onChange={(e) => updateTeamMember(index, 'name', e.target.value)}
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          label="Role"
+                          value={member.role}
+                          onChange={(e) => updateTeamMember(index, 'role', e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          label="Phone (E.164, e.g. +1234567890)"
+                          value={member.phone}
+                          onChange={(e) => updateTeamMember(index, 'phone', e.target.value)}
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          label="Email (optional)"
+                          value={member.email}
+                          onChange={(e) => updateTeamMember(index, 'email', e.target.value)}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                ))}
+              </>
+            )}
           </Box>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 3 }}>
