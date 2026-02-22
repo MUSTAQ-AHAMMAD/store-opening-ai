@@ -1,11 +1,14 @@
 from flask import Blueprint, request, jsonify
 from backend.database import db
-from backend.models.models import Store, WhatsAppGroup
+from backend.models.models import Store, WhatsAppGroup, TeamMember
 from backend.services.workflow_service import get_workflow_service
 from backend.services.whatsapp_service import WhatsAppService
 from backend.services.email_service import get_email_service
 from backend.utils.common_utils import parse_iso_datetime
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 bp = Blueprint('stores', __name__, url_prefix='/api/stores')
 
@@ -52,11 +55,37 @@ def create_store():
         db.session.add(store)
         db.session.flush()  # Get store ID
         
+        # Create inline team members if provided
+        inline_members = data.get('team_members', [])
+        created_members = []
+        for member_data in inline_members:
+            if not member_data.get('name') or not member_data.get('phone'):
+                logger.warning("Skipping team member with missing name or phone: %s", member_data)
+                continue
+            member = TeamMember(
+                name=member_data['name'],
+                role=member_data.get('role', 'team_member'),
+                phone=member_data['phone'],
+                email=member_data.get('email'),
+                store_id=store.id,
+                is_active=True
+            )
+            db.session.add(member)
+            created_members.append(member)
+        
+        if created_members:
+            db.session.flush()  # Ensure members have IDs
+        
+        # Determine responsible user for workflow stage assignment
+        responsible_user_id = data.get('responsible_user_id')
+        if responsible_user_id is None and created_members:
+            responsible_user_id = created_members[0].id
+        
         # Initialize workflow stages
         workflow_service = get_workflow_service()
-        workflow_service.initialize_workflow(store)
+        workflow_service.initialize_workflow(store, responsible_user_id=responsible_user_id)
         
-        # Create WhatsApp group
+        # Create WhatsApp communication channel record
         whatsapp_service = WhatsAppService()
         group_name = f"Store Opening - {store.name}"
         whatsapp_group = WhatsAppGroup(
@@ -68,14 +97,14 @@ def create_store():
         
         db.session.commit()
         
-        # Send welcome message to WhatsApp group
+        # Send welcome message to team members
         welcome_message = f"""🎉 Welcome to {group_name}!
 
 Store: {store.name}
 Location: {store.location}
 Opening Date: {store.opening_date.strftime('%Y-%m-%d')}
 
-This group will be used for all communications regarding this store opening project.
+This channel will be used for all communications regarding this store opening project.
 
 The 7-stage workflow process has been initiated:
 1. Update nearby store details
@@ -85,6 +114,8 @@ The 7-stage workflow process has been initiated:
 5. Start installation & update TeamViewer ID
 6. Complete final checklist on opening day
 7. Store opening complete
+
+Note: To receive WhatsApp messages via Twilio sandbox, each recipient must first join the sandbox by sending the keyword to the Twilio number.
 
 Let's work together to ensure a successful store opening! 🚀
 """
@@ -107,7 +138,9 @@ Let's work together to ensure a successful store opening! 🚀
                     [m.to_dict() for m in store.team_members]
                 )
         
-        return jsonify(store.to_dict()), 201
+        result = store.to_dict()
+        result['team_members'] = [m.to_dict() for m in store.team_members]
+        return jsonify(result), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

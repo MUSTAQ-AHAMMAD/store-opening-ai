@@ -46,10 +46,16 @@ def create_group():
         db.session.add(group)
         db.session.commit()
         
-        # Note: Actual WhatsApp group creation would happen via Twilio API
-        # For now, we're just tracking it in our database
-        
-        return jsonify(group.to_dict()), 201
+        # Note: Twilio does not support programmatic WhatsApp group creation.
+        # This record is used to track the communication channel for the store
+        # and to broadcast messages individually to team members.
+        result = group.to_dict()
+        result['note'] = (
+            'Communication channel record created. '
+            'Messages are sent individually to team members via Twilio WhatsApp. '
+            'Ensure each recipient has joined the Twilio sandbox first.'
+        )
+        return jsonify(result), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
@@ -142,6 +148,40 @@ def send_follow_up():
         }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+@bp.route('/diagnostics', methods=['GET'])
+def diagnostics():
+    """
+    Return diagnostics about the WhatsApp/Twilio configuration.
+    Useful for verifying credentials, TEST_MODE, and phone number setup.
+    """
+    import os
+    service = WhatsAppService()
+    number = service.whatsapp_number or ''
+    # Show enough of the number to identify it while masking middle digits
+    bare = number.replace('whatsapp:', '')
+    if len(bare) >= 6:
+        masked_number = bare[:4] + '****' + bare[-3:]
+    elif bare:
+        masked_number = '****'
+    else:
+        masked_number = ''
+    return jsonify({
+        'twilio_initialized': service.client is not None,
+        'test_mode': service.test_mode,
+        'whatsapp_number': masked_number,
+        'account_sid_set': bool(service.account_sid),
+        'auth_token_set': bool(service.auth_token),
+        'notes': (
+            'Twilio client is active. Ensure recipients have joined the sandbox '
+            '(send "join <sandbox-keyword>" to the WhatsApp number).'
+            if service.client else
+            'TEST MODE active – messages are logged only, not sent via Twilio.'
+            if service.test_mode else
+            'Twilio credentials not configured. Set TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN.'
+        )
+    }), 200
+
 
 @bp.route('/send-template', methods=['POST'])
 def send_template():
