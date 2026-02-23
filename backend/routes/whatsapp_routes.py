@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from backend.database import db
 from backend.models.models import WhatsAppGroup, ArchivedConversation, Store
 from backend.services.whatsapp_service import WhatsAppService
+from backend.services.chatbot_service import get_chatbot_service
 from datetime import datetime
 
 bp = Blueprint('whatsapp', __name__, url_prefix='/api/whatsapp')
@@ -23,7 +24,7 @@ def get_group_by_store(store_id):
 
 @bp.route('/groups', methods=['POST'])
 def create_group():
-    """Create a WhatsApp group for a store"""
+    """Create a WhatsApp group for a store and onboard team members"""
     data = request.get_json()
     
     try:
@@ -49,12 +50,38 @@ def create_group():
         # Note: Twilio does not support programmatic WhatsApp group creation.
         # This record is used to track the communication channel for the store
         # and to broadcast messages individually to team members.
+
+        # Send welcome/onboarding message to all active team members
+        welcome_message = (
+            f"👋 Welcome to *{group_name}*!\n\n"
+            f"You've been added to the WhatsApp communication channel for "
+            f"*{store.name}* (opening: {store.opening_date.strftime('%Y-%m-%d')}).\n\n"
+            "🤖 *AI Chatbot Commands:*\n"
+            "• Send *status* – see your pending tasks\n"
+            "• Send *store* – store opening info\n"
+            "• Send *done <task-id>* – mark a task complete\n"
+            "• Send *help* – show this menu\n\n"
+            "You'll receive automated follow-up reminders here. "
+            "Reply to this number anytime to interact with the AI assistant!"
+        )
+        sent = 0
+        failed = 0
+        for member in store.team_members:
+            if member.is_active and member.phone:
+                result = whatsapp_service.send_message(member.phone, welcome_message)
+                if result.get('success'):
+                    sent += 1
+                else:
+                    failed += 1
+
         result = group.to_dict()
         result['note'] = (
             'Communication channel record created. '
             'Messages are sent individually to team members via Twilio WhatsApp. '
             'Ensure each recipient has joined the Twilio sandbox first.'
         )
+        result['welcome_messages_sent'] = sent
+        result['welcome_messages_failed'] = failed
         return jsonify(result), 201
     except Exception as e:
         db.session.rollback()
@@ -211,3 +238,50 @@ def send_template():
         }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+
+@bp.route('/webhook', methods=['POST'])
+def whatsapp_webhook():
+    """
+    Twilio webhook for incoming WhatsApp messages.
+
+    Twilio calls this URL (configured in the Twilio Console as the
+    'A Message Comes In' webhook for your WhatsApp number) whenever a
+    team member sends a WhatsApp message to the Twilio number.
+
+    The chatbot service processes the message, queries the database for
+    relevant task/store context, generates an AI reply, and sends it
+    back to the sender via the Twilio REST API.
+
+    Returns an empty TwiML response (200 OK) so Twilio knows the webhook
+    was handled successfully.
+    """
+    # Twilio sends form-encoded data
+    from_number = request.form.get('From', '')
+    body = request.form.get('Body', '').strip()
+
+    if not from_number or not body:
+        # Return empty TwiML – nothing to process
+        return _twiml_response(''), 200
+
+    try:
+        chatbot = get_chatbot_service()
+        chatbot.handle_incoming_message(from_number, body)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).error(f"Webhook processing error: {e}")
+
+    # Always return an empty TwiML 200 so Twilio doesn't retry
+    return _twiml_response(''), 200
+
+
+def _twiml_response(message: str) -> str:
+    """Return a minimal TwiML response body."""
+    from flask import make_response
+    if message:
+        twiml = f'<?xml version="1.0" encoding="UTF-8"?><Response><Message>{message}</Message></Response>'
+    else:
+        twiml = '<?xml version="1.0" encoding="UTF-8"?><Response></Response>'
+    resp = make_response(twiml, 200)
+    resp.headers['Content-Type'] = 'text/xml'
+    return resp
