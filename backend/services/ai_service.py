@@ -272,6 +272,99 @@ Please contact the team member and ensure task completion ASAP.
 
 Thank you."""
 
+    def generate_chatbot_response(self, incoming_message: str, sender_context: Dict) -> str:
+        """
+        Generate an AI-powered chatbot response to an incoming WhatsApp message.
+
+        Args:
+            incoming_message: The text sent by the team member
+            sender_context: Dict with keys: member_name, role, pending_tasks,
+                            store_name, store_status, days_until_opening
+
+        Returns:
+            str: AI-generated (or default) reply
+        """
+        if not self.enabled:
+            return self._default_chatbot_response(incoming_message, sender_context)
+
+        try:
+            task_summary = "\n".join(
+                f"- [{t.get('priority','medium').upper()}] {t.get('title')} (due: {t.get('due_date','N/A')}, status: {t.get('status','unknown')})"
+                for t in sender_context.get('pending_tasks', [])[:5]
+            ) or "No pending tasks."
+
+            prompt = f"""You are an AI assistant for a store opening management system, chatting via WhatsApp with a team member.
+
+Team Member: {sender_context.get('member_name', 'Unknown')}
+Role: {sender_context.get('role', 'N/A')}
+Store: {sender_context.get('store_name', 'N/A')}
+Store Status: {sender_context.get('store_status', 'N/A')}
+Days Until Opening: {sender_context.get('days_until_opening', 'N/A')}
+
+Their Pending Tasks:
+{task_summary}
+
+Their Message: "{incoming_message}"
+
+Reply in a friendly, professional tone (max 150 words). If they ask for task status, summarise it. If they report a task is done, acknowledge it and remind them to update the system. If they ask about the store opening, give a brief timeline summary. Keep the reply concise and WhatsApp-friendly."""
+
+            response = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful WhatsApp chatbot for store opening management."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=200,
+                temperature=0.7
+            )
+            return response.choices[0].message.content.strip()
+
+        except Exception as e:
+            logger.error(f"AI chatbot response error: {e}")
+            return self._default_chatbot_response(incoming_message, sender_context)
+
+    def _default_chatbot_response(self, incoming_message: str, sender_context: Dict) -> str:
+        """Fallback chatbot response when AI is unavailable"""
+        msg = incoming_message.lower().strip()
+        name = sender_context.get('member_name', 'there')
+        store_name = sender_context.get('store_name', 'your store')
+        pending_tasks = sender_context.get('pending_tasks', [])
+        days = sender_context.get('days_until_opening')
+
+        if msg in ('hi', 'hello', 'hey', 'help', 'start'):
+            return (
+                f"👋 Hello {name}! I'm the Store Opening AI assistant.\n\n"
+                "You can send me:\n"
+                "• *status* – your pending tasks\n"
+                "• *store* – store opening info\n"
+                "• *done <task-id>* – mark a task complete\n\n"
+                "How can I help you today?"
+            )
+
+        if 'status' in msg or 'task' in msg:
+            if not pending_tasks:
+                return f"✅ Great news, {name}! You have no pending tasks right now."
+            lines = [f"📋 Your pending tasks for *{store_name}*:\n"]
+            for t in pending_tasks[:5]:
+                lines.append(
+                    f"• [{t.get('priority','medium').upper()}] {t.get('title')} – {t.get('status','unknown')}"
+                )
+            return "\n".join(lines)
+
+        if 'store' in msg or 'opening' in msg:
+            days_str = f"{days} day(s)" if days is not None else "TBD"
+            return (
+                f"🏪 *{store_name}*\n"
+                f"Status: {sender_context.get('store_status', 'N/A')}\n"
+                f"Days until opening: {days_str}"
+            )
+
+        return (
+            f"Hi {name}! 🤖 I received your message. "
+            "Send *help* to see what I can do, or *status* to check your tasks."
+        )
+
+
 # Global AI service instance
 ai_service = None
 
