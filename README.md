@@ -92,6 +92,7 @@ The entire frontend has been **completely rebuilt** using **React.js** with a mo
 ### 📸 Visual Guides
 
 **See the frontend in action:**
+- 📸 **[Screenshot Documentation](./docs/SCREENSHOT_DOCUMENTATION.md)** - **NEW!** Live screenshots of every page with descriptions
 - 📖 **[Complete Visual Walkthrough](./VISUAL_WALKTHROUGH.md)** - Step-by-step screenshots and detailed descriptions
 - 🎯 **[Quick Visual Reference](./VISUAL_REFERENCE.md)** - At-a-glance design patterns and UI elements
 - 🚀 **[Quick Start Guide](./REACT_QUICKSTART.md)** - Get up and running in minutes
@@ -99,17 +100,34 @@ The entire frontend has been **completely rebuilt** using **React.js** with a mo
 
 ### Screenshots
 
+> 📸 **Full visual documentation available:** [docs/SCREENSHOT_DOCUMENTATION.md](./docs/SCREENSHOT_DOCUMENTATION.md)
+
 **Login Page:**
-![Login Page](https://github.com/user-attachments/assets/8e600e2c-66f2-45fb-8332-ffa3b709b3cc)
+![Login Page](https://github.com/user-attachments/assets/ad16818d-0a68-40a0-94a6-62cc4c96becd)
 
 **Sign Up Page:**
-![Sign Up Page](https://github.com/user-attachments/assets/fc58c68a-42e2-4aa5-b826-a75bf7cefd06)
+![Sign Up Page](docs/screenshots/02-signup-page.png)
 
 **Dashboard:**
-![Dashboard](https://github.com/user-attachments/assets/0839f1c6-9afb-49f6-8f98-e7818992c16c)
+![Dashboard](docs/screenshots/03-dashboard.png)
 
 **Store Management:**
-![Stores Page](https://github.com/user-attachments/assets/d78a1707-6d06-4ece-9ad8-d096baccc8e9)
+![Stores Page](docs/screenshots/04-stores.png)
+
+**Team Members:**
+![Team Members](docs/screenshots/05-team.png)
+
+**Tasks & Checklists:**
+![Tasks](docs/screenshots/06-tasks.png)
+
+**Analytics:**
+![Analytics](docs/screenshots/07-analytics.png)
+
+**AI Insights:**
+![AI Insights](docs/screenshots/08-ai-insights.png)
+
+**WhatsApp Groups:**
+![WhatsApp](docs/screenshots/09-whatsapp.png)
 
 ---
 
